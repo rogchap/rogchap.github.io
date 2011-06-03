@@ -96,7 +96,8 @@ table {
 	margin-right: 3em;
 }
 
-.site .footer .contact a {
+.site .footer .contact a,
+.site .footer .rss a {
 	color: #8085C1;
 }
 
