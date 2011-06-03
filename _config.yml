@@ -1,2 +1,4 @@
+url: http://rogchap.com
 markdown: rdiscount
 pygments: true
+exclude: ['Rakefile.rb']
