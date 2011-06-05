@@ -1,7 +1,7 @@
----
+--- 
 layout: post 
 title: Mobile Development: The Beginning
----
+--- 
 
 Well, it's a Sunday and here I find myself writing a blog post. Well I did just promise that I wold keep up with this one, so I'm keen not to flop on the first hurdle.
 
