@@ -1,2 +1,2 @@
-Sitemap: {{ site.url }}/sitemap.xml
+Sitemap: http://rogchap.com/sitemap.xml
 User-agent: *
