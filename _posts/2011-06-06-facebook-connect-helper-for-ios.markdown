@@ -7,7 +7,7 @@ Many iPhone/iPad apps use Facebook Connect, and Facebook have made this really e
 
 One thing that you will always most likely want to do is make sure that the user only has to log in once, and every time time they want to use your app that they are already authenticated with Facebook. This means two things: first you need to make sure you authenticate the user with the `offline_access` flag and secondly, save the access tokens for the next time your app is used.
 
-This lead me to create a very simple helper class that I use in conjunction with the Facebook SDK to make my life a little easier:
+This led me to create a very simple helper class that I use in conjunction with the Facebook SDK to make my life a little easier:
 
 	// FacebookHelper.h
 	
