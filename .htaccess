@@ -1,7 +1,0 @@
-# Directory index is never accessible.
-# 
-#   /index.html     -> /
-#   /foo/index.html -> /foo/
-RewriteCond %{REQUEST_FILENAME} -f
-RewriteCond %{REQUEST_URI} ^\/.*index\.html$
-RewriteRule ^(.*)index.html$ http://rogchap.com/$1 [R=301,L]
