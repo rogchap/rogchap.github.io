@@ -68,6 +68,10 @@ blockquote {
 	line-height: 1.5em;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	text-align: left;
+}
+
 .title {
 	color: #369;
 	font-weight: bold;
@@ -131,6 +135,10 @@ ul.posts span {
 	font-size: 80%;
 }
 
+ul.posts a {
+	text-align: left;
+}
+
 /*****************************************************************************/
 /*
 /* Posts
@@ -147,6 +155,12 @@ ul.posts span {
 	border: 1px solid #ddd;
 	background-color: #eef;
 	padding: 0 .4em;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap !important;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
 }
 
 #post ul,
