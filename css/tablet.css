@@ -1,15 +1,5 @@
-@media screen and (orientation:portrait) {
-
-	body {
-		font-size:16pt;
-	}
-}
-
-@media screen and (orientation:landscape) {
-
-	body {
-		font-size:14pt;
-	}
+body {
+	font-size:14pt;
 }
 
 .site {
