@@ -1,7 +1,17 @@
-body {
-	font-size:16pt;
+@media screen and (orientation:portrait) {
+
+	body {
+		font-size:16pt;
+	}
+}
+
+@media screen and (orientation:landscape) {
+
+	body {
+		font-size:14pt;
+	}
 }
 
 .site {
-	width: 30em;
+	width: 35em;
 }
