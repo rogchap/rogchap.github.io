@@ -3,7 +3,7 @@ layout: post
 title: "iOS Image Manipulation with UIGestureRecognizer: scale, move, rotate"
 ---
 
-I promised to share with you my code that I used on the [Twibbon iPhone app](http://itunes.apple.com/us/app/twibbon/id441719849?mt=8&ls=1#). to manipulate images using touch gestures. This solution uses `UIGestureRecognizer`s and therefore only work in iOS 3.2 and above. The full source to a sample applications is available at the end.
+I promised to share with you my code that I used on the [Twibbon iPhone app](http://itunes.apple.com/us/app/twibbon/id441719849?mt=8&ls=1#), to manipulate images using touch gestures. This solution uses `UIGestureRecognizer`s and therefore only work in iOS 3.2 and above. The full source to a sample applications is available at the end.
 
 ## Setting up the UI
 
