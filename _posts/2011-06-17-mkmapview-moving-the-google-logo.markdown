@@ -26,9 +26,6 @@ The terms & conditions of using the MapKit in iOS is that the Google logo has to
 As an extra method to make things easy for my particular application I decided to add the use of `UITextAlignment` to align the logo left, center or right (right in my case):
 
 	- (void) alignGoogleLogo:(UITextAlignment) alignment {
-	  if (alignment == UITextAlignmentLeft) {
-	    return;
-	  }
 
 	  UIImageView *logo = [self googleLogo];
 	  CGRect frame = logo.frame;
