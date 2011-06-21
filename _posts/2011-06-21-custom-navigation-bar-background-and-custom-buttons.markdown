@@ -7,7 +7,7 @@ The default `UINavigationBar` color is a bit boring and even changing the tint c
 
 This is the sort of navigation bar we are trying to achieve:
 
-![Custom Nav](/images/custom_nav.png)
+![Custom Nav](http://rogchap.com/images/custom_nav.png)
 
 ## Navigation Bar background
 
