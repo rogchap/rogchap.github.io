@@ -48,6 +48,8 @@ This will create the directories and files for a basic web application. Lets tes
 	$ curl localhost:3000
 	<!DOCTYPE .... etc
 
+Now we have a running web application! You can get more simple and lightweight that that....love it!
+
 ## Part 2: Coming soon
 
 I'm going to split this tutorial into a few parts. In the next part we will setup our application with a familier MVC style pattern.
