@@ -5,85 +5,85 @@ title: Simple User Helper for iOS
 
 I'm sure there are many ways to store user information to remember if a user is logged in or not, using the key chain api for example. However, I like to keep things really really simple, so I created a simple helper class to deal with my user object and store the info using `NSUserDefaults` and have a static constructor:
 
-	// UserHelper.h
+{% highlight objc %}
+// UserHelper.h
 	
-	@interface UserHelper : NSObject {
+@interface UserHelper : NSObject {
+	NSString *currentUserId;
+	NSUserDefaults *_defaults;
+}
 
-	  NSString *currentUserId;
-		NSUserDefaults *_defaults;
-	}
+@property(nonatomic,retain) NSString *currentUserId;
 
-	@property(nonatomic,retain) NSString *currentUserId;
+-(BOOL) isValid;
+-(void) clear;
 
-	-(BOOL) isValid;
-	-(void) clear;
++(UserHelper *) default;
 
-	+(UserHelper *) default;
-
-	@end
+@end
 	
-	// UserHelper.m
+// UserHelper.m
 	
-	#import "UserHelper.h"
+#import "UserHelper.h"
 
-	@implementation UserHelper
-	@synthesize currentUserId;
+@implementation UserHelper
+@synthesize currentUserId;
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	#pragma mark -
-	#pragma mark NSObject
+//////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark NSObject
 
-	static NSString *kcurrentUser = @"currentUser";
+static NSString *kcurrentUser = @"currentUser";
 
-	+(UserHelper *) default
-	{
-		static UserHelper *helper = nil;
++(UserHelper *) default {
+	static UserHelper *helper = nil;
 
-		if (helper == nil) {
-			helper = [[UserHelper alloc] init];
-		}
-
-		return helper;
+	if (helper == nil) {
+		helper = [[UserHelper alloc] init];
 	}
 
-	-(id) init {
+	return helper;
+}
 
-		if (self == [super init]) {
-			_defaults = [NSUserDefaults standardUserDefaults];
-			currentUserId = [_defaults stringForKey:kcurrentUser];
-		}
+-(id) init {
 
-		return self;
+	if (self == [super init]) {
+		_defaults = [NSUserDefaults standardUserDefaults];
+		currentUserId = [_defaults stringForKey:kcurrentUser];
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	#pragma mark -
-	#pragma mark Private
+	return self;
+}
 
-	-(void)setCurrentUserId:(NSString *)_id {
-	  currentUserId = _id;
-	  [_defaults setObject:currentUserId forKey:kcurrentUser];
-	  [_defaults synchronize];
-	  [[NSNotificationCenter defaultCenter] postNotificationName:@"UserSignedIn" object:nil];
-	}
+//////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark Private
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////
-	#pragma mark -
-	#pragma mark Public
+-(void)setCurrentUserId:(NSString *)_id {
+	currentUserId = _id;
+	[_defaults setObject:currentUserId forKey:kcurrentUser];
+	[_defaults synchronize];
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"UserSignedIn" object:nil];
+}
 
-	-(BOOL) isValid {
-	  return [currentUserId isKindOfClass:[NSString class]] && [currentUserId length] > 0;
-	}
+//////////////////////////////////////////////////////////////////////////////////
+#pragma mark -
+#pragma mark Public
 
-	-(void) clear {
+-(BOOL) isValid {
+	return [currentUserId isKindOfClass:[NSString class]] && [currentUserId length] > 0;
+}
 
-	  currentUserId = nil;
-	  [_defaults removeObjectForKey:kcurrentUser];
-	  [_defaults synchronize];
-	  [[NSNotificationCenter defaultCenter] postNotificationName:@"UserSignedOut" object:nil];
-	}
+-(void) clear {
 
-	@end
+	currentUserId = nil;
+	[_defaults removeObjectForKey:kcurrentUser];
+	[_defaults synchronize];
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"UserSignedOut" object:nil];
+}
+
+@end
+{% endhighlight %}
 	
 In this helper method I'm only storing the user Id, but you could always store a user object and serialize/deserialize to JSON to store as `NSString`
 
