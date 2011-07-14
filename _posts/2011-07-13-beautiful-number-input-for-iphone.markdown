@@ -15,20 +15,22 @@ The trick here is to have a `UITextField` with a `UILabel` in front. The `UILabe
 
 Then all we need to do is hook up the `EditingChanged` event on the text field to then update our styled label:
 
-	- (IBAction)textChanged:(id)sender {
+{% highlight objc %}
+- (IBAction)textChanged:(id)sender {
 
-	  int number = [_numberTextField.text intValue];
+	int number = [_numberTextField.text intValue];
 
-	  // make sure we don't go beyond INT32_MAX
-	  if (number == INT32_MAX) {
-	    number = _currentNumber;
-	    _numberTextField.text = [NSString stringWithFormat:@"%d", number];
-	  }
-
-	  _currentNumber = number;
-	  _numberLabel.text = [NSString stringWithFormat:@"%@%d", [[NSLocale currentLocale] objectForKey:NSLocaleCurrencySymbol], _currentNumber];
+	// make sure we don't go beyond INT32_MAX
+	if (number == INT32_MAX) {
+		number = _currentNumber;
+ 		_numberTextField.text = [NSString stringWithFormat:@"%d", number];
 	}
-	
+
+	_currentNumber = number;
+	_numberLabel.text = [NSString stringWithFormat:@"%@%d", [[NSLocale currentLocale] objectForKey:NSLocaleCurrencySymbol], _currentNumber];
+}
+{% endhighlight %}
+
 ## Source on GitHub
 
 Once again I've added a source project on GitHub so you can try it out for yourself:
