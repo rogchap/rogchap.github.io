@@ -1,6 +1,6 @@
 ---
 layout: post
-title: HTML 5, Mobile Web & Websokets; What More do You Want?
+title: HTML 5, Mobile Web and Websokets; What More do You Want?
 published: true
 ---
 
