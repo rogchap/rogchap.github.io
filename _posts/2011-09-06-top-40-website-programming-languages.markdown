@@ -56,13 +56,13 @@ Once again, my results may be wrong! Also, I'm not thinking about other backend 
  | go.com         | 74,000,000   |  CGI
  | 4399.com       | 74,000,000   |  PHP
  | paypal.com     | 73,000,000   |  CGI
- | mozilla.com    | 73,000,000   |  PHP
+ | mozilla.com    | 73,000,000   |  PHP/Python
  | aol.com        | 73,000,000   |  JSP
  | about.com      | 73,000,000   |  unknown
  | xunlei.com     | 68,000,000   |  PHP
  | 56.com         | 67,000,000   |  PHP
  | flickr.com     | 67,000,000   |  PHP
- | craigslist.org | 66,000,000   |  unknown
+ | craigslist.org | 66,000,000   |  Perl
  | tmall.com      | 66,000,000   |  PHP
 {% endhighlight %}
 *educated guesses
