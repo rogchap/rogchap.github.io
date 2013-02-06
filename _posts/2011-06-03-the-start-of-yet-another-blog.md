@@ -3,7 +3,7 @@ layout: post
 title: The Start of yet Another Blog
 ---
 
-Over the course of my career I've had quite a few blogs, however I have struggled to maintain writing content for each one. I still write blog posts for [Storm ID](http://blog.stormid.com) but any personal blogs have now all disappeared from various hosting platforms.
+Over the course of my career I've had quite a few blogs, however I have struggled to maintain writing content for each one. I still write blog posts for [-Storm ID-](http://blog.stormid.com) (I've left Storm ID. and now work for M&C Saatchi in Australia) but any personal blogs have now all disappeared from various hosting platforms.
 
 The setup
 ---------
@@ -15,9 +15,9 @@ Also, by hosting my blog posts on GitHub (should) mean that I won't loose any of
 
 About Me
 --------
-I'm an Application Developer living in Edinburgh, Scotland. I've been in the development world commercially for 7 years now, but have been an indie developer for much longer.
+I'm an Application Developer living in Sydney, Australia. I've been in the development world commercially for 10 years now, but have been an indie developer for much longer.
 
-My core programming language has been C# and the .NET framework, however, the last two years has seen me develop my skills in Objective-C (iOS development), Java (Android development) and even PHP (just for fun!).
+My core programming language has been C# and the .NET framework, however, the last two years has seen me develop my skills in Objective-C (iOS development), Java (Android development) and even PHP; my current development enviroment of choice is Node.js.  
 
 I love building *new things* and I'm always on the lookout for the next big thing in technology; software or hardware.
 
