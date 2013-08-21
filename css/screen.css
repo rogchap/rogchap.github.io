@@ -55,6 +55,11 @@ blockquote {
 	margin-left:1em;
 }
 
+::selection {
+    color: white;
+    background-color: #369;
+}
+
 /*****************************************************************************/
 /*
 /* Site
