@@ -42,5 +42,5 @@ Ps. It's been tested on Chrome, Firefox and Safari, with an iPhone and an Androi
 
 Once again (as always) source is available on GitHub:
 
-<https://github.com/rogchap/SampleProjects/tree/master/NodeDrawing>
+[https://github.com/rogchap/SampleProjects/tree/master/NodeDrawing](https://github.com/rogchap/SampleProjects/tree/master/NodeDrawing)
 

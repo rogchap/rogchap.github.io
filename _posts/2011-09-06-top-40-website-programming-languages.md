@@ -65,7 +65,7 @@ Once again, my results may be wrong! Also, I'm not thinking about other backend 
  | craigslist.org | 66,000,000   |  Perl
  | tmall.com      | 66,000,000   |  PHP
 {% endhighlight %}
-*educated guesses
+\*educated guesses
 
 ## Observations
 
