@@ -36,6 +36,6 @@ We also set the action for the `percentage` to return a nice `CABasicAnimation`.
 
 Once we have created a the layer we can easily create the `UIView` that implements this layer and add this to our `UIViewController` either via code or Interface Builder.
 
-I've created a sample project on GitHub that cotains all the source and shows the implementation here:
+I've created a sample project on GitHub that contains all the source and shows the implementation here:
 
 [https://github.com/rogchap/SampleProjects/tree/master/CustomUIViewAnimation](https://github.com/rogchap/SampleProjects/tree/master/CustomUIViewAnimation)
