@@ -38,4 +38,4 @@ Once we have created a the layer we can easily create the `UIView` that implemen
 
 I've created a sample project on GitHub that contains all the source and shows the implementation here:
 
-[https://github.com/rogchap/SampleProjects/tree/master/CustomUIViewAnimation](https://github.com/rogchap/SampleProjects/tree/master/CustomUIViewAnimation)
+[https://github.com/rogchap/.../CustomUIViewAnimation](https://github.com/rogchap/SampleProjects/tree/master/CustomUIViewAnimation)
