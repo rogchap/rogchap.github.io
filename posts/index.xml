@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Roger Chapman</title>
+    <link>https://rogchap.com/posts/</link>
+    <description>Recent content in Posts on Roger Chapman</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <managingEditor>rogchap@gmail.com</managingEditor>
+    <webMaster>rogchap@gmail.com</webMaster>
+    <lastBuildDate>Fri, 26 Jul 2019 17:11:06 +1000</lastBuildDate>
+    
+	<atom:link href="https://rogchap.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>In Process gRPC-Web Proxy</title>
+      <link>https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/</link>
+      <pubDate>Fri, 26 Jul 2019 17:11:06 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/</guid>
+      <description>From the offical gRPC-Web docs:
+ &amp;ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&amp;rdquo;
+ For production we can just enable the envoy.grpc_web filter and we are good to go.
+But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker).</description>
+    </item>
+    
+    <item>
+      <title>Mocking gRPC in Go</title>
+      <link>https://rogchap.com/2019/06/25/mocking-grpc-in-go/</link>
+      <pubDate>Tue, 25 Jun 2019 22:20:10 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/2019/06/25/mocking-grpc-in-go/</guid>
+      <description>One of the huge benifits of using gRPC is the ability to autogenerate our client and server stubs from the protocol buffer definitions.
+In the same way, we can we generate our own code by building a plugin for the protocol buffer compiler (protoc).
+The plugin we&amp;rsquo;re creating is going to autogenerate gRPC response messages so that we can build a mock gRPC server.
+Goal Given the following proto file:</description>
+    </item>
+    
+  </channel>
+</rss>

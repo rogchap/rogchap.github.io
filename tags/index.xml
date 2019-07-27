@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Roger Chapman</title>
+    <link>https://rogchap.com/tags/</link>
+    <description>Recent content in Tags on Roger Chapman</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <managingEditor>rogchap@gmail.com</managingEditor>
+    <webMaster>rogchap@gmail.com</webMaster>
+    <lastBuildDate>Fri, 26 Jul 2019 17:11:06 +1000</lastBuildDate>
+    
+	<atom:link href="https://rogchap.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Go</title>
+      <link>https://rogchap.com/tags/go/</link>
+      <pubDate>Fri, 26 Jul 2019 17:11:06 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>gRPC</title>
+      <link>https://rogchap.com/tags/grpc/</link>
+      <pubDate>Fri, 26 Jul 2019 17:11:06 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/tags/grpc/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

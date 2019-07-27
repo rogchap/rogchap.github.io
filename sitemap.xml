@@ -1,16 +1,49 @@
----
-layout: nil
----
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	<url>
-		<loc>{{ site.url }}/</loc>
-		<lastmod>{{ site.time | date: "%Y-%m-%d" }}</lastmod>
-	</url>
-	{% for post in site.posts %}
-	<url>
-		<loc>{{ site.url }}{{ post.url }}</loc>
-		<lastmod>{{ post.date | date: "%Y-%m-%d" }}</lastmod>
-	</url>
-	{% endfor %}
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://rogchap.com/tags/go/</loc>
+    <lastmod>2019-07-26T17:11:06+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/</loc>
+    <lastmod>2019-07-26T17:11:06+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/posts/</loc>
+    <lastmod>2019-07-26T17:11:06+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/</loc>
+    <lastmod>2019-07-26T17:11:06+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/tags/</loc>
+    <lastmod>2019-07-26T17:11:06+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/tags/grpc/</loc>
+    <lastmod>2019-07-26T17:11:06+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/2019/06/25/mocking-grpc-in-go/</loc>
+    <lastmod>2019-06-25T22:20:10+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/about/</loc>
+  </url>
+  
 </urlset>

@@ -1,5 +1,0 @@
-url: http://rogchap.com
-#markdown: rdiscount
-permalink: pretty
-pygments: true
-exclude: ['Rakefile.rb', 'CNAME', 'README.markdown']
