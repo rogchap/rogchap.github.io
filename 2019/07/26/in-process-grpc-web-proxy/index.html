@@ -429,7 +429,7 @@ code, kbd, pre, samp {
         
         
 
-<p>From the offical <a href="https://github.com/grpc/grpc-web">gRPC-Web</a> docs:</p>
+<p>From the official <a href="https://github.com/grpc/grpc-web">gRPC-Web</a> docs:</p>
 
 <blockquote>
 <p>&ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&rdquo;</p>
@@ -441,9 +441,9 @@ code, kbd, pre, samp {
 
 <h2 id="grpc-web-wrapper">gRPC-Web Wrapper</h2>
 
-<p>Prior to the release of the offical gRPC-Web implementation the good guys at Improbable Engineering had created there own version of gRPC-Web and also have a <a href="https://github.com/improbable-eng/grpc-web/tree/master/go/grpcweb"><code>grpcweb</code></a> pacakge that implements the gRPC-Web spec as a wrapper around a gRPC-Go Server.</p>
+<p>Prior to the release of the official gRPC-Web implementation the good guys at Improbable Engineering had created there own version of gRPC-Web and also have a <a href="https://github.com/improbable-eng/grpc-web/tree/master/go/grpcweb"><code>grpcweb</code></a> package that implements the gRPC-Web spec as a wrapper around a gRPC-Go Server.</p>
 
-<p>Turns out that, with a little extra configuration, it can be made compatible with the offical gRPC-Web client:</p>
+<p>Turns out that, with a little extra configuration, it can be made compatible with the official gRPC-Web client:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">grpcServer <span style="color:#666">:=</span> grpc.<span style="color:#06287e">Server</span>()
 grpcWebServer <span style="color:#666">:=</span> grpcweb.<span style="color:#06287e">WrapServer</span>(grpcServer)
 
@@ -463,13 +463,13 @@ httpServer = <span style="color:#666">&amp;</span>http.Server{
         }
     }), <span style="color:#666">&amp;</span>http2.Server{}),
 }</code></pre></div>
-<p><strong>Note:</strong> Were also using the <code>golang.org/x/net/http2/h2c</code> package to allow HTTP/2 over cleartext as we are also listening for HTTP/1.1 requests on the same port without TLS. This is not recomended for production, but means we don&rsquo;t require certificates during development.</p>
+<p><strong>Note:</strong> Were also using the <code>golang.org/x/net/http2/h2c</code> package to allow HTTP/2 over cleartext as we are also listening for HTTP/1.1 requests on the same port without TLS. This is not recommended for production, but means we don&rsquo;t require certificates during development.</p>
 
 <h2 id="debugging-grpc-web-on-the-wire">Debugging gRPC-Web on the wire</h2>
 
-<p>For our frontend engineers they rely on chrome devtools to view newtwork traffic, but for gRPC-Web it appears as a base64 string; not very useful.</p>
+<p>For our frontend engineers they rely on chrome devtools to view network traffic, but for gRPC-Web it appears as a base64 string; not very useful.</p>
 
-<p>So we created <a href="https://github.com/SafetyCulture/grpc-web-devtools">gRPC-Web Dev Tools</a> a network like extension for Chrome that alows you to view the gRPC-Web requests and responses de-serialized to JSON objects; much better:</p>
+<p>So we created <a href="https://github.com/SafetyCulture/grpc-web-devtools">gRPC-Web Dev Tools</a> a network like extension for Chrome that allows you to view the gRPC-Web requests and responses de-serialized to JSON objects; much better:</p>
 
 <p><img src="/posts/img/grpc-web-devtools.png" alt="gRPC-Web Dev Tools" /></p>
 
