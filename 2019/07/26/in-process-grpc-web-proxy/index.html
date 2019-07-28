@@ -441,7 +441,7 @@ code, kbd, pre, samp {
 
 <h2 id="grpc-web-wrapper">gRPC-Web Wrapper</h2>
 
-<p>Prior to the release of the official gRPC-Web implementation the good guys at Improbable Engineering had created there own version of gRPC-Web and also have a <a href="https://github.com/improbable-eng/grpc-web/tree/master/go/grpcweb"><code>grpcweb</code></a> package that implements the gRPC-Web spec as a wrapper around a gRPC-Go Server.</p>
+<p>Prior to the release of the official gRPC-Web implementation the good guys at Improbable Engineering had created there own version of gRPC-Web and also have a <a href="https://github.com/improbable-eng/grpc-web/tree/master/go/grpcweb"><code>grpcweb</code></a> package that implements the gRPC-Web spec as a wrapper around a gRPC Go (Golang) Server.</p>
 
 <p>Turns out that, with a little extra configuration, it can be made compatible with the official gRPC-Web client:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">grpcServer <span style="color:#666">:=</span> grpc.<span style="color:#06287e">Server</span>()

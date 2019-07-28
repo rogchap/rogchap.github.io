@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="utf-8">
+  <title>Building an Assembler</title>
+  <meta name="description" content="Building an Assembler">
+  <meta name="author" content="">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <noscript>
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://rogchap.com/css/fonts.css">
+  </noscript>
+  
+  
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+/*!
+normalize.css v^3.0 | MIT License | git.io/normalize
+Copyright (c) Nicolas Gallagher and Jonathan Neal
+*/
+/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,optgroup,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre,textarea{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}table{border-collapse:collapse;border-spacing:0}.hidden,[hidden]{display:none!important}.pure-img{max-width:100%;height:auto;display:block}
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-menu{box-sizing:border-box}.pure-menu-fixed{position:fixed;left:0;top:0;z-index:3}.pure-menu-item,.pure-menu-list{position:relative}.pure-menu-list{list-style:none;margin:0;padding:0}.pure-menu-item{padding:0;margin:0;height:100%}.pure-menu-heading,.pure-menu-link{display:block;text-decoration:none;white-space:nowrap}.pure-menu-horizontal{width:100%;white-space:normal}.pure-menu-horizontal .pure-menu-list{display:inline-block}.pure-menu-horizontal .pure-menu-heading,.pure-menu-horizontal .pure-menu-item,.pure-menu-horizontal .pure-menu-separator{display:inline-block;zoom:1;vertical-align:middle}.pure-menu-item .pure-menu-item{display:block}.pure-menu-children{display:none;position:absolute;left:100%;top:0;margin:0;padding:0;z-index:3}.pure-menu-horizontal .pure-menu-children{left:0;top:auto;width:inherit}.pure-menu-active>.pure-menu-children,.pure-menu-allow-hover:hover>.pure-menu-children{display:block;position:absolute}.pure-menu-has-children>.pure-menu-link:after{padding-left:.5em;content:"\25B8";font-size:small}.pure-menu-horizontal .pure-menu-has-children>.pure-menu-link:after{content:"\25BE"}.pure-menu-scrollable{overflow-y:scroll;overflow-x:hidden}.pure-menu-scrollable .pure-menu-list{display:block}.pure-menu-horizontal.pure-menu-scrollable .pure-menu-list{display:inline-block}.pure-menu-horizontal.pure-menu-scrollable{white-space:nowrap;overflow-y:hidden;overflow-x:auto;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;padding:.5em 0}.pure-menu-horizontal.pure-menu-scrollable::-webkit-scrollbar{display:none}.pure-menu-horizontal .pure-menu-children .pure-menu-separator,.pure-menu-separator{background-color:#ccc;height:1px;margin:.3em 0}.pure-menu-horizontal .pure-menu-separator{width:1px;height:1.3em;margin:0 .3em}.pure-menu-horizontal .pure-menu-children .pure-menu-separator{display:block;width:auto}.pure-menu-heading{text-transform:uppercase;color:#565d64}.pure-menu-link{color:#777}.pure-menu-children{background-color:#fff}.pure-menu-disabled,.pure-menu-heading,.pure-menu-link{padding:.5em 1em}.pure-menu-disabled{opacity:.5}.pure-menu-disabled .pure-menu-link:hover{background-color:transparent}.pure-menu-active>.pure-menu-link,.pure-menu-link:focus,.pure-menu-link:hover{background-color:#eee}.pure-menu-selected .pure-menu-link,.pure-menu-selected .pure-menu-link:visited{color:#000}
+
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-g{letter-spacing:-.31em;text-rendering:optimizespeed;font-family:FreeSans,Arimo,"Droid Sans",Helvetica,Arial,sans-serif;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-flow:row wrap;-ms-flex-flow:row wrap;flex-flow:row wrap;-webkit-align-content:flex-start;-ms-flex-line-pack:start;align-content:flex-start}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){table .pure-g{display:block}}.opera-only :-o-prefocus,.pure-g{word-spacing:-.43em}.pure-u,.pure-u-1,.pure-u-1-1,.pure-u-1-12,.pure-u-1-2,.pure-u-1-24,.pure-u-1-3,.pure-u-1-4,.pure-u-1-5,.pure-u-1-6,.pure-u-1-8,.pure-u-10-24,.pure-u-11-12,.pure-u-11-24,.pure-u-12-24,.pure-u-13-24,.pure-u-14-24,.pure-u-15-24,.pure-u-16-24,.pure-u-17-24,.pure-u-18-24,.pure-u-19-24,.pure-u-2-24,.pure-u-2-3,.pure-u-2-5,.pure-u-20-24,.pure-u-21-24,.pure-u-22-24,.pure-u-23-24,.pure-u-24-24,.pure-u-3-24,.pure-u-3-4,.pure-u-3-5,.pure-u-3-8,.pure-u-4-24,.pure-u-4-5,.pure-u-5-12,.pure-u-5-24,.pure-u-5-5,.pure-u-5-6,.pure-u-5-8,.pure-u-6-24,.pure-u-7-12,.pure-u-7-24,.pure-u-7-8,.pure-u-8-24,.pure-u-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-g [class*=pure-u]{font-family:sans-serif}.pure-u-1-24{width:4.1667%}.pure-u-1-12,.pure-u-2-24{width:8.3333%}.pure-u-1-8,.pure-u-3-24{width:12.5%}.pure-u-1-6,.pure-u-4-24{width:16.6667%}.pure-u-1-5{width:20%}.pure-u-5-24{width:20.8333%}.pure-u-1-4,.pure-u-6-24{width:25%}.pure-u-7-24{width:29.1667%}.pure-u-1-3,.pure-u-8-24{width:33.3333%}.pure-u-3-8,.pure-u-9-24{width:37.5%}.pure-u-2-5{width:40%}.pure-u-10-24,.pure-u-5-12{width:41.6667%}.pure-u-11-24{width:45.8333%}.pure-u-1-2,.pure-u-12-24{width:50%}.pure-u-13-24{width:54.1667%}.pure-u-14-24,.pure-u-7-12{width:58.3333%}.pure-u-3-5{width:60%}.pure-u-15-24,.pure-u-5-8{width:62.5%}.pure-u-16-24,.pure-u-2-3{width:66.6667%}.pure-u-17-24{width:70.8333%}.pure-u-18-24,.pure-u-3-4{width:75%}.pure-u-19-24{width:79.1667%}.pure-u-4-5{width:80%}.pure-u-20-24,.pure-u-5-6{width:83.3333%}.pure-u-21-24,.pure-u-7-8{width:87.5%}.pure-u-11-12,.pure-u-22-24{width:91.6667%}.pure-u-23-24{width:95.8333%}.pure-u-1,.pure-u-1-1,.pure-u-24-24,.pure-u-5-5{width:100%}
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-table{border-collapse:collapse;border-spacing:0;empty-cells:show;border:1px solid #cbcbcb}.pure-table caption{color:#000;font:italic 85%/1 arial,sans-serif;padding:1em 0;text-align:center}.pure-table td,.pure-table th{border-left:1px solid #cbcbcb;border-width:0 0 0 1px;font-size:inherit;margin:0;overflow:visible;padding:.5em 1em}.pure-table td:first-child,.pure-table th:first-child{border-left-width:0}.pure-table thead{background-color:#e0e0e0;color:#000;text-align:left;vertical-align:bottom}.pure-table td{background-color:transparent}.pure-table-odd td,.pure-table-striped tr:nth-child(2n-1) td{background-color:#f2f2f2}.pure-table-bordered td{border-bottom:1px solid #cbcbcb}.pure-table-bordered tbody>tr:last-child>td{border-bottom-width:0}.pure-table-horizontal td,.pure-table-horizontal th{border-width:0 0 1px;border-bottom:1px solid #cbcbcb}.pure-table-horizontal tbody>tr:last-child>td{border-bottom-width:0}
+  </style>
+  
+  
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+@media screen and (min-width:35.5em){.pure-u-sm-1,.pure-u-sm-1-1,.pure-u-sm-1-12,.pure-u-sm-1-2,.pure-u-sm-1-24,.pure-u-sm-1-3,.pure-u-sm-1-4,.pure-u-sm-1-5,.pure-u-sm-1-6,.pure-u-sm-1-8,.pure-u-sm-10-24,.pure-u-sm-11-12,.pure-u-sm-11-24,.pure-u-sm-12-24,.pure-u-sm-13-24,.pure-u-sm-14-24,.pure-u-sm-15-24,.pure-u-sm-16-24,.pure-u-sm-17-24,.pure-u-sm-18-24,.pure-u-sm-19-24,.pure-u-sm-2-24,.pure-u-sm-2-3,.pure-u-sm-2-5,.pure-u-sm-20-24,.pure-u-sm-21-24,.pure-u-sm-22-24,.pure-u-sm-23-24,.pure-u-sm-24-24,.pure-u-sm-3-24,.pure-u-sm-3-4,.pure-u-sm-3-5,.pure-u-sm-3-8,.pure-u-sm-4-24,.pure-u-sm-4-5,.pure-u-sm-5-12,.pure-u-sm-5-24,.pure-u-sm-5-5,.pure-u-sm-5-6,.pure-u-sm-5-8,.pure-u-sm-6-24,.pure-u-sm-7-12,.pure-u-sm-7-24,.pure-u-sm-7-8,.pure-u-sm-8-24,.pure-u-sm-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-sm-1-24{width:4.1667%}.pure-u-sm-1-12,.pure-u-sm-2-24{width:8.3333%}.pure-u-sm-1-8,.pure-u-sm-3-24{width:12.5%}.pure-u-sm-1-6,.pure-u-sm-4-24{width:16.6667%}.pure-u-sm-1-5{width:20%}.pure-u-sm-5-24{width:20.8333%}.pure-u-sm-1-4,.pure-u-sm-6-24{width:25%}.pure-u-sm-7-24{width:29.1667%}.pure-u-sm-1-3,.pure-u-sm-8-24{width:33.3333%}.pure-u-sm-3-8,.pure-u-sm-9-24{width:37.5%}.pure-u-sm-2-5{width:40%}.pure-u-sm-10-24,.pure-u-sm-5-12{width:41.6667%}.pure-u-sm-11-24{width:45.8333%}.pure-u-sm-1-2,.pure-u-sm-12-24{width:50%}.pure-u-sm-13-24{width:54.1667%}.pure-u-sm-14-24,.pure-u-sm-7-12{width:58.3333%}.pure-u-sm-3-5{width:60%}.pure-u-sm-15-24,.pure-u-sm-5-8{width:62.5%}.pure-u-sm-16-24,.pure-u-sm-2-3{width:66.6667%}.pure-u-sm-17-24{width:70.8333%}.pure-u-sm-18-24,.pure-u-sm-3-4{width:75%}.pure-u-sm-19-24{width:79.1667%}.pure-u-sm-4-5{width:80%}.pure-u-sm-20-24,.pure-u-sm-5-6{width:83.3333%}.pure-u-sm-21-24,.pure-u-sm-7-8{width:87.5%}.pure-u-sm-11-12,.pure-u-sm-22-24{width:91.6667%}.pure-u-sm-23-24{width:95.8333%}.pure-u-sm-1,.pure-u-sm-1-1,.pure-u-sm-24-24,.pure-u-sm-5-5{width:100%}}@media screen and (min-width:48em){.pure-u-md-1,.pure-u-md-1-1,.pure-u-md-1-12,.pure-u-md-1-2,.pure-u-md-1-24,.pure-u-md-1-3,.pure-u-md-1-4,.pure-u-md-1-5,.pure-u-md-1-6,.pure-u-md-1-8,.pure-u-md-10-24,.pure-u-md-11-12,.pure-u-md-11-24,.pure-u-md-12-24,.pure-u-md-13-24,.pure-u-md-14-24,.pure-u-md-15-24,.pure-u-md-16-24,.pure-u-md-17-24,.pure-u-md-18-24,.pure-u-md-19-24,.pure-u-md-2-24,.pure-u-md-2-3,.pure-u-md-2-5,.pure-u-md-20-24,.pure-u-md-21-24,.pure-u-md-22-24,.pure-u-md-23-24,.pure-u-md-24-24,.pure-u-md-3-24,.pure-u-md-3-4,.pure-u-md-3-5,.pure-u-md-3-8,.pure-u-md-4-24,.pure-u-md-4-5,.pure-u-md-5-12,.pure-u-md-5-24,.pure-u-md-5-5,.pure-u-md-5-6,.pure-u-md-5-8,.pure-u-md-6-24,.pure-u-md-7-12,.pure-u-md-7-24,.pure-u-md-7-8,.pure-u-md-8-24,.pure-u-md-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-md-1-24{width:4.1667%}.pure-u-md-1-12,.pure-u-md-2-24{width:8.3333%}.pure-u-md-1-8,.pure-u-md-3-24{width:12.5%}.pure-u-md-1-6,.pure-u-md-4-24{width:16.6667%}.pure-u-md-1-5{width:20%}.pure-u-md-5-24{width:20.8333%}.pure-u-md-1-4,.pure-u-md-6-24{width:25%}.pure-u-md-7-24{width:29.1667%}.pure-u-md-1-3,.pure-u-md-8-24{width:33.3333%}.pure-u-md-3-8,.pure-u-md-9-24{width:37.5%}.pure-u-md-2-5{width:40%}.pure-u-md-10-24,.pure-u-md-5-12{width:41.6667%}.pure-u-md-11-24{width:45.8333%}.pure-u-md-1-2,.pure-u-md-12-24{width:50%}.pure-u-md-13-24{width:54.1667%}.pure-u-md-14-24,.pure-u-md-7-12{width:58.3333%}.pure-u-md-3-5{width:60%}.pure-u-md-15-24,.pure-u-md-5-8{width:62.5%}.pure-u-md-16-24,.pure-u-md-2-3{width:66.6667%}.pure-u-md-17-24{width:70.8333%}.pure-u-md-18-24,.pure-u-md-3-4{width:75%}.pure-u-md-19-24{width:79.1667%}.pure-u-md-4-5{width:80%}.pure-u-md-20-24,.pure-u-md-5-6{width:83.3333%}.pure-u-md-21-24,.pure-u-md-7-8{width:87.5%}.pure-u-md-11-12,.pure-u-md-22-24{width:91.6667%}.pure-u-md-23-24{width:95.8333%}.pure-u-md-1,.pure-u-md-1-1,.pure-u-md-24-24,.pure-u-md-5-5{width:100%}}@media screen and (min-width:64em){.pure-u-lg-1,.pure-u-lg-1-1,.pure-u-lg-1-12,.pure-u-lg-1-2,.pure-u-lg-1-24,.pure-u-lg-1-3,.pure-u-lg-1-4,.pure-u-lg-1-5,.pure-u-lg-1-6,.pure-u-lg-1-8,.pure-u-lg-10-24,.pure-u-lg-11-12,.pure-u-lg-11-24,.pure-u-lg-12-24,.pure-u-lg-13-24,.pure-u-lg-14-24,.pure-u-lg-15-24,.pure-u-lg-16-24,.pure-u-lg-17-24,.pure-u-lg-18-24,.pure-u-lg-19-24,.pure-u-lg-2-24,.pure-u-lg-2-3,.pure-u-lg-2-5,.pure-u-lg-20-24,.pure-u-lg-21-24,.pure-u-lg-22-24,.pure-u-lg-23-24,.pure-u-lg-24-24,.pure-u-lg-3-24,.pure-u-lg-3-4,.pure-u-lg-3-5,.pure-u-lg-3-8,.pure-u-lg-4-24,.pure-u-lg-4-5,.pure-u-lg-5-12,.pure-u-lg-5-24,.pure-u-lg-5-5,.pure-u-lg-5-6,.pure-u-lg-5-8,.pure-u-lg-6-24,.pure-u-lg-7-12,.pure-u-lg-7-24,.pure-u-lg-7-8,.pure-u-lg-8-24,.pure-u-lg-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-lg-1-24{width:4.1667%}.pure-u-lg-1-12,.pure-u-lg-2-24{width:8.3333%}.pure-u-lg-1-8,.pure-u-lg-3-24{width:12.5%}.pure-u-lg-1-6,.pure-u-lg-4-24{width:16.6667%}.pure-u-lg-1-5{width:20%}.pure-u-lg-5-24{width:20.8333%}.pure-u-lg-1-4,.pure-u-lg-6-24{width:25%}.pure-u-lg-7-24{width:29.1667%}.pure-u-lg-1-3,.pure-u-lg-8-24{width:33.3333%}.pure-u-lg-3-8,.pure-u-lg-9-24{width:37.5%}.pure-u-lg-2-5{width:40%}.pure-u-lg-10-24,.pure-u-lg-5-12{width:41.6667%}.pure-u-lg-11-24{width:45.8333%}.pure-u-lg-1-2,.pure-u-lg-12-24{width:50%}.pure-u-lg-13-24{width:54.1667%}.pure-u-lg-14-24,.pure-u-lg-7-12{width:58.3333%}.pure-u-lg-3-5{width:60%}.pure-u-lg-15-24,.pure-u-lg-5-8{width:62.5%}.pure-u-lg-16-24,.pure-u-lg-2-3{width:66.6667%}.pure-u-lg-17-24{width:70.8333%}.pure-u-lg-18-24,.pure-u-lg-3-4{width:75%}.pure-u-lg-19-24{width:79.1667%}.pure-u-lg-4-5{width:80%}.pure-u-lg-20-24,.pure-u-lg-5-6{width:83.3333%}.pure-u-lg-21-24,.pure-u-lg-7-8{width:87.5%}.pure-u-lg-11-12,.pure-u-lg-22-24{width:91.6667%}.pure-u-lg-23-24{width:95.8333%}.pure-u-lg-1,.pure-u-lg-1-1,.pure-u-lg-24-24,.pure-u-lg-5-5{width:100%}}@media screen and (min-width:80em){.pure-u-xl-1,.pure-u-xl-1-1,.pure-u-xl-1-12,.pure-u-xl-1-2,.pure-u-xl-1-24,.pure-u-xl-1-3,.pure-u-xl-1-4,.pure-u-xl-1-5,.pure-u-xl-1-6,.pure-u-xl-1-8,.pure-u-xl-10-24,.pure-u-xl-11-12,.pure-u-xl-11-24,.pure-u-xl-12-24,.pure-u-xl-13-24,.pure-u-xl-14-24,.pure-u-xl-15-24,.pure-u-xl-16-24,.pure-u-xl-17-24,.pure-u-xl-18-24,.pure-u-xl-19-24,.pure-u-xl-2-24,.pure-u-xl-2-3,.pure-u-xl-2-5,.pure-u-xl-20-24,.pure-u-xl-21-24,.pure-u-xl-22-24,.pure-u-xl-23-24,.pure-u-xl-24-24,.pure-u-xl-3-24,.pure-u-xl-3-4,.pure-u-xl-3-5,.pure-u-xl-3-8,.pure-u-xl-4-24,.pure-u-xl-4-5,.pure-u-xl-5-12,.pure-u-xl-5-24,.pure-u-xl-5-5,.pure-u-xl-5-6,.pure-u-xl-5-8,.pure-u-xl-6-24,.pure-u-xl-7-12,.pure-u-xl-7-24,.pure-u-xl-7-8,.pure-u-xl-8-24,.pure-u-xl-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-xl-1-24{width:4.1667%}.pure-u-xl-1-12,.pure-u-xl-2-24{width:8.3333%}.pure-u-xl-1-8,.pure-u-xl-3-24{width:12.5%}.pure-u-xl-1-6,.pure-u-xl-4-24{width:16.6667%}.pure-u-xl-1-5{width:20%}.pure-u-xl-5-24{width:20.8333%}.pure-u-xl-1-4,.pure-u-xl-6-24{width:25%}.pure-u-xl-7-24{width:29.1667%}.pure-u-xl-1-3,.pure-u-xl-8-24{width:33.3333%}.pure-u-xl-3-8,.pure-u-xl-9-24{width:37.5%}.pure-u-xl-2-5{width:40%}.pure-u-xl-10-24,.pure-u-xl-5-12{width:41.6667%}.pure-u-xl-11-24{width:45.8333%}.pure-u-xl-1-2,.pure-u-xl-12-24{width:50%}.pure-u-xl-13-24{width:54.1667%}.pure-u-xl-14-24,.pure-u-xl-7-12{width:58.3333%}.pure-u-xl-3-5{width:60%}.pure-u-xl-15-24,.pure-u-xl-5-8{width:62.5%}.pure-u-xl-16-24,.pure-u-xl-2-3{width:66.6667%}.pure-u-xl-17-24{width:70.8333%}.pure-u-xl-18-24,.pure-u-xl-3-4{width:75%}.pure-u-xl-19-24{width:79.1667%}.pure-u-xl-4-5{width:80%}.pure-u-xl-20-24,.pure-u-xl-5-6{width:83.3333%}.pure-u-xl-21-24,.pure-u-xl-7-8{width:87.5%}.pure-u-xl-11-12,.pure-u-xl-22-24{width:91.6667%}.pure-u-xl-23-24{width:95.8333%}.pure-u-xl-1,.pure-u-xl-1-1,.pure-u-xl-24-24,.pure-u-xl-5-5{width:100%}}
+  </style>
+  
+
+  
+  <style type="text/css" media="screen">
+    html {
+	min-height: 100%;
+	width: 100%;
+	position: relative;
+}
+
+body {
+	background-color: rgb(252, 252, 252);
+	color: #484848;
+}
+
+a {
+	text-decoration: none;
+}
+
+code, kbd, pre, samp {
+    background-color: rgb(240, 240, 240);
+}
+
+.nav-menu {
+	margin-top: 5px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+.pure-menu-heading {
+	text-transform: none;
+	font-size: large;
+}
+
+.header {
+	text-align: left;
+	color: #484848;
+	margin-bottom: .5em;
+}
+
+.header ul li {
+	height: auto;
+}
+
+.header ul li a {
+	font-weight: bold;
+	color: #484848;
+	font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.header {
+	font-weight: bold;
+	color: #484848;
+	font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.site-title {
+	color: #484848;
+	text-transform: none;
+	font-weight: normal;
+	font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.pull-right {
+	float: right;
+}
+
+.posts-name {
+	text-transform: capitalize;
+	font-weight: bold;
+	padding-left: 1em;
+	margin-top: 1em;
+	font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.posts {
+	font-family: verdana, arial, helvetica, sans-serif;
+	list-style-type: none;
+	padding-left: 1em;
+}
+
+.posts li p {
+	margin-top: 0;
+}
+
+.posts li {
+	margin-bottom: 1em;
+}
+
+.posts li > a {
+	color: #369;
+	text-decoration: none;
+}
+.posts li > a:hover {
+	color: #2d5986;
+	text-decoration: underline;
+}
+
+.post-list {
+	font-size: large;
+}
+
+.footnote {
+	font-family: verdana, arial, helvetica, sans-serif;
+	color: #575757;
+	font-size: 0.75em;
+	margin-bottom: 0;
+}
+
+.footnote a {
+	color: #575757;
+}
+
+.footnote a:hover {
+	text-decoration: underline;
+	color: #369;
+}
+
+.footer {
+	position: absolute;
+	z-index: 2;
+	height: auto;
+	width: 100%;
+	bottom: 0;
+}
+
+.footer-content {
+	border-top: 1px solid #e3e3e3;
+	font-size: 80%;
+	color: #bbb;
+}
+
+.footer-content a {
+	color: #575757;
+}
+
+.footer-content ul {
+	height: auto;
+	margin-top: 0;
+	margin-bottom: 0;
+	display: inline-block;
+	padding-left: 0;
+}
+
+/* https://github.com/gohugoio/hugo/issues/1778#issuecomment-451552602 */
+#TableOfContents > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#gototop-btn {
+	display: inline-block;
+}
+
+#foot-name {
+	color: #484848;
+	text-transform: none;
+}
+
+#foot-copyright {
+	padding-left: 1em;
+	padding-bottom: 0.5em;
+	margin: 0;
+}
+
+.post {
+	font-family: proxima-nova, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+	color: #484848;
+	letter-spacing: normal;
+	padding-left: .5em;
+}
+
+.post h1, h2, h3, h4, h5, h6 {
+	font-weight: bold;
+	letter-spacing: normal;
+}
+
+.post-content {
+	z-index: 9;
+	overflow: auto;
+	padding: 0;
+	padding-bottom: 3em;
+	font-size: 16px;
+	line-height: 1.4;
+}
+
+.post-content img {
+	max-width: 100%;
+	height: auto;
+}
+
+.post-content pre {
+	padding: 0.5em;
+}
+
+.post a {
+	color: #369;
+	text-decoration: none;
+}
+
+.post a:hover {
+	color: #2d5986;
+	text-decoration: underline;
+}
+
+.post h1 {
+	font-size: 28px;
+}
+
+.post h2 {
+	font-size: 25px;
+}
+
+.post h3 {
+	font-size: 23px;
+}
+
+.post h4 {
+	font-size: 21px;
+}
+
+.post h5 {
+	font-size: 19px;
+}
+
+.post h6 {
+	font-size: 18px;
+}
+
+.post-title {
+	margin-top: 0;
+	margin-bottom: 2em;
+}
+
+.post-title h1 {
+	font-weight: bold;
+	font-size: 39px;
+	line-height: 40px;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+@media screen and (max-width: 767px) {
+	.desktop {
+		display: none;
+	}
+
+	.mobile {
+		display: block;
+	}
+
+	#toggle-btn {
+		float: right;
+		padding: .5em 1em;
+		text-decoration: none;
+		color: #484848;
+		font-weight: bold;
+		line-height: 1.5em;
+	}
+
+	#toggle-content li {
+		clear: both;
+		height: auto;
+		background-color: rgb(249, 249, 249);
+	}
+
+	#toggle-home {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.mobile {
+		display: none;
+	}
+
+	.desktop {
+		display: block;
+	}
+}
+
+  </style>
+
+  
+  <link rel="shortcut icon" 
+   
+    href="https://rogchap.com/favicon.ico"
+  
+  type="image/x-icon">
+
+  
+  <meta name="generator" content="Hugo 0.56.0" />
+
+  
+  
+</head>
+<body>
+
+<div class="header pure-g">
+    <div class="pure-u-1-24 pure-u-md-5-24"></div>
+    <div class="pure-u-11-12 pure-u-md-7-12">
+        <div class="desktop pure-menu pure-menu-horizontal nav-menu">
+            
+            <a href="https://rogchap.com/" class="site-title pure-menu-heading">Roger Chapman</a>
+            <ul class="pure-menu-list pull-right">
+                
+                <li class="pure-menu-item">
+                    <a href="https://rogchap.com/about/" class="pure-menu-link">About</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mobile pure-menu nav-menu">
+            <a href="https://rogchap.com/" class="site-title pure-menu-heading" id="toggle-home">Roger Chapman</a>
+            <a href="#" id="toggle-btn">&#9776;</a>
+            <ul class="pure-menu-list" id="toggle-content" style="display:none;">
+                
+                
+                <li class="pure-menu-item">
+                    <a href="https://rogchap.com/about/" class="pure-menu-link">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+<div class="pure-g">
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+  <div class="pure-u-11-12 pure-u-md-7-12">
+    <div class="post">
+
+      <div class="post-title">
+        <p class="footnote">
+          
+          <time datetime="2019-07-28 13:04:23 &#43;1000 AEST">
+            
+            Jul 28, 2019
+            
+          </time>
+          
+          
+          
+          |
+          
+          
+          tags: [ <a
+            href="https://rogchap.com/tags/go">Go</a> ]
+          
+
+          
+
+          
+        </p>
+        <h1>Building an Assembler</h1>
+      </div>
+
+      <div class="post-content">
+        
+        
+
+<p>I recently completed the first part of the awesome &ldquo;<a href="https://www.nand2tetris.org">From Nand to Tetris</a>&rdquo; course. For project 6 you build an Assembler for the HACK Computer using a high level language of your choice; naturally I did my project using Go (Golang).</p>
+
+<p>The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I&rsquo;ve always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so.</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#60a0b0;font-style:italic">// HACK Assembly Language example
+</span><span style="color:#60a0b0;font-style:italic">// Draws a rectangle at the top-left corner of the screen.
+</span><span style="color:#60a0b0;font-style:italic"></span>
+   <span style="">@</span><span style="color:#40a070">0</span>               <span style="color:#60a0b0;font-style:italic">// this is an &#34;A&#34; instruction
+</span><span style="color:#60a0b0;font-style:italic"></span>   D<span style="color:#666">=</span>M              <span style="color:#60a0b0;font-style:italic">// this is a &#34;C&#34; instruction
+</span><span style="color:#60a0b0;font-style:italic"></span>   <span style="">@</span>INFINITE_LOOP
+   D;JLE            <span style="color:#60a0b0;font-style:italic">// this is also a &#34;C&#34; instruction
+</span><span style="color:#60a0b0;font-style:italic"></span>   <span style="">@</span>counter         
+   M<span style="color:#666">=</span>D
+   <span style="">@</span>SCREEN          <span style="color:#60a0b0;font-style:italic">// this is also an &#34;A&#34; instruction
+</span><span style="color:#60a0b0;font-style:italic"></span>   D<span style="color:#666">=</span>A
+   <span style="">@</span>address
+   M<span style="color:#666">=</span>D
+(LOOP)              <span style="color:#60a0b0;font-style:italic">// this is a Label
+</span><span style="color:#60a0b0;font-style:italic"></span>   <span style="">@</span>address
+   A<span style="color:#666">=</span>M
+   M<span style="color:#666">=-</span><span style="color:#40a070">1</span>
+   <span style="">@</span>address
+   D<span style="color:#666">=</span>M
+   <span style="">@</span><span style="color:#40a070">32</span>
+   D<span style="color:#666">=</span>D<span style="color:#666">+</span>A
+   <span style="">@</span>address
+   M<span style="color:#666">=</span>D
+   <span style="">@</span>counter
+   MD<span style="color:#666">=</span>M<span style="color:#666">-</span><span style="color:#40a070">1</span>
+   <span style="">@</span>LOOP
+   D;JGT
+(INFINITE_LOOP)
+   <span style="">@</span>INFINITE_LOOP
+   <span style="color:#40a070">0</span>;JMP</code></pre></div>
+<h2 id="defining-the-tokens">Defining the tokens</h2>
+
+<p>The HACK assembly language has 2 instruction types: &ldquo;A&rdquo; and &ldquo;C&rdquo;; it also has &ldquo;<code>goto</code>&rdquo; labels. Although each instruction can be broken down into parts, I decided to keep my tokens super simple:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> Token <span style="color:#902000">int</span>
+
+<span style="color:#007020;font-weight:bold">const</span> ( 
+    ILLEGAL Token = <span style="color:#007020;font-weight:bold">iota</span>
+	EOF
+	COMMENT
+	LABEL
+	A_INSTRUCTION
+	C_INSTRUCTION
+)</code></pre></div>
+<h2 id="the-scanner">The Scanner</h2>
+
+<p>My scanner is based on the <a href="https://golang.org/src/go/scanner/scanner.go">standard library&rsquo;s Go Scanner</a>:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> Scanner <span style="color:#007020;font-weight:bold">struct</span> {
+	src      []<span style="color:#902000">byte</span>
+	ch       <span style="color:#902000">rune</span> <span style="color:#60a0b0;font-style:italic">// current character
+</span><span style="color:#60a0b0;font-style:italic"></span>	offset   <span style="color:#902000">int</span>  <span style="color:#60a0b0;font-style:italic">// character offset
+</span><span style="color:#60a0b0;font-style:italic"></span>	rdOffset <span style="color:#902000">int</span>  <span style="color:#60a0b0;font-style:italic">// reading offset
+</span><span style="color:#60a0b0;font-style:italic"></span>}
+
+<span style="color:#007020;font-weight:bold">const</span> bom = <span style="color:#40a070">0xFEFF</span>
+<span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">Init</span>(src []<span style="color:#902000">byte</span>) {
+	s.src = src
+	s.ch = <span style="color:#4070a0">&#39; &#39;</span>
+	s.offset = <span style="color:#40a070">0</span>
+	s.rdOffset = <span style="color:#40a070">0</span>
+
+	s.<span style="color:#06287e">next</span>()
+	<span style="color:#007020;font-weight:bold">if</span> s.ch <span style="color:#666">==</span> bom {
+		s.<span style="color:#06287e">next</span>()
+	}
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">next</span>() {
+	<span style="color:#007020;font-weight:bold">if</span> s.rdOffset &lt; <span style="color:#007020">len</span>(s.src) {
+		s.offset = s.rdOffset
+		s.ch = <span style="color:#007020">rune</span>(s.src[s.rdOffset])
+		s.rdOffset <span style="color:#666">+=</span> <span style="color:#40a070">1</span>
+	} <span style="color:#007020;font-weight:bold">else</span> {
+		s.offset = <span style="color:#007020">len</span>(s.src)
+		s.ch = <span style="color:#666">-</span><span style="color:#40a070">1</span> <span style="color:#60a0b0;font-style:italic">// eof
+</span><span style="color:#60a0b0;font-style:italic"></span>	}
+}</code></pre></div>
+<p>The scanners job is to read one <code>rune</code> at a time and return a <code>Token</code> and the <code>string</code> literal of what it scanned.</p>
+
+<p>For the Hack Assembly Language whitespace means nothing, so we can safely skip any found (the indentation in the example is only for readability):</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">skipWhitespace</span>() {
+	<span style="color:#007020;font-weight:bold">for</span> s.ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39; &#39;</span> <span style="color:#666">||</span> s.ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;\t&#39;</span> <span style="color:#666">||</span> s.ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;\n&#39;</span> <span style="color:#666">||</span> s.ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;\r&#39;</span> {
+		s.<span style="color:#06287e">next</span>()
+	}
+}</code></pre></div>
+<p>The output of an assembler is <code>1</code>s and <code>0</code>s so we don&rsquo;t really need to scan for comments, but I thought that handling comments would be a good starting point to building the scanner:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">scanComment</span>() <span style="color:#902000">string</span> {
+	s.<span style="color:#06287e">next</span>()
+	offs <span style="color:#666">:=</span> s.offset
+	<span style="color:#007020;font-weight:bold">for</span> s.ch <span style="color:#666">!=</span> <span style="color:#4070a0">&#39;\n&#39;</span> <span style="color:#666">&amp;&amp;</span> s.ch <span style="color:#666">&gt;=</span> <span style="color:#40a070">0</span> {
+		s.<span style="color:#06287e">next</span>()
+	}
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020">string</span>(s.src[offs:s.offset])
+}</code></pre></div>
+<p>Our <code>scanComment()</code> function keeps progressing the scanner until it finds a newline or reaches the end of file (<code>EOF</code>), and returns all the characters as a <code>string</code>. Our <code>Scan()</code> function can now fully scan for comments:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">Scan</span>() (tok Token, lit <span style="color:#902000">string</span>) {
+	s.<span style="color:#06287e">skipWhitespace</span>()
+	ch <span style="color:#666">:=</span> s.ch
+	s.<span style="color:#06287e">next</span>() <span style="color:#60a0b0;font-style:italic">// always make progress
+</span><span style="color:#60a0b0;font-style:italic"></span>	
+	<span style="color:#007020;font-weight:bold">switch</span> ch {	
+	<span style="color:#007020;font-weight:bold">case</span> <span style="color:#666">-</span><span style="color:#40a070">1</span>:
+		tok = EOF
+	<span style="color:#007020;font-weight:bold">case</span> <span style="color:#4070a0">&#39;/&#39;</span>:
+		<span style="color:#007020;font-weight:bold">if</span> s.ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;/&#39;</span> { <span style="color:#60a0b0;font-style:italic">// the second &#39;/&#39; means we have a comment
+</span><span style="color:#60a0b0;font-style:italic"></span>			tok = COMMENT
+			lit = s.<span style="color:#06287e">scanComment</span>()
+        } 
+    <span style="color:#007020;font-weight:bold">default</span>:
+        tok = ILLEGAL
+	}
+	<span style="color:#007020;font-weight:bold">return</span>
+}               </code></pre></div>
+<p>Great, we now have a working Scanner that will tokenize Comments; lets add some more tokens.</p>
+
+<p>The &ldquo;A&rdquo; instruction is the easiest to scan; the instruction begins with <code>@</code>, and all we need to do is scan the whole line:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">scanLine</span>() <span style="color:#902000">string</span> {
+	offs <span style="color:#666">:=</span> s.offset
+	<span style="color:#007020;font-weight:bold">for</span> s.ch <span style="color:#666">!=</span> <span style="color:#4070a0">&#39;\n&#39;</span> <span style="color:#666">&amp;&amp;</span> s.ch <span style="color:#666">!=</span> <span style="color:#4070a0">&#39;\r&#39;</span> <span style="color:#666">&amp;&amp;</span> s.ch <span style="color:#666">&gt;=</span> <span style="color:#40a070">0</span> <span style="color:#666">&amp;&amp;</span> s.ch <span style="color:#666">!=</span> <span style="color:#4070a0">&#39; &#39;</span>  {
+		s.<span style="color:#06287e">next</span>()
+	}
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020">string</span>(s.src[offs:s.offset])
+}</code></pre></div>
+<p>A &ldquo;Label&rdquo; is also is easy as it begins with a bracket <code>(</code>, but instead of reading to the end of the line, we make sure end when we see the closing bracket <code>)</code>:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">scanLabel</span>() <span style="color:#902000">string</span> {
+	offs <span style="color:#666">:=</span> s.offset
+	<span style="color:#007020;font-weight:bold">for</span> {
+		ch <span style="color:#666">:=</span> s.ch
+		<span style="color:#007020;font-weight:bold">if</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;\n&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;\r&#39;</span> <span style="color:#666">||</span> ch &lt; <span style="color:#40a070">0</span> {
+			<span style="color:#007020;font-weight:bold">break</span>
+		}
+		s.<span style="color:#06287e">next</span>()
+		<span style="color:#007020;font-weight:bold">if</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;)&#39;</span> {
+			<span style="color:#007020;font-weight:bold">break</span>
+		}
+	}
+	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020">string</span>(s.src[offs:s.offset<span style="color:#666">-</span><span style="color:#40a070">1</span>])
+}</code></pre></div>
+<p>The &ldquo;C&rdquo; instruction is the most complex but a simple helper function can help us to determine if it&rsquo;s a C-Instruction (as described by the HACK Assembly Language spec):</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">isCInstruction</span>(ch <span style="color:#902000">rune</span>) <span style="color:#902000">bool</span> {
+	<span style="color:#007020;font-weight:bold">return</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;0&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;1&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;-&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;!&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;A&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;D&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;M&#39;</span>
+}</code></pre></div>
+<p>We can use the same <code>scanLine()</code> function for the C-Instruction, making sure we don&rsquo;t throw away the first character; Our final <code>Scan()</code> function looks like this:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">Scan</span>() (tok Token, lit <span style="color:#902000">string</span>) {
+	s.<span style="color:#06287e">skipWhitespace</span>()
+
+	<span style="color:#007020;font-weight:bold">switch</span> ch <span style="color:#666">:=</span> s.ch; {
+	<span style="color:#007020;font-weight:bold">case</span> <span style="color:#06287e">isCInstruction</span>(ch):
+		tok = C_INSTRUCTION
+		lit = s.<span style="color:#06287e">scanLine</span>()
+	<span style="color:#007020;font-weight:bold">default</span>:
+		s.<span style="color:#06287e">next</span>() <span style="color:#60a0b0;font-style:italic">// always make progress
+</span><span style="color:#60a0b0;font-style:italic"></span>		<span style="color:#007020;font-weight:bold">switch</span> ch {	
+		<span style="color:#007020;font-weight:bold">case</span> <span style="color:#666">-</span><span style="color:#40a070">1</span>:
+			tok = EOF
+		<span style="color:#007020;font-weight:bold">case</span> <span style="color:#4070a0">&#39;/&#39;</span>:
+			<span style="color:#007020;font-weight:bold">if</span> s.ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;/&#39;</span> {
+				tok = COMMENT
+				lit = s.<span style="color:#06287e">scanComment</span>()
+			}
+		<span style="color:#007020;font-weight:bold">case</span> <span style="color:#4070a0">&#39;(&#39;</span>:
+			tok = LABEL
+			lit = s.<span style="color:#06287e">scanLabel</span>()
+		<span style="color:#007020;font-weight:bold">case</span> <span style="color:#4070a0">&#39;@&#39;</span>:
+			tok = A_INSTRUCTION
+			lit = s.<span style="color:#06287e">scanLine</span>()
+		<span style="color:#007020;font-weight:bold">default</span>:
+			tok = ILLEGAL
+		}
+	}
+	<span style="color:#007020;font-weight:bold">return</span>
+}</code></pre></div>
+<h2 id="syntax-tree">Syntax Tree</h2>
+
+<p>Before we start parsing the HACK Assembly file we want to define our abstract syntax tree (AST). All Labels get converted to Symbols (more on this later) so we&rsquo;re left with a simple list of either &ldquo;A&rdquo;, or &ldquo;C&rdquo; instructions:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> Instruction <span style="color:#007020;font-weight:bold">interface</span> {
+	<span style="color:#06287e">BinaryString</span>() <span style="color:#902000">string</span>
+}
+
+<span style="color:#007020;font-weight:bold">type</span> HackFile <span style="color:#007020;font-weight:bold">struct</span> {
+	Instructions []Instruction
+}
+
+<span style="color:#007020;font-weight:bold">type</span> AInstruction <span style="color:#007020;font-weight:bold">struct</span> {
+	lit <span style="color:#902000">string</span> <span style="color:#60a0b0;font-style:italic">// the raw assembly instruction pre-parsing
+</span><span style="color:#60a0b0;font-style:italic"></span>	addr <span style="color:#902000">int</span>
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (a <span style="color:#666">*</span>AInstruction) <span style="color:#06287e">BinaryString</span>() <span style="color:#902000">string</span> {
+	<span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Sprintf</span>(<span style="color:#4070a0">&#34;0%015b\n&#34;</span>, a.addr)
+}
+
+<span style="color:#007020;font-weight:bold">type</span> CInstruction <span style="color:#007020;font-weight:bold">struct</span> {
+	lit <span style="color:#902000">string</span>
+	dest <span style="color:#902000">int</span> <span style="color:#60a0b0;font-style:italic">// C instructions look like: `dest=comp;jump`; dest and jump are optional
+</span><span style="color:#60a0b0;font-style:italic"></span>	comp <span style="color:#902000">int</span>
+	jump <span style="color:#902000">int</span>
+}
+
+<span style="color:#007020;font-weight:bold">func</span> (c <span style="color:#666">*</span>CInstruction) <span style="color:#06287e">BinaryString</span>() <span style="color:#902000">string</span> {
+	<span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Sprintf</span>(<span style="color:#4070a0">&#34;111%07b%03b%03b\n&#34;</span>, c.comp, c.dest, c.jump)
+}</code></pre></div>
+<p>Each <code>Instruction</code> interface has a single method <code>BinaryString()</code> which will make it really easy for us to output the machine code later.</p>
+
+<p>With out AST defined and our complete Scanner, we are ready to start parsing the data.</p>
+
+<h2 id="parsing">Parsing</h2>
+
+<p>The HACK Assembly Language has a number of pre-defined memory allocations defined as Symbols, so we&rsquo;ll initiate our parser with this in mind. Later, Labels we parse will be added to these Symbols and any variables found should also be added to these Symbols for later lookup.</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> Parser <span style="color:#007020;font-weight:bold">struct</span> {
+	scanner Scanner
+	symbols <span style="color:#007020;font-weight:bold">map</span>[<span style="color:#902000">string</span>]<span style="color:#902000">int</span>
+	instructions []Instruction
+	nAddr <span style="color:#902000">int</span> <span style="color:#60a0b0;font-style:italic">// next available address
+</span><span style="color:#60a0b0;font-style:italic"></span>}
+
+<span style="color:#007020;font-weight:bold">func</span> (p <span style="color:#666">*</span>Parser) <span style="color:#06287e">Init</span>(src []<span style="color:#902000">byte</span>) {
+	p.scanner.<span style="color:#06287e">Init</span>(src)	
+	p.nAddr = <span style="color:#40a070">16</span> <span style="color:#60a0b0;font-style:italic">// address [0:15] are reserved
+</span><span style="color:#60a0b0;font-style:italic"></span>	p.symbols = <span style="color:#007020;font-weight:bold">map</span>[<span style="color:#902000">string</span>]<span style="color:#902000">int</span>{
+		<span style="color:#4070a0">&#34;R0&#34;</span>: <span style="color:#40a070">0</span>, <span style="color:#4070a0">&#34;R1&#34;</span>: <span style="color:#40a070">1</span>, <span style="color:#4070a0">&#34;R2&#34;</span>: <span style="color:#40a070">2</span>, <span style="color:#4070a0">&#34;R3&#34;</span>: <span style="color:#40a070">3</span>, <span style="color:#4070a0">&#34;R4&#34;</span>: <span style="color:#40a070">4</span>, <span style="color:#4070a0">&#34;R5&#34;</span>: <span style="color:#40a070">5</span>, <span style="color:#4070a0">&#34;R6&#34;</span>: <span style="color:#40a070">6</span>, <span style="color:#4070a0">&#34;R7&#34;</span>: <span style="color:#40a070">7</span>, <span style="color:#4070a0">&#34;R8&#34;</span>: <span style="color:#40a070">8</span>,
+		<span style="color:#4070a0">&#34;R9&#34;</span>: <span style="color:#40a070">9</span>, <span style="color:#4070a0">&#34;R10&#34;</span>: <span style="color:#40a070">10</span>, <span style="color:#4070a0">&#34;R11&#34;</span>: <span style="color:#40a070">11</span>, <span style="color:#4070a0">&#34;R12&#34;</span>: <span style="color:#40a070">12</span>, <span style="color:#4070a0">&#34;R13&#34;</span>: <span style="color:#40a070">13</span>, <span style="color:#4070a0">&#34;R14&#34;</span>: <span style="color:#40a070">14</span>, <span style="color:#4070a0">&#34;R15&#34;</span>: <span style="color:#40a070">15</span>,
+		<span style="color:#4070a0">&#34;SCREEN&#34;</span>: <span style="color:#40a070">16384</span>, <span style="color:#4070a0">&#34;KBD&#34;</span>: <span style="color:#40a070">24576</span>,
+		<span style="color:#4070a0">&#34;SP&#34;</span>: <span style="color:#40a070">0</span>, <span style="color:#4070a0">&#34;LCL&#34;</span>: <span style="color:#40a070">1</span>, <span style="color:#4070a0">&#34;ARG&#34;</span>: <span style="color:#40a070">2</span>, <span style="color:#4070a0">&#34;THIS&#34;</span>: <span style="color:#40a070">3</span>, <span style="color:#4070a0">&#34;THAT&#34;</span>: <span style="color:#40a070">4</span>,
+	}
+}</code></pre></div>
+<p>Because Labels could appear in an &ldquo;A&rdquo; instruction before they are defined, we will need to parse the file in two passes; but instead of re-setting the scanner, we will parse the instructions by storing the raw string literal and parse the instructions in a second pass:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (p <span style="color:#666">*</span>Parser) <span style="color:#06287e">Parse</span>() HackFile {
+loop:
+	<span style="color:#007020;font-weight:bold">for</span> {
+		tok, lit <span style="color:#666">:=</span> p.scanner.<span style="color:#06287e">Scan</span>()
+		<span style="color:#007020;font-weight:bold">switch</span> tok {
+		<span style="color:#007020;font-weight:bold">case</span> EOF:
+			<span style="color:#007020;font-weight:bold">break</span> loop <span style="color:#60a0b0;font-style:italic">// break out of the loop not just the switch
+</span><span style="color:#60a0b0;font-style:italic"></span>		<span style="color:#007020;font-weight:bold">case</span> LABEL:
+			p.symbols[lit] = <span style="color:#007020">len</span>(p.instructions)
+		<span style="color:#007020;font-weight:bold">case</span> A_INSTRUCTION:
+			p.instructions = <span style="color:#007020">append</span>(p.instructions, <span style="color:#666">&amp;</span>AInstruction{lit: lit})
+		<span style="color:#007020;font-weight:bold">case</span> C_INSTRUCTION:
+			p.instructions = <span style="color:#007020">append</span>(p.instructions, <span style="color:#666">&amp;</span>CInstruction{lit: lit})
+		}
+	}
+
+	<span style="color:#007020;font-weight:bold">for</span> _, instr <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> p.instructions {
+		<span style="color:#007020;font-weight:bold">switch</span> i <span style="color:#666">:=</span> instr.(<span style="color:#007020;font-weight:bold">type</span>) {
+		<span style="color:#007020;font-weight:bold">case</span> <span style="color:#666">*</span>AInstruction:
+			p.<span style="color:#06287e">parseAInstruction</span>(i)
+		<span style="color:#007020;font-weight:bold">case</span> <span style="color:#666">*</span>CInstruction:
+			p.<span style="color:#06287e">parseCInstruction</span>(i)
+		}
+	} 
+	<span style="color:#007020;font-weight:bold">return</span> HackFile{ Instructions: p.instructions }
+}</code></pre></div>
+<p>I&rsquo;m intentionally not giving you the <code>parseAInstruction()</code> and <code>parseCInstruction()</code> methods, just so you can do some of the work yourself 😄</p>
+
+<h2 id="tying-it-all-together">Tying it all together</h2>
+
+<p>Our CLI tool will read in the <code>*.asm</code> file and output the machine code as a <code>*.hack</code> file:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {
+	asmFilePath <span style="color:#666">:=</span> os.Args[<span style="color:#40a070">1</span>]
+	asmData, _ <span style="color:#666">:=</span> ioutil.<span style="color:#06287e">ReadFile</span>(asmFilePath) <span style="color:#60a0b0;font-style:italic">// ignoring errors for brevity
+</span><span style="color:#60a0b0;font-style:italic"></span>	
+	<span style="color:#007020;font-weight:bold">var</span> p Parser
+	p.<span style="color:#06287e">Init</span>(asmData)
+	hackFile <span style="color:#666">:=</span> p.<span style="color:#06287e">Parse</span>()
+
+	<span style="color:#007020;font-weight:bold">var</span> b bytes.Buffer
+	<span style="color:#007020;font-weight:bold">for</span> _, i <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> hackFile.Instructions {
+		b.<span style="color:#06287e">WriteString</span>(i.<span style="color:#06287e">BinaryString</span>())
+	}
+
+	hackFilePath <span style="color:#666">:=</span> strings.<span style="color:#06287e">Replace</span>(asmFilePath, <span style="color:#4070a0">&#34;.asm&#34;</span>, <span style="color:#4070a0">&#34;.hack&#34;</span>, <span style="color:#40a070">1</span>)
+	ioutil.<span style="color:#06287e">WriteFile</span>(hackFilePath, b.<span style="color:#06287e">Bytes</span>(), <span style="color:#40a070">0644</span>)
+}</code></pre></div>
+<p>This project was the pre-cursor to writing a lexer/parser for the <a href="https://github.com/SafetyCulture/djinni-parser">Djinni IDL in Go</a>, which builds on top of these concepts; Check it out of you want more detail on building a lexer/parser in Go.</p>
+
+        
+        <div style="margin-top: 4em" v>
+          <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "rogchap" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+<div class="footer pure-g">
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+  <div class="pure-u-11-12 pure-u-md-7-12">
+    <div class="footer-content">
+      <div class="pure-menu pure-menu-horizontal">
+        <ul>
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="mailto:rogchap@gmail.com" class="pure-menu-link">Email</a>
+          </li>
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="https://github.com/rogchap" class="pure-menu-link">GitHub</a>
+          </li>
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="https://twitter.com/rogchap" class="pure-menu-link">Twitter</a>
+          </li>
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="https://medium.com/@rogchap" class="pure-menu-link">Medium</a>
+          </li>
+          
+
+        </ul>
+        <a href="#" class="pure-menu-link pull-right desktop" id="gototop-btn">↑↑</a>
+        
+      </div>
+      
+    </div>
+  </div>
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+<script type="text/javascript">
+  function go() {
+    var d = document.querySelectorAll(".desktop")
+    if (document.documentElement.clientWidth > 768) {
+      d.forEach(function (e) { e.style.display = ""; })
+    } else {
+      d.forEach(function (e) { e.style.display = "none"; })
+    }
+  }
+  go();
+  window.addEventListener('resize', go);
+</script>
+<script type="text/javascript">
+  var a = document.querySelector("#toggle-btn"), b = document.querySelector("#toggle-content"); a.addEventListener("click", function () { "" == b.style.display ? (b.style.display = "none", a.innerHTML = "☰") : (b.style.display = "", a.innerHTML = "✕") });</script>
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-4155555-8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

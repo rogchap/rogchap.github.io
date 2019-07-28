@@ -33,7 +33,7 @@ But for development I wanted to create a gRPC server that engineers could instal
       <guid>https://rogchap.com/2019/06/25/mocking-grpc-in-go/</guid>
       <description>One of the huge benefits of using gRPC is the ability to autogenerate our client and server stubs from the protocol buffer definitions.
 In the same way, we can we generate our own code by building a plugin for the protocol buffer compiler (protoc).
-The plugin we&amp;rsquo;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server.
+The plugin we&amp;rsquo;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).
 Goal Given the following proto file:</description>
     </item>
     
