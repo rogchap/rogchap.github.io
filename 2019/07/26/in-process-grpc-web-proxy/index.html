@@ -4,7 +4,10 @@
   
   <meta charset="utf-8">
   <title>In Process gRPC-Web Proxy</title>
-  <meta name="description" content="In Process gRPC-Web Proxy">
+  <meta name="description" content="From the official gRPC-Web docs:
+ &ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&rdquo;
+ For production we can just enable the envoy.grpc_web filter and we are good to go.
+But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker).">
   <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
