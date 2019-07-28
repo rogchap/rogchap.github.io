@@ -365,7 +365,18 @@ code, kbd, pre, samp {
   <meta name="generator" content="Hugo 0.56.0" />
 
   
-  
+  <meta property="og:title" content="In Process gRPC-Web Proxy" />
+<meta property="og:description" content="From the official gRPC-Web docs:
+ &ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&rdquo;
+ For production we can just enable the envoy.grpc_web filter and we are good to go.
+But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker)." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/" />
+
+<meta property="og:image" content="https://rogchap.com/tile.png" />
+<meta property="article:published_time" content="2019-07-26T17:11:06+10:00" />
+<meta property="article:modified_time" content="2019-07-26T17:11:06+10:00" />
+
 </head>
 <body>
 
