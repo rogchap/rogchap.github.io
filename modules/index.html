@@ -3,11 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>In Process gRPC-Web Proxy</title>
-  <meta name="description" content="From the official gRPC-Web docs:
- &ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&rdquo;
- For production we can just enable the envoy.grpc_web filter and we are good to go.
-But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker).">
+  <title>Modules</title>
+  <meta name="description" content="">
   <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -362,20 +359,17 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
+  <link rel="alternate" type="application/rss+xml" href="https://rogchap.com/modules/index.xml" title="Roger Chapman" />
   <meta name="generator" content="Hugo 0.56.3" />
 
   
-  <meta property="og:title" content="In Process gRPC-Web Proxy" />
-<meta property="og:description" content="From the official gRPC-Web docs:
- &ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&rdquo;
- For production we can just enable the envoy.grpc_web filter and we are good to go.
-But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker)." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/" />
+  <meta property="og:title" content="Modules" />
+<meta property="og:description" content="Roger is a Software Engineer living in Sydney, Australia. As a polyglot engineer, working with C#, Objective-C (iOS), Java (Android) and Javascript, he has found his passion with the Go programming language." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://rogchap.com/modules/" />
 
 <meta property="og:image" content="https://rogchap.com/tile.png" />
-<meta property="article:published_time" content="2019-07-26T17:11:06+10:00" />
-<meta property="article:modified_time" content="2019-07-26T17:11:06+10:00" />
+
 
 </head>
 <body>
@@ -408,110 +402,19 @@ But for development I wanted to create a gRPC server that engineers could instal
     <div class="pure-u-1-24 pure-u-md-5-24"></div>
 </div>
 
+
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
   <div class="pure-u-11-12 pure-u-md-7-12">
-    <div class="post">
+    <div class="post-content">
+      <p class="posts-name">Modules:</p>
 
-      <div class="post-title">
-        <p class="footnote">
-          
-          <time datetime="2019-07-26 17:11:06 &#43;1000 AEST">
-            
-            Jul 26, 2019
-            
-          </time>
-          
-          
-          
-          |
-          
-          
-          tags: [ <a
-            href="https://rogchap.com/tags/go">Go</a>, <a
-            href="https://rogchap.com/tags/grpc">gRPC</a> ]
-          
-
-          
-
-          
-        </p>
-        <h1>In Process gRPC-Web Proxy</h1>
-      </div>
-
-      <div class="post-content">
+      <ul class="posts">
         
         
-
-<p>From the official <a href="https://github.com/grpc/grpc-web">gRPC-Web</a> docs:</p>
-
-<blockquote>
-<p>&ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&rdquo;</p>
-</blockquote>
-
-<p>For production we can just enable the <code>envoy.grpc_web</code> filter and we are good to go.</p>
-
-<p>But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker).</p>
-
-<h2 id="grpc-web-wrapper">gRPC-Web Wrapper</h2>
-
-<p>Prior to the release of the official gRPC-Web implementation the good guys at Improbable Engineering had created there own version of gRPC-Web and also have a <a href="https://github.com/improbable-eng/grpc-web/tree/master/go/grpcweb"><code>grpcweb</code></a> package that implements the gRPC-Web spec as a wrapper around a gRPC Go (Golang) Server.</p>
-
-<p>Turns out that, with a little extra configuration, it can be made compatible with the official gRPC-Web client:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">grpcServer <span style="color:#666">:=</span> grpc.<span style="color:#06287e">Server</span>()
-grpcWebServer <span style="color:#666">:=</span> grpcweb.<span style="color:#06287e">WrapServer</span>(grpcServer)
-
-httpServer = <span style="color:#666">&amp;</span>http.Server{
-    Handler: h2c.<span style="color:#06287e">NewHandler</span>(http.<span style="color:#06287e">HandlerFunc</span>(<span style="color:#007020;font-weight:bold">func</span>(w http.ResponseWriter, r <span style="color:#666">*</span>http.Request) {
-        <span style="color:#007020;font-weight:bold">if</span> r.ProtoMajor <span style="color:#666">==</span> <span style="color:#40a070">2</span> {
-            grpcWebServer.<span style="color:#06287e">ServeHTTP</span>(w, r)
-        } <span style="color:#007020;font-weight:bold">else</span> {
-            w.<span style="color:#06287e">Header</span>().<span style="color:#06287e">Set</span>(<span style="color:#4070a0">&#34;Access-Control-Allow-Origin&#34;</span>, <span style="color:#4070a0">&#34;*&#34;</span>)
-            w.<span style="color:#06287e">Header</span>().<span style="color:#06287e">Set</span>(<span style="color:#4070a0">&#34;Access-Control-Allow-Methods&#34;</span>, <span style="color:#4070a0">&#34;POST, GET, OPTIONS, PUT, DELETE&#34;</span>)
-            w.<span style="color:#06287e">Header</span>().<span style="color:#06287e">Set</span>(<span style="color:#4070a0">&#34;Access-Control-Allow-Headers&#34;</span>, <span style="color:#4070a0">&#34;Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, X-User-Agent, X-Grpc-Web&#34;</span>)
-            w.<span style="color:#06287e">Header</span>().<span style="color:#06287e">Set</span>(<span style="color:#4070a0">&#34;grpc-status&#34;</span>, <span style="color:#4070a0">&#34;&#34;</span>)
-            w.<span style="color:#06287e">Header</span>().<span style="color:#06287e">Set</span>(<span style="color:#4070a0">&#34;grpc-message&#34;</span>, <span style="color:#4070a0">&#34;&#34;</span>)
-            <span style="color:#007020;font-weight:bold">if</span> grpcWebServer.<span style="color:#06287e">IsGrpcWebRequest</span>(r) {
-                grpcWebServer.<span style="color:#06287e">ServeHTTP</span>(w, r)
-            }
-        }
-    }), <span style="color:#666">&amp;</span>http2.Server{}),
-}</code></pre></div>
-<p><strong>Note:</strong> Were also using the <code>golang.org/x/net/http2/h2c</code> package to allow HTTP/2 over cleartext as we are also listening for HTTP/1.1 requests on the same port without TLS. This is not recommended for production, but means we don&rsquo;t require certificates during development.</p>
-
-<h2 id="debugging-grpc-web-on-the-wire">Debugging gRPC-Web on the wire</h2>
-
-<p>For our frontend engineers they rely on chrome devtools to view network traffic, but for gRPC-Web it appears as a base64 string; not very useful.</p>
-
-<p>So we created <a href="https://github.com/SafetyCulture/grpc-web-devtools">gRPC-Web Dev Tools</a> a network like extension for Chrome that allows you to view the gRPC-Web requests and responses de-serialized to JSON objects; much better:</p>
-
-<p><img src="/posts/img/grpc-web-devtools.png" alt="gRPC-Web Dev Tools" /></p>
-
         
-        <div style="margin-top: 4em" v>
-          <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "rogchap" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-        </div>
         
-      </div>
+      </ul>
     </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
@@ -551,6 +454,8 @@ httpServer = <span style="color:#666">&amp;</span>http.Server{
 
         </ul>
         <a href="#" class="pure-menu-link pull-right desktop" id="gototop-btn">↑↑</a>
+        
+        <a href="/modules/index.xml" class="pure-menu-link pull-right">RSS</a>
         
       </div>
       

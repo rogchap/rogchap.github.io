@@ -58,5 +58,14 @@ Roger is currently a Snr Principal Enginner at SafetyCulture, where he helps tea
 Code  grpc-web-devtools - Chrome browser extension to aid gRPC-Web development; view gRPC messages de-serialized into JSON just like the standard Network devtool.</description>
     </item>
     
+    <item>
+      <title>v8go</title>
+      <link>https://rogchap.com/v8go/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/v8go/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

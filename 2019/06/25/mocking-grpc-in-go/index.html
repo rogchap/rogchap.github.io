@@ -362,7 +362,7 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.56.0" />
+  <meta name="generator" content="Hugo 0.56.3" />
 
   
   <meta property="og:title" content="Mocking gRPC in Go" />
@@ -523,12 +523,12 @@ Goal Given the following proto file:" />
     msgName <span style="color:#666">:=</span> g.<span style="color:#06287e">TypeName</span>(msg)
     g.<span style="color:#06287e">P</span>(msgName, <span style="color:#4070a0">`{`</span>)
     g.<span style="color:#06287e">In</span>()
-        <span style="color:#007020;font-weight:bold">for</span> _, field <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> msg.Field {
-            fieldName <span style="color:#666">:=</span> g.<span style="color:#06287e">GetFieldName</span>(msg, field)
-            <span style="color:#007020;font-weight:bold">if</span> field.<span style="color:#06287e">IsString</span>() {
-                g.<span style="color:#06287e">P</span>(fieldName, <span style="color:#4070a0">`: &#34;f267332d-0d9a-4220-b055-63b661b600db&#34;,`</span>) 
-            }
-        }
+	<span style="color:#007020;font-weight:bold">for</span> _, field <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> msg.Field {
+		fieldName <span style="color:#666">:=</span> g.<span style="color:#06287e">GetFieldName</span>(msg, field)
+		<span style="color:#007020;font-weight:bold">if</span> field.<span style="color:#06287e">IsString</span>() {
+			g.<span style="color:#06287e">P</span>(fieldName, <span style="color:#4070a0">`: &#34;f267332d-0d9a-4220-b055-63b661b600db&#34;,`</span>) 
+		}
+	}
     g.<span style="color:#06287e">Out</span>()
     g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`}`</span>)
 }</code></pre></div>

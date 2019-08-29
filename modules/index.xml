@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Modules on Roger Chapman</title>
+    <link>https://rogchap.com/modules/</link>
+    <description>Recent content in Modules on Roger Chapman</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <managingEditor>rogchap@gmail.com</managingEditor>
+    <webMaster>rogchap@gmail.com</webMaster>
+    
+	<atom:link href="https://rogchap.com/modules/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>v8go</title>
+      <link>https://rogchap.com/v8go/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/v8go/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

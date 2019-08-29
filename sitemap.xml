@@ -51,4 +51,13 @@
     <loc>https://rogchap.com/about/</loc>
   </url>
   
+  <url>
+    <loc>https://rogchap.com/modules/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/v8go/</loc>
+  </url>
+  
 </urlset>
