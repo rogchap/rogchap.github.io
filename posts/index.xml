@@ -8,10 +8,21 @@
     <language>en-au</language>
     <managingEditor>rogchap@gmail.com</managingEditor>
     <webMaster>rogchap@gmail.com</webMaster>
-    <lastBuildDate>Sun, 28 Jul 2019 13:04:23 +1000</lastBuildDate>
+    <lastBuildDate>Sun, 06 Oct 2019 14:03:20 +1100</lastBuildDate>
     
 	<atom:link href="https://rogchap.com/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Demystify Go&#39;s Empty Interface</title>
+      <link>https://rogchap.com/2019/10/06/demystify-gos-empty-interface/</link>
+      <pubDate>Sun, 06 Oct 2019 14:03:20 +1100</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/2019/10/06/demystify-gos-empty-interface/</guid>
+      <description>One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &amp;ldquo;Copy/Paste&amp;rdquo; without some of the understanding.
+Go&amp;rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&amp;rsquo;s used.
+let i:any = 1; // Typescript std::any i = 1; // C++17 Object i = 1; // Java var i interface{} = 1 // Go   &amp;ldquo;interface{} says nothing&amp;rdquo; &amp;ndash; Rob Pike  Interface type Lets start with a regular interface:</description>
+    </item>
     
     <item>
       <title>Building an Assembler</title>

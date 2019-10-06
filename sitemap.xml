@@ -3,32 +3,37 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://rogchap.com/2019/07/28/building-an-assembler/</loc>
-    <lastmod>2019-07-28T13:04:23+10:00</lastmod>
+    <loc>https://rogchap.com/2019/10/06/demystify-gos-empty-interface/</loc>
+    <lastmod>2019-10-06T14:03:20+11:00</lastmod>
   </url>
   
   <url>
     <loc>https://rogchap.com/tags/go/</loc>
-    <lastmod>2019-07-28T13:04:23+10:00</lastmod>
+    <lastmod>2019-10-06T14:03:20+11:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://rogchap.com/posts/</loc>
-    <lastmod>2019-07-28T13:04:23+10:00</lastmod>
+    <lastmod>2019-10-06T14:03:20+11:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://rogchap.com/</loc>
-    <lastmod>2019-07-28T13:04:23+10:00</lastmod>
+    <lastmod>2019-10-06T14:03:20+11:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://rogchap.com/tags/</loc>
-    <lastmod>2019-07-28T13:04:23+10:00</lastmod>
+    <lastmod>2019-10-06T14:03:20+11:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://rogchap.com/2019/07/28/building-an-assembler/</loc>
+    <lastmod>2019-07-28T13:04:23+10:00</lastmod>
   </url>
   
   <url>

@@ -3,8 +3,10 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Tags</title>
-  <meta name="description" content="">
+  <title>Demystify Go&#39;s Empty Interface</title>
+  <meta name="description" content="One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.
+Go&rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&rsquo;s used.
+let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go   &ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike  Interface type Lets start with a regular interface:">
   <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -359,18 +361,19 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <link rel="alternate" type="application/rss+xml" href="https://rogchap.com/tags/index.xml" title="Roger Chapman" />
   <meta name="generator" content="Hugo 0.56.3" />
 
   
-  <meta property="og:title" content="Tags" />
-<meta property="og:description" content="Roger is a Software Engineer living in Sydney, Australia. As a polyglot engineer, working with C#, Objective-C (iOS), Java (Android) and Javascript, he has found his passion with the Go programming language." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://rogchap.com/tags/" />
+  <meta property="og:title" content="Demystify Go&#39;s Empty Interface" />
+<meta property="og:description" content="One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.
+Go&rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&rsquo;s used.
+let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go   &ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike  Interface type Lets start with a regular interface:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rogchap.com/2019/10/06/demystify-gos-empty-interface/" />
 
 <meta property="og:image" content="https://rogchap.com/tile.png" />
-
-<meta property="og:updated_time" content="2019-10-06T14:03:20+11:00" />
+<meta property="article:published_time" content="2019-10-06T14:03:20+11:00" />
+<meta property="article:modified_time" content="2019-10-06T14:03:20+11:00" />
 
 </head>
 <body>
@@ -402,28 +405,151 @@ code, kbd, pre, samp {
     </div>
     <div class="pure-u-1-24 pure-u-md-5-24"></div>
 </div>
+
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
   <div class="pure-u-11-12 pure-u-md-7-12">
-    <p class="posts-name">Tags:</p>
-    <div class="post-content">
-      <ul class="posts">
+    <div class="post">
+
+      <div class="post-title">
+        <p class="footnote">
+          
+          <time datetime="2019-10-06 14:03:20 &#43;1100 AEDT">
+            
+            Oct 6, 2019
+            
+          </time>
+          
+          
+          
+          |
+          
+          
+          tags: [ <a
+            href="https://rogchap.com/tags/go">Go</a> ]
+          
+
+          
+
+          
+        </p>
+        <h1>Demystify Go&#39;s Empty Interface</h1>
+      </div>
+
+      <div class="post-content">
         
         
-        <li>
-          <a href="go">go</a>
-          <span>&#40;4&#41;</span>
-        </li>
+
+<p>One of delights of using the Go programming language is how quickly Engineers can learn and start using the language;
+but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.</p>
+
+<p>Go&rsquo;s empty interface <code>interface{}</code> is one such mystery when learning the language; Engineers are happy to use <code>interface{}</code>
+to represent any type, but get confused about the <code>interface</code> keyword and why it&rsquo;s used.</p>
+
+<pre><code>let i:any = 1;          // Typescript
+std::any i = 1;         // C++17
+Object i = 1;           // Java
+var i interface{} = 1   // Go
+</code></pre>
+
+<blockquote>
+<h4 id="interface-says-nothing-rob-pike">&ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike</h4>
+</blockquote>
+
+<h2 id="interface-type">Interface type</h2>
+
+<p>Lets start with a regular interface:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> I <span style="color:#007020;font-weight:bold">interface</span> {
+	<span style="color:#06287e">M</span>()
+}
+
+<span style="color:#007020;font-weight:bold">type</span> T <span style="color:#007020;font-weight:bold">struct</span> {}
+
+<span style="color:#007020;font-weight:bold">func</span> (t T) <span style="color:#06287e">M</span>() {}</code></pre></div>
+<p>Type <code>T</code> has the <code>M()</code> method, therfore implements the <code>I</code> interface; interfaces are implemented implicitly in Go so there
+is no need explicitly declare that it does so.</p>
+
+<h2 id="interface-with-no-methods">Interface with no methods</h2>
+
+<p>If we now change the interface to the following, does type <code>T</code> still implement the interface?</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> I <span style="color:#007020;font-weight:bold">interface</span> {
+
+}
+
+<span style="color:#007020;font-weight:bold">type</span> T <span style="color:#007020;font-weight:bold">struct</span> {}
+
+<span style="color:#007020;font-weight:bold">func</span> (t T) <span style="color:#06287e">M</span>() {}</code></pre></div>
+<p>For <code>T</code> to implement the <code>I</code> interface, <code>T</code> is required to implement <em>all</em> the methods defined in the interface&hellip;</p>
+
+<blockquote>
+<h4 id="how-do-you-implement-zero-methods">&ldquo;How do you implement zero methods?&rdquo;</h4>
+</blockquote>
+
+<p>I hope you already know the answer; <code>T</code> does implement <code>I</code> because it does not need to implement any methods to comply.
+Our final implementation can be reduced to:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> I <span style="color:#007020;font-weight:bold">interface</span>{}
+<span style="color:#007020;font-weight:bold">type</span> T <span style="color:#007020;font-weight:bold">struct</span>{}
+
+<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {
+    <span style="color:#007020;font-weight:bold">var</span> a I = <span style="color:#666">&amp;</span>T{}
+}</code></pre></div>
+<h2 id="empty-interface">Empty interface</h2>
+
+<p>In Go we can delare types inline:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {
+    user <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">struct</span>{
+        ID <span style="color:#902000">string</span>
+        Name <span style="color:#902000">string</span>
+    }{
+        <span style="color:#4070a0">&#34;uuid_1234&#34;</span>,
+        <span style="color:#4070a0">&#34;Roger&#34;</span>,
+    }
+    fmt.<span style="color:#06287e">Println</span>(user)
+    <span style="color:#60a0b0;font-style:italic">// output: {uuid_1234 Roger}
+</span><span style="color:#60a0b0;font-style:italic"></span>}</code></pre></div>
+<p>We can also declare an empty struct too:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">done <span style="color:#666">:=</span> <span style="color:#007020">make</span>(<span style="color:#007020;font-weight:bold">chan</span> <span style="color:#007020;font-weight:bold">struct</span>{}, <span style="color:#40a070">1</span>)
+<span style="color:#60a0b0;font-style:italic">//...
+</span><span style="color:#60a0b0;font-style:italic"></span>done <span style="color:#666">&lt;-</span> <span style="color:#007020;font-weight:bold">struct</span>{}{}</code></pre></div>
+<blockquote>
+<h4 id="all-types-implement-at-least-zero-methods">&ldquo;All types implement at least zero methods&rdquo;</h4>
+</blockquote>
+
+<p>This now leads us to the empty interface:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">var</span> i <span style="color:#007020;font-weight:bold">interface</span>{} = <span style="color:#4070a0">&#34;x&#34;</span></code></pre></div>
+<p>The empty interface is exactly the same interface <code>I</code> that we declared eairler; all types implement at least zero methods
+an therfore can be used to hold any value.</p>
+
         
-        <li>
-          <a href="grpc">grpc</a>
-          <span>&#40;2&#41;</span>
-        </li>
+        <div style="margin-top: 4em" v>
+          <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "rogchap" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
         
-      </ul>
+      </div>
     </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
 <div class="footer pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
   <div class="pure-u-11-12 pure-u-md-7-12">
@@ -458,8 +584,6 @@ code, kbd, pre, samp {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right desktop" id="gototop-btn">↑↑</a>
-        
-        <a href="/tags/index.xml" class="pure-menu-link pull-right">RSS</a>
         
       </div>
       
