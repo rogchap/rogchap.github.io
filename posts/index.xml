@@ -8,10 +8,21 @@
     <language>en-au</language>
     <managingEditor>rogchap@gmail.com</managingEditor>
     <webMaster>rogchap@gmail.com</webMaster>
-    <lastBuildDate>Sun, 06 Oct 2019 14:03:20 +1100</lastBuildDate>
+    <lastBuildDate>Sat, 19 Oct 2019 13:50:32 +1100</lastBuildDate>
     
 	<atom:link href="https://rogchap.com/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Webhook Endpoint for grpc-gateway</title>
+      <link>https://rogchap.com/2019/10/19/webhook-endpoint-for-grpc-gateway/</link>
+      <pubDate>Sat, 19 Oct 2019 13:50:32 +1100</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/2019/10/19/webhook-endpoint-for-grpc-gateway/</guid>
+      <description>grpc-gatway is a protoc plugin that reads protobuf service definitions and generates a reverse-proxy server which translates a RESTful HTTP API into gRPC.
+Each field in a proto message would normally match to a JSON field:
+message Request { id int32 = 1; first_name string = 2; last_name string = 3;}{ &amp;#34;id&amp;#34;: 123456, &amp;#34;first_name&amp;#34;: &amp;#34;Roger&amp;#34;, &amp;#34;last_name&amp;#34;: &amp;#34;Chapman&amp;#34; } However, for a webhook (or other arbitrary data) being POSTed you may just want to pass the raw JSON body to your gRPC handler.</description>
+    </item>
     
     <item>
       <title>Demystify Go&#39;s Empty Interface</title>

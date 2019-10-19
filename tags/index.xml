@@ -8,7 +8,7 @@
     <language>en-au</language>
     <managingEditor>rogchap@gmail.com</managingEditor>
     <webMaster>rogchap@gmail.com</webMaster>
-    <lastBuildDate>Sun, 06 Oct 2019 14:03:20 +1100</lastBuildDate>
+    <lastBuildDate>Sat, 19 Oct 2019 13:50:32 +1100</lastBuildDate>
     
 	<atom:link href="https://rogchap.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -16,7 +16,7 @@
     <item>
       <title>Go</title>
       <link>https://rogchap.com/tags/go/</link>
-      <pubDate>Sun, 06 Oct 2019 14:03:20 +1100</pubDate>
+      <pubDate>Sat, 19 Oct 2019 13:50:32 +1100</pubDate>
       <author>rogchap@gmail.com</author>
       <guid>https://rogchap.com/tags/go/</guid>
       <description></description>
@@ -25,7 +25,7 @@
     <item>
       <title>gRPC</title>
       <link>https://rogchap.com/tags/grpc/</link>
-      <pubDate>Fri, 26 Jul 2019 17:11:06 +1000</pubDate>
+      <pubDate>Sat, 19 Oct 2019 13:50:32 +1100</pubDate>
       <author>rogchap@gmail.com</author>
       <guid>https://rogchap.com/tags/grpc/</guid>
       <description></description>
