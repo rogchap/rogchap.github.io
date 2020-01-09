@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Roger Chapman</title>
@@ -8,10 +8,22 @@
     <language>en-au</language>
     <managingEditor>rogchap@gmail.com</managingEditor>
     <webMaster>rogchap@gmail.com</webMaster>
-    <lastBuildDate>Sat, 19 Oct 2019 13:50:32 +1100</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jan 2020 21:46:34 +1100</lastBuildDate>
     
 	<atom:link href="https://rogchap.com/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Simple Vim Markdown Preview</title>
+      <link>https://rogchap.com/2020/01/09/simple-vim-markdown-preview/</link>
+      <pubDate>Thu, 09 Jan 2020 21:46:34 +1100</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/2020/01/09/simple-vim-markdown-preview/</guid>
+      <description>There are a lot of Vim plugins that allow you to preview markdown files:
+ iamcco/markdown-preview.vim JamshedVesuna/vim-markdown-preview MikeCoder/markdown-preview.vim pingao777/markdown-preview-sync suan/vim-instant-markdown PratikBhusal/vim-grip mgor/vim-markdown-grip  But to name a few.
+I was looking for something simple; but most of these plugins had options and setting, commands and auto commands that was just too bloated for my needs.
+Most of these tools use a separate tool to render the markdown to the browser; grip is a cli application that renders markdown via the GitHub API, and is simple to install:</description>
+    </item>
     
     <item>
       <title>Webhook Endpoint for grpc-gateway</title>
@@ -31,8 +43,8 @@ message Request { id int32 = 1; first_name string = 2; last_name string = 3;}{ &
       <author>rogchap@gmail.com</author>
       <guid>https://rogchap.com/2019/10/06/demystify-gos-empty-interface/</guid>
       <description>One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &amp;ldquo;Copy/Paste&amp;rdquo; without some of the understanding.
-Go&amp;rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&amp;rsquo;s used.
-let i:any = 1; // Typescript std::any i = 1; // C++17 Object i = 1; // Java var i interface{} = 1 // Go   &amp;ldquo;interface{} says nothing&amp;rdquo; &amp;ndash; Rob Pike  Interface type Lets start with a regular interface:</description>
+Go&#39;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&#39;s used.
+let i:any = 1; // Typescript std::any i = 1; // C++17 Object i = 1; // Java var i interface{} = 1 // Go  &amp;ldquo;interface  Interface type Lets start with a regular interface:</description>
     </item>
     
     <item>
@@ -42,7 +54,7 @@ let i:any = 1; // Typescript std::any i = 1; // C++17 Object i = 1; // Java var 
       <author>rogchap@gmail.com</author>
       <guid>https://rogchap.com/2019/07/28/building-an-assembler/</guid>
       <description>I recently completed the first part of the awesome &amp;ldquo;From Nand to Tetris&amp;rdquo; course. For project 6 you build an Assembler for the HACK Computer using a high level language of your choice; naturally I did my project using Go (Golang).
-The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I&amp;rsquo;ve always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so.</description>
+The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I&#39;ve always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so.</description>
     </item>
     
     <item>
@@ -65,7 +77,7 @@ But for development I wanted to create a gRPC server that engineers could instal
       <guid>https://rogchap.com/2019/06/25/mocking-grpc-in-go/</guid>
       <description>One of the huge benefits of using gRPC is the ability to autogenerate our client and server stubs from the protocol buffer definitions.
 In the same way, we can we generate our own code by building a plugin for the protocol buffer compiler (protoc).
-The plugin we&amp;rsquo;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).
+The plugin we&#39;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).
 Goal Given the following proto file:</description>
     </item>
     

@@ -3,8 +3,11 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Roger Chapman</title>
-  <meta name="description" content="">
+  <title>Simple Vim Markdown Preview</title>
+  <meta name="description" content="There are a lot of Vim plugins that allow you to preview markdown files:
+ iamcco/markdown-preview.vim JamshedVesuna/vim-markdown-preview MikeCoder/markdown-preview.vim pingao777/markdown-preview-sync suan/vim-instant-markdown PratikBhusal/vim-grip mgor/vim-markdown-grip  But to name a few.
+I was looking for something simple; but most of these plugins had options and setting, commands and auto commands that was just too bloated for my needs.
+Most of these tools use a separate tool to render the markdown to the browser; grip is a cli application that renders markdown via the GitHub API, and is simple to install:">
   <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -359,16 +362,19 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <link rel="alternate" type="application/rss+xml" href="https://rogchap.com/index.xml" title="Roger Chapman" />
   <meta name="generator" content="Hugo 0.62.2" />
 
   
-  <meta property="og:title" content="Roger Chapman" />
-<meta property="og:description" content="Roger is a Software Engineer living in Sydney, Australia. As a polyglot engineer, working with C#, Objective-C (iOS), Java (Android) and Javascript, he has found his passion with the Go programming language." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://rogchap.com/" />
+  <meta property="og:title" content="Simple Vim Markdown Preview" />
+<meta property="og:description" content="There are a lot of Vim plugins that allow you to preview markdown files:
+ iamcco/markdown-preview.vim JamshedVesuna/vim-markdown-preview MikeCoder/markdown-preview.vim pingao777/markdown-preview-sync suan/vim-instant-markdown PratikBhusal/vim-grip mgor/vim-markdown-grip  But to name a few.
+I was looking for something simple; but most of these plugins had options and setting, commands and auto commands that was just too bloated for my needs.
+Most of these tools use a separate tool to render the markdown to the browser; grip is a cli application that renders markdown via the GitHub API, and is simple to install:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rogchap.com/2020/01/09/simple-vim-markdown-preview/" />
 <meta property="og:image" content="https://rogchap.com/tile.png"/>
-<meta property="og:updated_time" content="2020-01-09T21:46:34+11:00" />
+<meta property="article:published_time" content="2020-01-09T21:46:34+11:00" />
+<meta property="article:modified_time" content="2020-01-09T21:46:34+11:00" />
 
 </head>
 <body>
@@ -404,193 +410,112 @@ code, kbd, pre, samp {
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
   <div class="pure-u-11-12 pure-u-md-7-12">
-    <div class="post-content">
-      
-      <ul class="posts">
-        
-        
-        
-        <li>
+    <div class="post">
+
+      <div class="post-title">
+        <p class="footnote">
           
-          <a class="post-list" href="https://rogchap.com/2020/01/09/simple-vim-markdown-preview/">Simple Vim Markdown Preview</a>
-
-          <p class="footnote">
-            <time datetime="2020-01-09 21:46:34 &#43;1100 AEDT">
-              
-              Jan 9, 2020
-              
-            </time>
-
+          <time datetime="2020-01-09 21:46:34 &#43;1100 AEDT">
             
-            |
+            Jan 9, 2020
             
-
-            
-            tags: [ <a
-              href="https://rogchap.com/tags/vim">Vim</a> ]
-            
-
-            
-
-            
-
-          </p>
-        </li>
-        
-        
-        
-        <li>
+          </time>
           
-          <a class="post-list" href="https://rogchap.com/2019/10/19/webhook-endpoint-for-grpc-gateway/">Webhook Endpoint for grpc-gateway</a>
-
-          <p class="footnote">
-            <time datetime="2019-10-19 13:50:32 &#43;1100 AEDT">
-              
-              Oct 19, 2019
-              
-            </time>
-
-            
-            |
-            
-
-            
-            tags: [ <a
-              href="https://rogchap.com/tags/go">Go</a>, <a
-              href="https://rogchap.com/tags/grpc">gRPC</a> ]
-            
-
-            
-
-            
-
-          </p>
-        </li>
-        
-        
-        
-        <li>
           
-          <a class="post-list" href="https://rogchap.com/2019/10/06/demystify-gos-empty-interface/">Demystify Go&#39;s Empty Interface</a>
-
-          <p class="footnote">
-            <time datetime="2019-10-06 14:03:20 &#43;1100 AEDT">
-              
-              Oct 6, 2019
-              
-            </time>
-
-            
-            |
-            
-
-            
-            tags: [ <a
-              href="https://rogchap.com/tags/go">Go</a> ]
-            
-
-            
-
-            
-
-          </p>
-        </li>
-        
-        
-        
-        <li>
           
-          <a class="post-list" href="https://rogchap.com/2019/07/28/building-an-assembler/">Building an Assembler</a>
-
-          <p class="footnote">
-            <time datetime="2019-07-28 13:04:23 &#43;1000 AEST">
-              
-              Jul 28, 2019
-              
-            </time>
-
-            
-            |
-            
-
-            
-            tags: [ <a
-              href="https://rogchap.com/tags/go">Go</a> ]
-            
-
-            
-
-            
-
-          </p>
-        </li>
-        
-        
-        
-        <li>
+          |
           
-          <a class="post-list" href="https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/">In Process gRPC-Web Proxy</a>
-
-          <p class="footnote">
-            <time datetime="2019-07-26 17:11:06 &#43;1000 AEST">
-              
-              Jul 26, 2019
-              
-            </time>
-
-            
-            |
-            
-
-            
-            tags: [ <a
-              href="https://rogchap.com/tags/go">Go</a>, <a
-              href="https://rogchap.com/tags/grpc">gRPC</a> ]
-            
-
-            
-
-            
-
-          </p>
-        </li>
-        
-        
-        
-        <li>
           
-          <a class="post-list" href="https://rogchap.com/2019/06/25/mocking-grpc-in-go/">Mocking gRPC in Go</a>
+          tags: [ <a
+            href="https://rogchap.com/tags/vim">Vim</a> ]
+          
 
-          <p class="footnote">
-            <time datetime="2019-06-25 22:20:10 &#43;1000 AEST">
-              
-              Jun 25, 2019
-              
-            </time>
+          
 
-            
-            |
-            
+          
+        </p>
+        <h1>Simple Vim Markdown Preview</h1>
+      </div>
 
-            
-            tags: [ <a
-              href="https://rogchap.com/tags/go">Go</a>, <a
-              href="https://rogchap.com/tags/grpc">gRPC</a> ]
-            
+      <div class="post-content">
+        
+        <p>There are a lot of Vim plugins that allow you to preview markdown files:</p>
+<ul>
+<li><a href="https://github.com/iamcco/markdown-preview.vim">iamcco/markdown-preview.vim</a></li>
+<li><a href="https://github.com/JamshedVesuna/vim-markdown-preview">JamshedVesuna/vim-markdown-preview</a></li>
+<li><a href="https://github.com/MikeCoder/markdown-preview.vim">MikeCoder/markdown-preview.vim</a></li>
+<li><a href="https://github.com/pingao777/markdown-preview-sync">pingao777/markdown-preview-sync</a></li>
+<li><a href="https://github.com/suan/vim-instant-markdown">suan/vim-instant-markdown</a></li>
+<li><a href="https://github.com/PratikBhusal/vim-grip">PratikBhusal/vim-grip</a></li>
+<li><a href="https://github.com/mgor/vim-markdown-grip">mgor/vim-markdown-grip</a></li>
+</ul>
+<p>But to name a few.</p>
+<p>I was looking for something simple; but most of these plugins had options and setting, commands and auto commands that
+was just too bloated for my needs.</p>
+<p>Most of these tools use a separate tool to render the markdown to the browser; <a href="https://github.com/joeyespo/grip">grip</a>
+is a cli application that renders markdown via the GitHub API, and is simple to install:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">$ brew install grip
+</code></pre></div><p>I would prefer to render offline, but grip does what I need for now.</p>
+<h2 id="no-plugin-required">No plugin required</h2>
+<p>With <code>grip</code> installed I can simple run it with:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:! grip %<span style="">
+</span></code></pre></div><p>or in a Vim terminal:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:term grip %<span style="">
+</span></code></pre></div><h2 id="homemade-plugin">Homemade plugin</h2>
+<p>The above commands are great, but I wanted something more integrated into Vim. Using this <a href="https://www.reddit.com/r/vim/comments/8asgjj/topnotch_vim_markdown_live_previews_with_no/">Reddit
+post</a> as inspiration, I
+adapted the code to work in Vim8:</p>
+<pre><code class="language-vimscript" data-lang="vimscript">&quot; .vim/plugin/local.vim
+command! MarkdownPreview call local#mdpreview#start()
+command! MarkdownStopPreview call local#mdpreview#stop()
+</code></pre><pre><code class="language-vimscript" data-lang="vimscript">&quot; .vim/autoload/local/mdpreview.vim
+func! local#mdpreview#start() abort
+    call local#mdpreview#stop()
+    let s:mdpreview_job_id = job_start(
+        \ &quot;/bin/zsh -c \&quot;grip -b &quot;. shellescape(expand('%:p')) . &quot; 0 2&gt;&amp;1 | awk '/Running/ { print \\$4 }'\&quot;&quot;,
+        \ { 'out_cb': 'OnGripStart', 'pty': 1 })
+    func! OnGripStart(_, output)
+        echo &quot;grip &quot; . a:output
+    endfunc
+endfunc
 
-            
+func! local#mdpreview#stop() abort
+    if exists('s:mdpreview_job_id')
+        call job_stop(s:mdpreview_job_id)
+        unlet s:mdpreview_job_id
+    endif
+endfunc
+</code></pre><p>I also wanted the <code>grip</code> server to stop when I changed vim buffers so I also added this <code>autocmd</code>:</p>
+<pre><code class="language-vimscript" data-lang="vimscript">&quot; .vim/plugin/local.vim
+au BufLeave * call local#mdpreview#stop()
+</code></pre><p>Simple homemade plugin for markdown preview; all I do now is call <code>:MarkdownPreview</code> and <code>grip</code> will preview my markdown
+file in my default browser.</p>
 
-            
-
-          </p>
-        </li>
         
+        <div style="margin-top: 4em" v>
+          <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "rogchap" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
         
-        
-        
-        
-        
-      </ul>
+      </div>
     </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
@@ -630,8 +555,6 @@ code, kbd, pre, samp {
 
         </ul>
         <a href="#" class="pure-menu-link pull-right desktop" id="gototop-btn">↑↑</a>
-        
-        <a href="/index.xml" class="pure-menu-link pull-right">RSS</a>
         
       </div>
       

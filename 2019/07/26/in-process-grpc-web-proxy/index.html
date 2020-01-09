@@ -362,7 +362,7 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.56.3" />
+  <meta name="generator" content="Hugo 0.62.2" />
 
   
   <meta property="og:title" content="In Process gRPC-Web Proxy" />
@@ -372,8 +372,7 @@ code, kbd, pre, samp {
 But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker)." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/" />
-
-<meta property="og:image" content="https://rogchap.com/tile.png" />
+<meta property="og:image" content="https://rogchap.com/tile.png"/>
 <meta property="article:published_time" content="2019-07-26T17:11:06+10:00" />
 <meta property="article:modified_time" content="2019-07-26T17:11:06+10:00" />
 
@@ -441,22 +440,14 @@ But for development I wanted to create a gRPC server that engineers could instal
 
       <div class="post-content">
         
-        
-
-<p>From the official <a href="https://github.com/grpc/grpc-web">gRPC-Web</a> docs:</p>
-
+        <p>From the official <a href="https://github.com/grpc/grpc-web">gRPC-Web</a> docs:</p>
 <blockquote>
 <p>&ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&rdquo;</p>
 </blockquote>
-
 <p>For production we can just enable the <code>envoy.grpc_web</code> filter and we are good to go.</p>
-
 <p>But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker).</p>
-
 <h2 id="grpc-web-wrapper">gRPC-Web Wrapper</h2>
-
 <p>Prior to the release of the official gRPC-Web implementation the good guys at Improbable Engineering had created there own version of gRPC-Web and also have a <a href="https://github.com/improbable-eng/grpc-web/tree/master/go/grpcweb"><code>grpcweb</code></a> package that implements the gRPC-Web spec as a wrapper around a gRPC Go (Golang) Server.</p>
-
 <p>Turns out that, with a little extra configuration, it can be made compatible with the official gRPC-Web client:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">grpcServer <span style="color:#666">:=</span> grpc.<span style="color:#06287e">Server</span>()
 grpcWebServer <span style="color:#666">:=</span> grpcweb.<span style="color:#06287e">WrapServer</span>(grpcServer)
@@ -476,16 +467,12 @@ httpServer = <span style="color:#666">&amp;</span>http.Server{
             }
         }
     }), <span style="color:#666">&amp;</span>http2.Server{}),
-}</code></pre></div>
-<p><strong>Note:</strong> Were also using the <code>golang.org/x/net/http2/h2c</code> package to allow HTTP/2 over cleartext as we are also listening for HTTP/1.1 requests on the same port without TLS. This is not recommended for production, but means we don&rsquo;t require certificates during development.</p>
-
+}
+</code></pre></div><p><strong>Note:</strong> Were also using the <code>golang.org/x/net/http2/h2c</code> package to allow HTTP/2 over cleartext as we are also listening for HTTP/1.1 requests on the same port without TLS. This is not recommended for production, but means we don't require certificates during development.</p>
 <h2 id="debugging-grpc-web-on-the-wire">Debugging gRPC-Web on the wire</h2>
-
 <p>For our frontend engineers they rely on chrome devtools to view network traffic, but for gRPC-Web it appears as a base64 string; not very useful.</p>
-
 <p>So we created <a href="https://github.com/SafetyCulture/grpc-web-devtools">gRPC-Web Dev Tools</a> a network like extension for Chrome that allows you to view the gRPC-Web requests and responses de-serialized to JSON objects; much better:</p>
-
-<p><img src="/posts/img/grpc-web-devtools.png" alt="gRPC-Web Dev Tools" /></p>
+<p><img src="/posts/img/grpc-web-devtools.png" alt="gRPC-Web Dev Tools"></p>
 
         
         <div style="margin-top: 4em" v>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vim on Roger Chapman</title>
+    <link>https://rogchap.com/tags/vim/</link>
+    <description>Recent content in Vim on Roger Chapman</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <managingEditor>rogchap@gmail.com</managingEditor>
+    <webMaster>rogchap@gmail.com</webMaster>
+    <lastBuildDate>Thu, 09 Jan 2020 21:46:34 +1100</lastBuildDate>
+    
+	<atom:link href="https://rogchap.com/tags/vim/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Simple Vim Markdown Preview</title>
+      <link>https://rogchap.com/2020/01/09/simple-vim-markdown-preview/</link>
+      <pubDate>Thu, 09 Jan 2020 21:46:34 +1100</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/2020/01/09/simple-vim-markdown-preview/</guid>
+      <description>There are a lot of Vim plugins that allow you to preview markdown files:
+ iamcco/markdown-preview.vim JamshedVesuna/vim-markdown-preview MikeCoder/markdown-preview.vim pingao777/markdown-preview-sync suan/vim-instant-markdown PratikBhusal/vim-grip mgor/vim-markdown-grip  But to name a few.
+I was looking for something simple; but most of these plugins had options and setting, commands and auto commands that was just too bloated for my needs.
+Most of these tools use a separate tool to render the markdown to the browser; grip is a cli application that renders markdown via the GitHub API, and is simple to install:</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <title>Demystify Go&#39;s Empty Interface</title>
   <meta name="description" content="One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.
-Go&rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&rsquo;s used.
-let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go   &ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike  Interface type Lets start with a regular interface:">
+Go&#39;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&#39;s used.
+let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go  &ldquo;interface  Interface type Lets start with a regular interface:">
   <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -361,17 +361,16 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.56.3" />
+  <meta name="generator" content="Hugo 0.62.2" />
 
   
   <meta property="og:title" content="Demystify Go&#39;s Empty Interface" />
 <meta property="og:description" content="One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.
-Go&rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&rsquo;s used.
-let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go   &ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike  Interface type Lets start with a regular interface:" />
+Go&#39;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&#39;s used.
+let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go  &ldquo;interface  Interface type Lets start with a regular interface:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rogchap.com/2019/10/06/demystify-gos-empty-interface/" />
-
-<meta property="og:image" content="https://rogchap.com/tile.png" />
+<meta property="og:image" content="https://rogchap.com/tile.png"/>
 <meta property="article:published_time" content="2019-10-06T14:03:20+11:00" />
 <meta property="article:modified_time" content="2019-10-06T14:03:20+11:00" />
 
@@ -438,26 +437,18 @@ let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // J
 
       <div class="post-content">
         
-        
-
-<p>One of delights of using the Go programming language is how quickly Engineers can learn and start using the language;
+        <p>One of delights of using the Go programming language is how quickly Engineers can learn and start using the language;
 but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.</p>
-
-<p>Go&rsquo;s empty interface <code>interface{}</code> is one such mystery when learning the language; Engineers are happy to use <code>interface{}</code>
-to represent any type, but get confused about the <code>interface</code> keyword and why it&rsquo;s used.</p>
-
+<p>Go's empty interface <code>interface{}</code> is one such mystery when learning the language; Engineers are happy to use <code>interface{}</code>
+to represent any type, but get confused about the <code>interface</code> keyword and why it's used.</p>
 <pre><code>let i:any = 1;          // Typescript
 std::any i = 1;         // C++17
 Object i = 1;           // Java
 var i interface{} = 1   // Go
-</code></pre>
-
-<blockquote>
-<h4 id="interface-says-nothing-rob-pike">&ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike</h4>
+</code></pre><blockquote>
+<h4 id="interface">&ldquo;interface</h4>
 </blockquote>
-
 <h2 id="interface-type">Interface type</h2>
-
 <p>Lets start with a regular interface:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> I <span style="color:#007020;font-weight:bold">interface</span> {
 	<span style="color:#06287e">M</span>()
@@ -465,12 +456,10 @@ var i interface{} = 1   // Go
 
 <span style="color:#007020;font-weight:bold">type</span> T <span style="color:#007020;font-weight:bold">struct</span> {}
 
-<span style="color:#007020;font-weight:bold">func</span> (t T) <span style="color:#06287e">M</span>() {}</code></pre></div>
-<p>Type <code>T</code> has the <code>M()</code> method, therfore implements the <code>I</code> interface; interfaces are implemented implicitly in Go so there
+<span style="color:#007020;font-weight:bold">func</span> (t T) <span style="color:#06287e">M</span>() {}
+</code></pre></div><p>Type <code>T</code> has the <code>M()</code> method, therfore implements the <code>I</code> interface; interfaces are implemented implicitly in Go so there
 is no need explicitly declare that it does so.</p>
-
 <h2 id="interface-with-no-methods">Interface with no methods</h2>
-
 <p>If we now change the interface to the following, does type <code>T</code> still implement the interface?</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> I <span style="color:#007020;font-weight:bold">interface</span> {
 
@@ -478,13 +467,11 @@ is no need explicitly declare that it does so.</p>
 
 <span style="color:#007020;font-weight:bold">type</span> T <span style="color:#007020;font-weight:bold">struct</span> {}
 
-<span style="color:#007020;font-weight:bold">func</span> (t T) <span style="color:#06287e">M</span>() {}</code></pre></div>
-<p>For <code>T</code> to implement the <code>I</code> interface, <code>T</code> is required to implement <em>all</em> the methods defined in the interface&hellip;</p>
-
+<span style="color:#007020;font-weight:bold">func</span> (t T) <span style="color:#06287e">M</span>() {}
+</code></pre></div><p>For <code>T</code> to implement the <code>I</code> interface, <code>T</code> is required to implement <em>all</em> the methods defined in the interface&hellip;</p>
 <blockquote>
 <h4 id="how-do-you-implement-zero-methods">&ldquo;How do you implement zero methods?&rdquo;</h4>
 </blockquote>
-
 <p>I hope you already know the answer; <code>T</code> does implement <code>I</code> because it does not need to implement any methods to comply.
 Our final implementation can be reduced to:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> I <span style="color:#007020;font-weight:bold">interface</span>{}
@@ -492,9 +479,8 @@ Our final implementation can be reduced to:</p>
 
 <span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {
     <span style="color:#007020;font-weight:bold">var</span> a I = <span style="color:#666">&amp;</span>T{}
-}</code></pre></div>
-<h2 id="empty-interface">Empty interface</h2>
-
+}
+</code></pre></div><h2 id="empty-interface">Empty interface</h2>
 <p>In Go we can delare types inline:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {
     user <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">struct</span>{
@@ -506,18 +492,17 @@ Our final implementation can be reduced to:</p>
     }
     fmt.<span style="color:#06287e">Println</span>(user)
     <span style="color:#60a0b0;font-style:italic">// output: {uuid_1234 Roger}
-</span><span style="color:#60a0b0;font-style:italic"></span>}</code></pre></div>
-<p>We can also declare an empty struct too:</p>
+</span><span style="color:#60a0b0;font-style:italic"></span>}
+</code></pre></div><p>We can also declare an empty struct too:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">done <span style="color:#666">:=</span> <span style="color:#007020">make</span>(<span style="color:#007020;font-weight:bold">chan</span> <span style="color:#007020;font-weight:bold">struct</span>{}, <span style="color:#40a070">1</span>)
 <span style="color:#60a0b0;font-style:italic">//...
-</span><span style="color:#60a0b0;font-style:italic"></span>done <span style="color:#666">&lt;-</span> <span style="color:#007020;font-weight:bold">struct</span>{}{}</code></pre></div>
-<blockquote>
+</span><span style="color:#60a0b0;font-style:italic"></span>done <span style="color:#666">&lt;-</span> <span style="color:#007020;font-weight:bold">struct</span>{}{}
+</code></pre></div><blockquote>
 <h4 id="all-types-implement-at-least-zero-methods">&ldquo;All types implement at least zero methods&rdquo;</h4>
 </blockquote>
-
 <p>This now leads us to the empty interface:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">var</span> i <span style="color:#007020;font-weight:bold">interface</span>{} = <span style="color:#4070a0">&#34;x&#34;</span></code></pre></div>
-<p>The empty interface is exactly the same interface <code>I</code> that we declared eairler; all types implement at least zero methods
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">var</span> i <span style="color:#007020;font-weight:bold">interface</span>{} = <span style="color:#4070a0">&#34;x&#34;</span>
+</code></pre></div><p>The empty interface is exactly the same interface <code>I</code> that we declared eairler; all types implement at least zero methods
 an therfore can be used to hold any value.</p>
 
         
