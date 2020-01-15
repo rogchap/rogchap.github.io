@@ -89,7 +89,7 @@ Goal Given the following proto file:</description>
       <guid>https://rogchap.com/about/</guid>
       <description>Roger is a Software Engineer living in Sydney, Australia. As a polyglot engineer, previously working with C# (ASP.NET), Objective-C (iOS), Java (Android) and Javascript (Node.js and React), he has found his passion with the Go programming language.
 Roger is currently Principal Enginner (Architecture) at SafetyCulture, where he helps team&#39;s design, and build, their microservice architecture using gRPC, Protocol Buffers, Docker, Kubernetes and Go.
-Code  v8go - A Go module package to execute JavaScript grpc-web-devtools - Chrome browser extension to aid gRPC-Web development; view gRPC messages de-serialized into JSON just like the standard Network devtool.</description>
+Code  dotfiles - All my dotfiles (configuration) for my development tools (OSX, iTerm2, tmux, vim etc) v8go - A Go module package to execute JavaScript grpc-web-devtools - Chrome browser extension to aid gRPC-Web development; view gRPC messages de-serialized into JSON just like the standard Network devtool.</description>
     </item>
     
     <item>
