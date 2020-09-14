@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>Building an Assembler</title>
   <meta name="description" content="I recently completed the first part of the awesome &ldquo;From Nand to Tetris&rdquo; course. For project 6 you build an Assembler for the HACK Computer using a high level language of your choice; naturally I did my project using Go (Golang).
-The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I&#39;ve always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so.">
+The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I&rsquo;ve always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so.">
   <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -360,12 +360,12 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.62.2" />
+  <meta name="generator" content="Hugo 0.74.3" />
 
   
   <meta property="og:title" content="Building an Assembler" />
 <meta property="og:description" content="I recently completed the first part of the awesome &ldquo;From Nand to Tetris&rdquo; course. For project 6 you build an Assembler for the HACK Computer using a high level language of your choice; naturally I did my project using Go (Golang).
-The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I&#39;ve always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so." />
+The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I&rsquo;ve always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rogchap.com/2019/07/28/building-an-assembler/" />
 <meta property="og:image" content="https://rogchap.com/tile.png"/>
@@ -436,9 +436,9 @@ The HACK Assembly language is very simple, and an Assembler could be written usi
       <div class="post-content">
         
         <p>I recently completed the first part of the awesome &ldquo;<a href="https://www.nand2tetris.org">From Nand to Tetris</a>&rdquo; course. For project 6 you build an Assembler for the HACK Computer using a high level language of your choice; naturally I did my project using Go (Golang).</p>
-<p>The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I've always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so.</p>
+<p>The HACK Assembly language is very simple, and an Assembler could be written using string manipulation in less than 50 lines of code. However, I&rsquo;ve always wanted to build a lexer/scanner and parser in Go and thought this would be a great little project to do so.</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#60a0b0;font-style:italic">// HACK Assembly Language example
-</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#60a0b0;font-style:italic">// Draws a rectangle at the top-left corner of the screen.
+</span><span style="color:#60a0b0;font-style:italic">// Draws a rectangle at the top-left corner of the screen.
 </span><span style="color:#60a0b0;font-style:italic"></span>
    <span style="">@</span><span style="color:#40a070">0</span>               <span style="color:#60a0b0;font-style:italic">// this is an &#34;A&#34; instruction
 </span><span style="color:#60a0b0;font-style:italic"></span>   D<span style="color:#666">=</span>M              <span style="color:#60a0b0;font-style:italic">// this is a &#34;C&#34; instruction
@@ -453,7 +453,7 @@ The HACK Assembly language is very simple, and an Assembler could be written usi
 (LOOP)              <span style="color:#60a0b0;font-style:italic">// this is a Label
 </span><span style="color:#60a0b0;font-style:italic"></span>   <span style="">@</span>address
    A<span style="color:#666">=</span>M
-   M<span style="color:#666">=</span><span style="color:#666">-</span><span style="color:#40a070">1</span>
+   M<span style="color:#666">=-</span><span style="color:#40a070">1</span>
    <span style="">@</span>address
    D<span style="color:#666">=</span>M
    <span style="">@</span><span style="color:#40a070">32</span>
@@ -480,7 +480,7 @@ The HACK Assembly language is very simple, and an Assembler could be written usi
 	C_INSTRUCTION
 )
 </code></pre></div><h2 id="the-scanner">The Scanner</h2>
-<p>My scanner is based on the <a href="https://golang.org/src/go/scanner/scanner.go">standard library's Go Scanner</a>:</p>
+<p>My scanner is based on the <a href="https://golang.org/src/go/scanner/scanner.go">standard library&rsquo;s Go Scanner</a>:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> Scanner <span style="color:#007020;font-weight:bold">struct</span> {
 	src      []<span style="color:#902000">byte</span>
 	ch       <span style="color:#902000">rune</span> <span style="color:#60a0b0;font-style:italic">// current character
@@ -518,7 +518,7 @@ The HACK Assembly language is very simple, and an Assembler could be written usi
 		s.<span style="color:#06287e">next</span>()
 	}
 }
-</code></pre></div><p>The output of an assembler is <code>1</code>s and <code>0</code>s so we don't really need to scan for comments, but I thought that handling comments would be a good starting point to building the scanner:</p>
+</code></pre></div><p>The output of an assembler is <code>1</code>s and <code>0</code>s so we don&rsquo;t really need to scan for comments, but I thought that handling comments would be a good starting point to building the scanner:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">scanComment</span>() <span style="color:#902000">string</span> {
 	s.<span style="color:#06287e">next</span>()
 	offs <span style="color:#666">:=</span> s.offset
@@ -570,11 +570,11 @@ The HACK Assembly language is very simple, and an Assembler could be written usi
 	}
 	<span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020">string</span>(s.src[offs:s.offset<span style="color:#666">-</span><span style="color:#40a070">1</span>])
 }
-</code></pre></div><p>The &ldquo;C&rdquo; instruction is the most complex but a simple helper function can help us to determine if it's a C-Instruction (as described by the HACK Assembly Language spec):</p>
+</code></pre></div><p>The &ldquo;C&rdquo; instruction is the most complex but a simple helper function can help us to determine if it&rsquo;s a C-Instruction (as described by the HACK Assembly Language spec):</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">isCInstruction</span>(ch <span style="color:#902000">rune</span>) <span style="color:#902000">bool</span> {
 	<span style="color:#007020;font-weight:bold">return</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;0&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;1&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;-&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;!&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;A&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;D&#39;</span> <span style="color:#666">||</span> ch <span style="color:#666">==</span> <span style="color:#4070a0">&#39;M&#39;</span>
 }
-</code></pre></div><p>We can use the same <code>scanLine()</code> function for the C-Instruction, making sure we don't throw away the first character; Our final <code>Scan()</code> function looks like this:</p>
+</code></pre></div><p>We can use the same <code>scanLine()</code> function for the C-Instruction, making sure we don&rsquo;t throw away the first character; Our final <code>Scan()</code> function looks like this:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (s <span style="color:#666">*</span>Scanner) <span style="color:#06287e">Scan</span>() (tok Token, lit <span style="color:#902000">string</span>) {
 	s.<span style="color:#06287e">skipWhitespace</span>()
 
@@ -605,7 +605,7 @@ The HACK Assembly language is very simple, and an Assembler could be written usi
 	<span style="color:#007020;font-weight:bold">return</span>
 }
 </code></pre></div><h2 id="syntax-tree">Syntax Tree</h2>
-<p>Before we start parsing the HACK Assembly file we want to define our abstract syntax tree (AST). All Labels get converted to Symbols (more on this later) so we're left with a simple list of either &ldquo;A&rdquo;, or &ldquo;C&rdquo; instructions:</p>
+<p>Before we start parsing the HACK Assembly file we want to define our abstract syntax tree (AST). All Labels get converted to Symbols (more on this later) so we&rsquo;re left with a simple list of either &ldquo;A&rdquo;, or &ldquo;C&rdquo; instructions:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> Instruction <span style="color:#007020;font-weight:bold">interface</span> {
 	<span style="color:#06287e">BinaryString</span>() <span style="color:#902000">string</span>
 }
@@ -636,7 +636,7 @@ The HACK Assembly language is very simple, and an Assembler could be written usi
 </code></pre></div><p>Each <code>Instruction</code> interface has a single method <code>BinaryString()</code> which will make it really easy for us to output the machine code later.</p>
 <p>With out AST defined and our complete Scanner, we are ready to start parsing the data.</p>
 <h2 id="parsing">Parsing</h2>
-<p>The HACK Assembly Language has a number of pre-defined memory allocations defined as Symbols, so we'll initiate our parser with this in mind. Later, Labels we parse will be added to these Symbols and any variables found should also be added to these Symbols for later lookup.</p>
+<p>The HACK Assembly Language has a number of pre-defined memory allocations defined as Symbols, so we&rsquo;ll initiate our parser with this in mind. Later, Labels we parse will be added to these Symbols and any variables found should also be added to these Symbols for later lookup.</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">type</span> Parser <span style="color:#007020;font-weight:bold">struct</span> {
 	scanner Scanner
 	symbols <span style="color:#007020;font-weight:bold">map</span>[<span style="color:#902000">string</span>]<span style="color:#902000">int</span>
@@ -681,7 +681,7 @@ loop:
 	} 
 	<span style="color:#007020;font-weight:bold">return</span> HackFile{ Instructions: p.instructions }
 }
-</code></pre></div><p>I'm intentionally not giving you the <code>parseAInstruction()</code> and <code>parseCInstruction()</code> methods, just so you can do some of the work yourself 😄</p>
+</code></pre></div><p>I&rsquo;m intentionally not giving you the <code>parseAInstruction()</code> and <code>parseCInstruction()</code> methods, just so you can do some of the work yourself 😄</p>
 <h2 id="tying-it-all-together">Tying it all together</h2>
 <p>Our CLI tool will read in the <code>*.asm</code> file and output the machine code as a <code>*.hack</code> file:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {

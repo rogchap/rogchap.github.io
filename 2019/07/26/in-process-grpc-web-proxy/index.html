@@ -362,7 +362,7 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.62.2" />
+  <meta name="generator" content="Hugo 0.74.3" />
 
   
   <meta property="og:title" content="In Process gRPC-Web Proxy" />
@@ -468,7 +468,7 @@ httpServer = <span style="color:#666">&amp;</span>http.Server{
         }
     }), <span style="color:#666">&amp;</span>http2.Server{}),
 }
-</code></pre></div><p><strong>Note:</strong> Were also using the <code>golang.org/x/net/http2/h2c</code> package to allow HTTP/2 over cleartext as we are also listening for HTTP/1.1 requests on the same port without TLS. This is not recommended for production, but means we don't require certificates during development.</p>
+</code></pre></div><p><strong>Note:</strong> Were also using the <code>golang.org/x/net/http2/h2c</code> package to allow HTTP/2 over cleartext as we are also listening for HTTP/1.1 requests on the same port without TLS. This is not recommended for production, but means we don&rsquo;t require certificates during development.</p>
 <h2 id="debugging-grpc-web-on-the-wire">Debugging gRPC-Web on the wire</h2>
 <p>For our frontend engineers they rely on chrome devtools to view network traffic, but for gRPC-Web it appears as a base64 string; not very useful.</p>
 <p>So we created <a href="https://github.com/SafetyCulture/grpc-web-devtools">gRPC-Web Dev Tools</a> a network like extension for Chrome that allows you to view the gRPC-Web requests and responses de-serialized to JSON objects; much better:</p>

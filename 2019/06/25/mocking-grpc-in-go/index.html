@@ -6,7 +6,7 @@
   <title>Mocking gRPC in Go</title>
   <meta name="description" content="One of the huge benefits of using gRPC is the ability to autogenerate our client and server stubs from the protocol buffer definitions.
 In the same way, we can we generate our own code by building a plugin for the protocol buffer compiler (protoc).
-The plugin we&#39;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).
+The plugin we&rsquo;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).
 Goal Given the following proto file:">
   <meta name="author" content="">
   
@@ -362,13 +362,13 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.62.2" />
+  <meta name="generator" content="Hugo 0.74.3" />
 
   
   <meta property="og:title" content="Mocking gRPC in Go" />
 <meta property="og:description" content="One of the huge benefits of using gRPC is the ability to autogenerate our client and server stubs from the protocol buffer definitions.
 In the same way, we can we generate our own code by building a plugin for the protocol buffer compiler (protoc).
-The plugin we&#39;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).
+The plugin we&rsquo;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).
 Goal Given the following proto file:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rogchap.com/2019/06/25/mocking-grpc-in-go/" />
@@ -442,7 +442,7 @@ Goal Given the following proto file:" />
         
         <p>One of the huge benefits of using gRPC is the ability to autogenerate our client and server stubs from the protocol buffer definitions.</p>
 <p>In the same way, we can we generate our own code by building a plugin for the protocol buffer compiler (protoc).</p>
-<p>The plugin we're creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).</p>
+<p>The plugin we&rsquo;re creating is going to auto-generate gRPC response messages so that we can build a mock gRPC server in Go (Golang).</p>
 <h2 id="goal">Goal</h2>
 <p>Given the following <code>proto</code> file:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-proto" data-lang="proto"><span style="color:#007020;font-weight:bold">service</span> MyService {<span style="">
@@ -486,7 +486,7 @@ Goal Given the following proto file:" />
 	servName <span style="color:#666">:=</span> generator.<span style="color:#06287e">CamelCase</span>(origServName)
 	servTypeName <span style="color:#666">:=</span> fmt.<span style="color:#06287e">Sprintf</span>(<span style="color:#4070a0">&#34;%sMock&#34;</span>, servName)
 
-	g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`</span><span style="color:#4070a0">type </span><span style="color:#4070a0">`</span>, servTypeName, <span style="color:#4070a0">`</span><span style="color:#4070a0"> struct </span><span style="color:#4070a0">{</span><span style="color:#4070a0">}</span><span style="color:#4070a0">`</span>)
+	g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`type `</span>, servTypeName, <span style="color:#4070a0">` struct {}`</span>)
 	g.<span style="color:#06287e">P</span>()
 	<span style="color:#007020;font-weight:bold">for</span> _, method <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> service.Method {
 		g.<span style="color:#06287e">mockMethod</span>(servTypeName, method)
@@ -498,30 +498,30 @@ Goal Given the following proto file:" />
 	inType <span style="color:#666">:=</span> g.<span style="color:#06287e">typeName</span>(method.<span style="color:#06287e">GetInputType</span>())
 	outType <span style="color:#666">:=</span> g.<span style="color:#06287e">typeName</span>(method.<span style="color:#06287e">GetOutputType</span>())
 
-	g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`</span><span style="color:#4070a0">func (m *</span><span style="color:#4070a0">`</span>, servTypeName, <span style="color:#4070a0">`</span><span style="color:#4070a0">) </span><span style="color:#4070a0">`</span>, methName, <span style="color:#4070a0">`</span><span style="color:#4070a0">(context.Context, *</span><span style="color:#4070a0">`</span>, inType, <span style="color:#4070a0">`</span><span style="color:#4070a0">) (*</span><span style="color:#4070a0">`</span>, outType, <span style="color:#4070a0">`</span><span style="color:#4070a0">, error)</span><span style="color:#4070a0">{</span><span style="color:#4070a0">`</span>)
+	g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`func (m *`</span>, servTypeName, <span style="color:#4070a0">`) `</span>, methName, <span style="color:#4070a0">`(context.Context, *`</span>, inType, <span style="color:#4070a0">`) (*`</span>, outType, <span style="color:#4070a0">`, error){`</span>)
 	g.<span style="color:#06287e">In</span>()
 	
     msg <span style="color:#666">:=</span> g.<span style="color:#06287e">objectNamed</span>(method.<span style="color:#06287e">GetOutputType</span>()).(<span style="color:#666">*</span>generator.Descriptor)
-	g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`</span><span style="color:#4070a0">res := </span><span style="color:#4070a0">`</span>)
+	g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`res := `</span>)
     g.<span style="color:#06287e">generateMockMessage</span>(msg)
-    g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`</span><span style="color:#4070a0">return res, nil</span><span style="color:#4070a0">`</span>)
+    g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`return res, nil`</span>)
 
 	g.<span style="color:#06287e">Out</span>()
-	g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`</span><span style="color:#4070a0">}</span><span style="color:#4070a0">`</span>)
+	g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`}`</span>)
 }
-</code></pre></div><p>The last part is to generate the response message and it's fields:</p>
+</code></pre></div><p>The last part is to generate the response message and it&rsquo;s fields:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (g <span style="color:#666">*</span>grpcmock) <span style="color:#06287e">generateMockMessage</span>(msg <span style="color:#666">*</span>generator.Descriptor) {
     msgName <span style="color:#666">:=</span> g.<span style="color:#06287e">TypeName</span>(msg)
-    g.<span style="color:#06287e">P</span>(msgName, <span style="color:#4070a0">`</span><span style="color:#4070a0">{</span><span style="color:#4070a0">`</span>)
+    g.<span style="color:#06287e">P</span>(msgName, <span style="color:#4070a0">`{`</span>)
     g.<span style="color:#06287e">In</span>()
 	<span style="color:#007020;font-weight:bold">for</span> _, field <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> msg.Field {
 		fieldName <span style="color:#666">:=</span> g.<span style="color:#06287e">GetFieldName</span>(msg, field)
 		<span style="color:#007020;font-weight:bold">if</span> field.<span style="color:#06287e">IsString</span>() {
-			g.<span style="color:#06287e">P</span>(fieldName, <span style="color:#4070a0">`</span><span style="color:#4070a0">: &#34;f267332d-0d9a-4220-b055-63b661b600db&#34;,</span><span style="color:#4070a0">`</span>) 
+			g.<span style="color:#06287e">P</span>(fieldName, <span style="color:#4070a0">`: &#34;f267332d-0d9a-4220-b055-63b661b600db&#34;,`</span>) 
 		}
 	}
     g.<span style="color:#06287e">Out</span>()
-    g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`</span><span style="color:#4070a0">}</span><span style="color:#4070a0">`</span>)
+    g.<span style="color:#06287e">P</span>(<span style="color:#4070a0">`}`</span>)
 }
 </code></pre></div><p>For the above <code>string</code> field we are returning a hard coded value, but we can easily replace this for auto-generated values.</p>
 <h2 id="building-our-plugin">Building our plugin</h2>

@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <title>Demystify Go&#39;s Empty Interface</title>
   <meta name="description" content="One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.
-Go&#39;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&#39;s used.
-let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go  &ldquo;interface  Interface type Lets start with a regular interface:">
+Go&rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&rsquo;s used.
+let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go  &ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike  Interface type Lets start with a regular interface:">
   <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -361,13 +361,13 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.62.2" />
+  <meta name="generator" content="Hugo 0.74.3" />
 
   
   <meta property="og:title" content="Demystify Go&#39;s Empty Interface" />
 <meta property="og:description" content="One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.
-Go&#39;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&#39;s used.
-let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go  &ldquo;interface  Interface type Lets start with a regular interface:" />
+Go&rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&rsquo;s used.
+let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // Java var i interface{} = 1 // Go  &ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike  Interface type Lets start with a regular interface:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rogchap.com/2019/10/06/demystify-gos-empty-interface/" />
 <meta property="og:image" content="https://rogchap.com/tile.png"/>
@@ -439,14 +439,14 @@ let i:any = 1; // Typescript std::any i = 1; // C&#43;&#43;17 Object i = 1; // J
         
         <p>One of delights of using the Go programming language is how quickly Engineers can learn and start using the language;
 but at the same time, Engineers also &ldquo;Copy/Paste&rdquo; without some of the understanding.</p>
-<p>Go's empty interface <code>interface{}</code> is one such mystery when learning the language; Engineers are happy to use <code>interface{}</code>
-to represent any type, but get confused about the <code>interface</code> keyword and why it's used.</p>
+<p>Go&rsquo;s empty interface <code>interface{}</code> is one such mystery when learning the language; Engineers are happy to use <code>interface{}</code>
+to represent any type, but get confused about the <code>interface</code> keyword and why it&rsquo;s used.</p>
 <pre><code>let i:any = 1;          // Typescript
 std::any i = 1;         // C++17
 Object i = 1;           // Java
 var i interface{} = 1   // Go
 </code></pre><blockquote>
-<h4 id="interface">&ldquo;interface</h4>
+<h4 id="interface-says-nothing----rob-pike">&ldquo;interface{} says nothing&rdquo; &ndash; Rob Pike</h4>
 </blockquote>
 <h2 id="interface-type">Interface type</h2>
 <p>Lets start with a regular interface:</p>

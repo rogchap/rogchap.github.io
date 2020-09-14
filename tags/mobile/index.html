@@ -3,10 +3,8 @@
 <head>
   
   <meta charset="utf-8">
-  <title>Webhook Endpoint for grpc-gateway</title>
-  <meta name="description" content="grpc-gatway is a protoc plugin that reads protobuf service definitions and generates a reverse-proxy server which translates a RESTful HTTP API into gRPC.
-Each field in a proto message would normally match to a JSON field:
-message Request { id int32 = 1; first_name string = 2; last_name string = 3;}{ &#34;id&#34;: 123456, &#34;first_name&#34;: &#34;Roger&#34;, &#34;last_name&#34;: &#34;Chapman&#34; } However, for a webhook (or other arbitrary data) being POSTed you may just want to pass the raw JSON body to your gRPC handler.">
+  <title>Mobile</title>
+  <meta name="description" content="">
   <meta name="author" content="">
   
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -361,18 +359,16 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
+  <link rel="alternate" type="application/rss+xml" href="https://rogchap.com/tags/mobile/index.xml" title="Roger Chapman" />
   <meta name="generator" content="Hugo 0.74.3" />
 
   
-  <meta property="og:title" content="Webhook Endpoint for grpc-gateway" />
-<meta property="og:description" content="grpc-gatway is a protoc plugin that reads protobuf service definitions and generates a reverse-proxy server which translates a RESTful HTTP API into gRPC.
-Each field in a proto message would normally match to a JSON field:
-message Request { id int32 = 1; first_name string = 2; last_name string = 3;}{ &#34;id&#34;: 123456, &#34;first_name&#34;: &#34;Roger&#34;, &#34;last_name&#34;: &#34;Chapman&#34; } However, for a webhook (or other arbitrary data) being POSTed you may just want to pass the raw JSON body to your gRPC handler." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://rogchap.com/2019/10/19/webhook-endpoint-for-grpc-gateway/" />
+  <meta property="og:title" content="Mobile" />
+<meta property="og:description" content="Roger is a Software Engineer living in Sydney, Australia. As a polyglot engineer, working with C#, Objective-C (iOS), Java (Android) and Javascript, he has found his passion with the Go programming language." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://rogchap.com/tags/mobile/" />
 <meta property="og:image" content="https://rogchap.com/tile.png"/>
-<meta property="article:published_time" content="2019-10-19T13:50:32+11:00" />
-<meta property="article:modified_time" content="2019-10-19T13:50:32+11:00" />
+<meta property="og:updated_time" content="2020-09-14T14:51:26+10:00" />
 
 </head>
 <body>
@@ -405,190 +401,32 @@ message Request { id int32 = 1; first_name string = 2; last_name string = 3;}{ &
     <div class="pure-u-1-24 pure-u-md-5-24"></div>
 </div>
 
+
 <div class="pure-g">
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
   <div class="pure-u-11-12 pure-u-md-7-12">
-    <div class="post">
+    <div class="post-content">
+      <p class="posts-name">Mobile:</p>
 
-      <div class="post-title">
-        <p class="footnote">
-          
-          <time datetime="2019-10-19 13:50:32 &#43;1100 AEDT">
-            
-            Oct 19, 2019
-            
-          </time>
-          
-          
-          
-          |
-          
-          
-          tags: [ <a
-            href="https://rogchap.com/tags/go">Go</a>, <a
-            href="https://rogchap.com/tags/grpc">gRPC</a> ]
-          
-
-          
-
-          
-        </p>
-        <h1>Webhook Endpoint for grpc-gateway</h1>
-      </div>
-
-      <div class="post-content">
+      <ul class="posts">
         
-        <p><a href="https://github.com/grpc-ecosystem/grpc-gateway">grpc-gatway</a> is a protoc plugin that reads protobuf service definitions
-and generates a reverse-proxy server which translates a RESTful HTTP API into gRPC.</p>
-<p>Each field in a proto message would normally match to a JSON field:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-proto" data-lang="proto"><span style="color:#007020;font-weight:bold">message</span> <span style="color:#0e84b5;font-weight:bold">Request</span> {<span style="">
-</span><span style=""></span>    id <span style="color:#902000">int32</span> <span style="color:#666">=</span> <span style="color:#40a070">1</span>;<span style="">
-</span><span style=""></span>    first_name <span style="color:#902000">string</span> <span style="color:#666">=</span> <span style="color:#40a070">2</span>;<span style="">
-</span><span style=""></span>    last_name <span style="color:#902000">string</span> <span style="color:#666">=</span> <span style="color:#40a070">3</span>;<span style="">
-</span><span style=""></span>}<span style="">
-</span></code></pre></div><div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JSON" data-lang="JSON">{
-    <span style="color:#062873;font-weight:bold">&#34;id&#34;</span>: <span style="color:#40a070">123456</span>,
-    <span style="color:#062873;font-weight:bold">&#34;first_name&#34;</span>: <span style="color:#4070a0">&#34;Roger&#34;</span>,
-    <span style="color:#062873;font-weight:bold">&#34;last_name&#34;</span>: <span style="color:#4070a0">&#34;Chapman&#34;</span>
-}
-</code></pre></div><p>However, for a webhook (or other arbitrary data) being POSTed you may just want to pass the raw JSON body to your gRPC handler.</p>
-<p>We&rsquo;ll use the example of a <a href="https://stripe.com/docs/webhooks">Stripe Webhook</a> sending us data for an event.</p>
-<h2 id="protocol-buffer-definition">Protocol Buffer definition</h2>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-proto" data-lang="proto"><span style="color:#007020;font-weight:bold">service</span> WebhookService {<span style="">
-</span><span style=""></span>  <span style="color:#007020;font-weight:bold">rpc</span> StripeWebhook(WebhookRequest) <span style="color:#007020;font-weight:bold">returns</span> (google.protobuf.Empty) {<span style="">
-</span><span style=""></span>    <span style="color:#007020;font-weight:bold">option</span> (google.api.http) <span style="color:#666">=</span> {<span style="">
-</span><span style=""></span>      post<span style="color:#666">:</span> <span style="color:#4070a0">&#34;/webhook:Stripe&#34;</span><span style="">
-</span><span style=""></span>      body<span style="color:#666">:</span> <span style="color:#4070a0">&#34;raw&#34;</span>  <span style="color:#60a0b0;font-style:italic">// this mapping is key for this to work
-</span><span style="color:#60a0b0;font-style:italic"></span>    };<span style="">
-</span><span style=""></span>  }<span style="">
-</span><span style=""></span>}<span style="">
-</span><span style="">
-</span><span style=""></span><span style="color:#007020;font-weight:bold">message</span> <span style="color:#0e84b5;font-weight:bold">WebhookRequest</span> {<span style="">
-</span><span style=""></span>  <span style="color:#902000">bytes</span> raw <span style="color:#666">=</span> <span style="color:#40a070">1</span>;<span style="">
-</span><span style=""></span>}<span style="">
-</span></code></pre></div><p>REST options you may have set previously would map the whole request message as the body via <code>body: *</code>; but the magic in our example, is that we
-are mapping the <code>POST body</code> directly to the <code>raw</code> field.</p>
-<h2 id="custom-marshalling">Custom marshalling</h2>
-<p>The default marshalling will expect the incoming request body to be <code>base64</code> encoded as this is the default for <code>bytes</code>. See
-the JSON mapping table in the <a href="https://developers.google.com/protocol-buffers/docs/proto3#json">proto3 language guide</a> for more details.</p>
-<p><code>grpc-gateway</code> allows you to create custom marshaller for a given MIME type, so we&rsquo;ll use this hook to create our own custom marshaller for our raw JSON body:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">var</span> (
-  typeOfBytes = reflect.<span style="color:#06287e">TypeOf</span>([]<span style="color:#007020">byte</span>(<span style="color:#007020;font-weight:bold">nil</span>))
-  rawJSONMIME = <span style="color:#4070a0">&#34;application/raw-json&#34;</span> <span style="color:#60a0b0;font-style:italic">// made-up MIME type for our webhook
-</span><span style="color:#60a0b0;font-style:italic"></span>)
-
-<span style="color:#007020;font-weight:bold">type</span> rawJSONPb <span style="color:#007020;font-weight:bold">struct</span> {
-  <span style="color:#666">*</span>gateway.JSONPb
-}
-
-<span style="color:#007020;font-weight:bold">func</span> (<span style="color:#666">*</span>rawJSONPb) <span style="color:#06287e">ContentType</span>() <span style="color:#902000">string</span> {
-  <span style="color:#007020;font-weight:bold">return</span> rawJSONMIME
-}
-
-<span style="color:#007020;font-weight:bold">func</span> (<span style="color:#666">*</span>rawJSONPb) <span style="color:#06287e">NewDecoder</span>(r io.Reader) runtime.Decoder {
-  <span style="color:#007020;font-weight:bold">return</span> runtime.<span style="color:#06287e">DecoderFunc</span>(<span style="color:#007020;font-weight:bold">func</span>(v <span style="color:#007020;font-weight:bold">interface</span>{}) <span style="color:#902000">error</span> {
-    raw, err <span style="color:#666">:=</span> ioutil.<span style="color:#06287e">ReadAll</span>(r)
-    <span style="color:#007020;font-weight:bold">if</span> err <span style="color:#666">!=</span> <span style="color:#007020;font-weight:bold">nil</span> {
-      <span style="color:#007020;font-weight:bold">return</span> err
-    }
-    rv <span style="color:#666">:=</span> reflect.<span style="color:#06287e">ValueOf</span>(v)
-
-    <span style="color:#007020;font-weight:bold">if</span> rv.<span style="color:#06287e">Kind</span>() <span style="color:#666">!=</span> reflect.Ptr {
-      <span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Errorf</span>(<span style="color:#4070a0">&#34;%T is not a pointer&#34;</span>, v)
-    }
-
-    rv = rv.<span style="color:#06287e">Elem</span>()
-    <span style="color:#007020;font-weight:bold">if</span> rv.<span style="color:#06287e">Type</span>() <span style="color:#666">!=</span> typeOfBytes {
-      <span style="color:#007020;font-weight:bold">return</span> fmt.<span style="color:#06287e">Errorf</span>(<span style="color:#4070a0">&#34;Type must be []byte but got %T&#34;</span>, v)
-    }
-
-    rv.<span style="color:#06287e">Set</span>(reflect.<span style="color:#06287e">ValueOf</span>(raw))
-    <span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020;font-weight:bold">nil</span>
-  })
-}
-</code></pre></div><p>Now we can use our new custom marshaller for requests with this new MIME type:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">newRESTServer</span>() <span style="color:#666">*</span>runtime.ServeMux {
-  jsonpb <span style="color:#666">:=</span> <span style="color:#666">&amp;</span>gateway.JSONPb{
-    EmitDefaults: <span style="color:#007020;font-weight:bold">true</span>,
-    Indent:       <span style="color:#4070a0">&#34;  &#34;</span>,
-    OrigName:     <span style="color:#007020;font-weight:bold">true</span>,
-  }
-
-  mux = runtime.<span style="color:#06287e">NewServeMux</span>(
-    runtime.<span style="color:#06287e">WithMarshalerOption</span>(rawJSONMIME, <span style="color:#666">&amp;</span>rawJSONPb{jsonpb}), <span style="color:#60a0b0;font-style:italic">// if content-type == &#34;application/raw-json&#34;
-</span><span style="color:#60a0b0;font-style:italic"></span>    runtime.<span style="color:#06287e">WithMarshalerOption</span>(runtime.MIMEWildcard, jsonpb),    <span style="color:#60a0b0;font-style:italic">// all other content-types
-</span><span style="color:#60a0b0;font-style:italic"></span>    runtime.<span style="color:#06287e">WithProtoErrorHandler</span>(runtime.DefaultHTTPProtoErrorHandler),
-  )
-  <span style="color:#007020;font-weight:bold">return</span> mux
-}
-</code></pre></div><p>With this custom marshaller, our JSON body (<code>[]byte</code>) will now be correctly mapped to the <code>raw</code> field of our request message; but only for
-request where the <code>Content-Type</code> header is set to &ldquo;application/raw-json&rdquo;.</p>
-<h2 id="content-type-middleware">Content-Type middleware</h2>
-<p>If you control the application that is sending the webhook, you can just make sure that you set the correct <code>Content-Type</code> for the
-endpoint to marshal the data correctly. For the Stripe webhook we can&rsquo;t change the <code>Content-Type</code> header so we add a simple middleware to catch the route and update
-the <code>Content-Type</code>:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">customMIME</span>(h http.Handler) http.Handler {
-  <span style="color:#007020;font-weight:bold">return</span> http.<span style="color:#06287e">HandlerFunc</span>(<span style="color:#007020;font-weight:bold">func</span>(w http.ResponseWriter, r <span style="color:#666">*</span>http.Request) {
-    <span style="color:#007020;font-weight:bold">if</span> strings.<span style="color:#06287e">Contains</span>(r.URL.Path, <span style="color:#4070a0">&#34;webhook&#34;</span>) {
-      r.Header.<span style="color:#06287e">Set</span>(<span style="color:#4070a0">&#34;Content-Type&#34;</span>, rawJSONMIME)
-    }
-    h.<span style="color:#06287e">ServeHTTP</span>(w, r)
-  })
-}
-
-<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">NewServer</span>() {
-  <span style="color:#60a0b0;font-style:italic">// ...
-</span><span style="color:#60a0b0;font-style:italic"></span>  restHandler = http.<span style="color:#06287e">NewServeMux</span>()
-  restHandler.<span style="color:#06287e">Handle</span>(<span style="color:#4070a0">&#34;/&#34;</span>, <span style="color:#06287e">customMIME</span>(restServer))
-  <span style="color:#60a0b0;font-style:italic">// ...
-</span><span style="color:#60a0b0;font-style:italic"></span>}
-</code></pre></div><h2 id="process-webhook-data">Process webhook data</h2>
-<p>Now we can process the request just like any other RPC method; but we get the benifit of using the Stripe-Go library to
-do all the heavy lifting for us to unmarshal the JSON payload.</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#007020;font-weight:bold">func</span> (a <span style="color:#666">*</span>app) <span style="color:#06287e">StripeWebhook</span>(ctx context.Context, req <span style="color:#666">*</span>api.WebhookRequest) (<span style="color:#666">*</span>protobuf.Empty, <span style="color:#902000">error</span>) {
-    md _ <span style="color:#666">:=</span> metadata.<span style="color:#06287e">FromIncomingContext</span>(ctx)
-
-    <span style="color:#60a0b0;font-style:italic">// https://stripe.com/docs/webhooks/signatures#verify-official-libraries
-</span><span style="color:#60a0b0;font-style:italic"></span>    endpointSecret <span style="color:#666">:=</span> <span style="color:#4070a0">&#34;whsec_...&#34;</span>;
-    event, _ <span style="color:#666">:=</span> webhook.<span style="color:#06287e">ConstructEvent</span>(req.<span style="color:#06287e">GetRaw</span>(), md.<span style="color:#06287e">Get</span>(<span style="color:#4070a0">&#34;Stripe-Signature&#34;</span>)[<span style="color:#40a070">0</span>], endpointSecret)
-
-    <span style="color:#007020;font-weight:bold">switch</span> event.Type {
-    <span style="color:#007020;font-weight:bold">case</span> <span style="color:#4070a0">&#34;payment_intent.succeeded&#34;</span>:
-    <span style="color:#60a0b0;font-style:italic">// ...
-</span><span style="color:#60a0b0;font-style:italic"></span>    <span style="color:#007020;font-weight:bold">case</span> <span style="color:#4070a0">&#34;payment_method.attached&#34;</span>:
-    <span style="color:#60a0b0;font-style:italic">// ...
-</span><span style="color:#60a0b0;font-style:italic"></span>    <span style="color:#60a0b0;font-style:italic">// etc
-</span><span style="color:#60a0b0;font-style:italic"></span>    }
-
-    <span style="color:#007020;font-weight:bold">return</span> <span style="color:#666">&amp;</span>protobuf.Empty{}, <span style="color:#007020;font-weight:bold">nil</span>
-}
-
-</code></pre></div>
         
-        <div style="margin-top: 4em" v>
-          <div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "rogchap" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-        </div>
         
-      </div>
+        <li>
+          
+          <a class="post-list" href="https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/">Running Go Code on iOS and Android</a>
+
+          <p class="footnote">
+            <time datetime="2020-09-14 14:51:26 &#43;1000 AEST">
+              
+              Sep 14, 2020
+              
+            </time>
+          </p>
+        </li>
+        
+        
+      </ul>
     </div>
   </div>
   <div class="pure-u-1-24 pure-u-md-5-24"></div>
@@ -628,6 +466,8 @@ do all the heavy lifting for us to unmarshal the JSON payload.</p>
 
         </ul>
         <a href="#" class="pure-menu-link pull-right desktop" id="gototop-btn">↑↑</a>
+        
+        <a href="/tags/mobile/index.xml" class="pure-menu-link pull-right">RSS</a>
         
       </div>
       
