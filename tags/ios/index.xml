@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iOS on Roger Chapman</title>
+    <link>https://rogchap.com/tags/ios/</link>
+    <description>Recent content in iOS on Roger Chapman</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-au</language>
+    <managingEditor>rogchap@gmail.com</managingEditor>
+    <webMaster>rogchap@gmail.com</webMaster>
+    <lastBuildDate>Mon, 14 Sep 2020 14:51:26 +1000</lastBuildDate>
+    
+	<atom:link href="https://rogchap.com/tags/ios/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Running Go Code on iOS and Android</title>
+      <link>https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/</link>
+      <pubDate>Mon, 14 Sep 2020 14:51:26 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/</guid>
+      <description>In this tutorial we&#39;ll be building a simple Go package that you can run from an iOS application (Swift) and also an Android application (Kotlin).
+This tutorial does NOT use the Go Mobile framework; instead it uses Cgo to build the raw static (iOS) and shared (Android) C library that can be imported into your mobile project (which is what the Go Mobile framework does under-the-hood).
+Setup For this tutorial we&#39;ll create a simple monorepo with the following structure:</description>
+    </item>
+    
+  </channel>
+</rss>

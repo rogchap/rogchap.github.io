@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="utf-8">
+  <title>Running Go Code on iOS and Android</title>
+  <meta name="description" content="In this tutorial we&#39;ll be building a simple Go package that you can run from an iOS application (Swift) and also an Android application (Kotlin).
+This tutorial does NOT use the Go Mobile framework; instead it uses Cgo to build the raw static (iOS) and shared (Android) C library that can be imported into your mobile project (which is what the Go Mobile framework does under-the-hood).
+Setup For this tutorial we&#39;ll create a simple monorepo with the following structure:">
+  <meta name="author" content="">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <noscript>
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://rogchap.com/css/fonts.css">
+  </noscript>
+  
+  
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+/*!
+normalize.css v^3.0 | MIT License | git.io/normalize
+Copyright (c) Nicolas Gallagher and Jonathan Neal
+*/
+/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */img,legend{border:0}legend,td,th{padding:0}html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block;vertical-align:baseline}audio:not([controls]){display:none;height:0}[hidden],template{display:none}a{background-color:transparent}a:active,a:hover{outline:0}abbr[title]{border-bottom:1px dotted}b,optgroup,strong{font-weight:700}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}svg:not(:root){overflow:hidden}figure{margin:1em 40px}hr{box-sizing:content-box;height:0}pre,textarea{overflow:auto}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}button,input,optgroup,select,textarea{color:inherit;font:inherit;margin:0}button{overflow:visible}button,select{text-transform:none}button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appearance:button;cursor:pointer}button[disabled],html input[disabled]{cursor:default}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}input{line-height:normal}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{height:auto}input[type=search]{-webkit-appearance:textfield;box-sizing:content-box}input[type=search]::-webkit-search-cancel-button,input[type=search]::-webkit-search-decoration{-webkit-appearance:none}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}table{border-collapse:collapse;border-spacing:0}.hidden,[hidden]{display:none!important}.pure-img{max-width:100%;height:auto;display:block}
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-menu{box-sizing:border-box}.pure-menu-fixed{position:fixed;left:0;top:0;z-index:3}.pure-menu-item,.pure-menu-list{position:relative}.pure-menu-list{list-style:none;margin:0;padding:0}.pure-menu-item{padding:0;margin:0;height:100%}.pure-menu-heading,.pure-menu-link{display:block;text-decoration:none;white-space:nowrap}.pure-menu-horizontal{width:100%;white-space:normal}.pure-menu-horizontal .pure-menu-list{display:inline-block}.pure-menu-horizontal .pure-menu-heading,.pure-menu-horizontal .pure-menu-item,.pure-menu-horizontal .pure-menu-separator{display:inline-block;zoom:1;vertical-align:middle}.pure-menu-item .pure-menu-item{display:block}.pure-menu-children{display:none;position:absolute;left:100%;top:0;margin:0;padding:0;z-index:3}.pure-menu-horizontal .pure-menu-children{left:0;top:auto;width:inherit}.pure-menu-active>.pure-menu-children,.pure-menu-allow-hover:hover>.pure-menu-children{display:block;position:absolute}.pure-menu-has-children>.pure-menu-link:after{padding-left:.5em;content:"\25B8";font-size:small}.pure-menu-horizontal .pure-menu-has-children>.pure-menu-link:after{content:"\25BE"}.pure-menu-scrollable{overflow-y:scroll;overflow-x:hidden}.pure-menu-scrollable .pure-menu-list{display:block}.pure-menu-horizontal.pure-menu-scrollable .pure-menu-list{display:inline-block}.pure-menu-horizontal.pure-menu-scrollable{white-space:nowrap;overflow-y:hidden;overflow-x:auto;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;padding:.5em 0}.pure-menu-horizontal.pure-menu-scrollable::-webkit-scrollbar{display:none}.pure-menu-horizontal .pure-menu-children .pure-menu-separator,.pure-menu-separator{background-color:#ccc;height:1px;margin:.3em 0}.pure-menu-horizontal .pure-menu-separator{width:1px;height:1.3em;margin:0 .3em}.pure-menu-horizontal .pure-menu-children .pure-menu-separator{display:block;width:auto}.pure-menu-heading{text-transform:uppercase;color:#565d64}.pure-menu-link{color:#777}.pure-menu-children{background-color:#fff}.pure-menu-disabled,.pure-menu-heading,.pure-menu-link{padding:.5em 1em}.pure-menu-disabled{opacity:.5}.pure-menu-disabled .pure-menu-link:hover{background-color:transparent}.pure-menu-active>.pure-menu-link,.pure-menu-link:focus,.pure-menu-link:hover{background-color:#eee}.pure-menu-selected .pure-menu-link,.pure-menu-selected .pure-menu-link:visited{color:#000}
+
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-g{letter-spacing:-.31em;text-rendering:optimizespeed;font-family:FreeSans,Arimo,"Droid Sans",Helvetica,Arial,sans-serif;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-flow:row wrap;-ms-flex-flow:row wrap;flex-flow:row wrap;-webkit-align-content:flex-start;-ms-flex-line-pack:start;align-content:flex-start}@media all and (-ms-high-contrast:none),(-ms-high-contrast:active){table .pure-g{display:block}}.opera-only :-o-prefocus,.pure-g{word-spacing:-.43em}.pure-u,.pure-u-1,.pure-u-1-1,.pure-u-1-12,.pure-u-1-2,.pure-u-1-24,.pure-u-1-3,.pure-u-1-4,.pure-u-1-5,.pure-u-1-6,.pure-u-1-8,.pure-u-10-24,.pure-u-11-12,.pure-u-11-24,.pure-u-12-24,.pure-u-13-24,.pure-u-14-24,.pure-u-15-24,.pure-u-16-24,.pure-u-17-24,.pure-u-18-24,.pure-u-19-24,.pure-u-2-24,.pure-u-2-3,.pure-u-2-5,.pure-u-20-24,.pure-u-21-24,.pure-u-22-24,.pure-u-23-24,.pure-u-24-24,.pure-u-3-24,.pure-u-3-4,.pure-u-3-5,.pure-u-3-8,.pure-u-4-24,.pure-u-4-5,.pure-u-5-12,.pure-u-5-24,.pure-u-5-5,.pure-u-5-6,.pure-u-5-8,.pure-u-6-24,.pure-u-7-12,.pure-u-7-24,.pure-u-7-8,.pure-u-8-24,.pure-u-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-g [class*=pure-u]{font-family:sans-serif}.pure-u-1-24{width:4.1667%}.pure-u-1-12,.pure-u-2-24{width:8.3333%}.pure-u-1-8,.pure-u-3-24{width:12.5%}.pure-u-1-6,.pure-u-4-24{width:16.6667%}.pure-u-1-5{width:20%}.pure-u-5-24{width:20.8333%}.pure-u-1-4,.pure-u-6-24{width:25%}.pure-u-7-24{width:29.1667%}.pure-u-1-3,.pure-u-8-24{width:33.3333%}.pure-u-3-8,.pure-u-9-24{width:37.5%}.pure-u-2-5{width:40%}.pure-u-10-24,.pure-u-5-12{width:41.6667%}.pure-u-11-24{width:45.8333%}.pure-u-1-2,.pure-u-12-24{width:50%}.pure-u-13-24{width:54.1667%}.pure-u-14-24,.pure-u-7-12{width:58.3333%}.pure-u-3-5{width:60%}.pure-u-15-24,.pure-u-5-8{width:62.5%}.pure-u-16-24,.pure-u-2-3{width:66.6667%}.pure-u-17-24{width:70.8333%}.pure-u-18-24,.pure-u-3-4{width:75%}.pure-u-19-24{width:79.1667%}.pure-u-4-5{width:80%}.pure-u-20-24,.pure-u-5-6{width:83.3333%}.pure-u-21-24,.pure-u-7-8{width:87.5%}.pure-u-11-12,.pure-u-22-24{width:91.6667%}.pure-u-23-24{width:95.8333%}.pure-u-1,.pure-u-1-1,.pure-u-24-24,.pure-u-5-5{width:100%}
+  </style>
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+.pure-table{border-collapse:collapse;border-spacing:0;empty-cells:show;border:1px solid #cbcbcb}.pure-table caption{color:#000;font:italic 85%/1 arial,sans-serif;padding:1em 0;text-align:center}.pure-table td,.pure-table th{border-left:1px solid #cbcbcb;border-width:0 0 0 1px;font-size:inherit;margin:0;overflow:visible;padding:.5em 1em}.pure-table td:first-child,.pure-table th:first-child{border-left-width:0}.pure-table thead{background-color:#e0e0e0;color:#000;text-align:left;vertical-align:bottom}.pure-table td{background-color:transparent}.pure-table-odd td,.pure-table-striped tr:nth-child(2n-1) td{background-color:#f2f2f2}.pure-table-bordered td{border-bottom:1px solid #cbcbcb}.pure-table-bordered tbody>tr:last-child>td{border-bottom-width:0}.pure-table-horizontal td,.pure-table-horizontal th{border-width:0 0 1px;border-bottom:1px solid #cbcbcb}.pure-table-horizontal tbody>tr:last-child>td{border-bottom-width:0}
+  </style>
+  
+  
+  <style type="text/css" media="screen">
+    /*!
+Pure v1.0.0
+Copyright 2013 Yahoo!
+Licensed under the BSD License.
+https://github.com/yahoo/pure/blob/master/LICENSE.md
+*/
+@media screen and (min-width:35.5em){.pure-u-sm-1,.pure-u-sm-1-1,.pure-u-sm-1-12,.pure-u-sm-1-2,.pure-u-sm-1-24,.pure-u-sm-1-3,.pure-u-sm-1-4,.pure-u-sm-1-5,.pure-u-sm-1-6,.pure-u-sm-1-8,.pure-u-sm-10-24,.pure-u-sm-11-12,.pure-u-sm-11-24,.pure-u-sm-12-24,.pure-u-sm-13-24,.pure-u-sm-14-24,.pure-u-sm-15-24,.pure-u-sm-16-24,.pure-u-sm-17-24,.pure-u-sm-18-24,.pure-u-sm-19-24,.pure-u-sm-2-24,.pure-u-sm-2-3,.pure-u-sm-2-5,.pure-u-sm-20-24,.pure-u-sm-21-24,.pure-u-sm-22-24,.pure-u-sm-23-24,.pure-u-sm-24-24,.pure-u-sm-3-24,.pure-u-sm-3-4,.pure-u-sm-3-5,.pure-u-sm-3-8,.pure-u-sm-4-24,.pure-u-sm-4-5,.pure-u-sm-5-12,.pure-u-sm-5-24,.pure-u-sm-5-5,.pure-u-sm-5-6,.pure-u-sm-5-8,.pure-u-sm-6-24,.pure-u-sm-7-12,.pure-u-sm-7-24,.pure-u-sm-7-8,.pure-u-sm-8-24,.pure-u-sm-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-sm-1-24{width:4.1667%}.pure-u-sm-1-12,.pure-u-sm-2-24{width:8.3333%}.pure-u-sm-1-8,.pure-u-sm-3-24{width:12.5%}.pure-u-sm-1-6,.pure-u-sm-4-24{width:16.6667%}.pure-u-sm-1-5{width:20%}.pure-u-sm-5-24{width:20.8333%}.pure-u-sm-1-4,.pure-u-sm-6-24{width:25%}.pure-u-sm-7-24{width:29.1667%}.pure-u-sm-1-3,.pure-u-sm-8-24{width:33.3333%}.pure-u-sm-3-8,.pure-u-sm-9-24{width:37.5%}.pure-u-sm-2-5{width:40%}.pure-u-sm-10-24,.pure-u-sm-5-12{width:41.6667%}.pure-u-sm-11-24{width:45.8333%}.pure-u-sm-1-2,.pure-u-sm-12-24{width:50%}.pure-u-sm-13-24{width:54.1667%}.pure-u-sm-14-24,.pure-u-sm-7-12{width:58.3333%}.pure-u-sm-3-5{width:60%}.pure-u-sm-15-24,.pure-u-sm-5-8{width:62.5%}.pure-u-sm-16-24,.pure-u-sm-2-3{width:66.6667%}.pure-u-sm-17-24{width:70.8333%}.pure-u-sm-18-24,.pure-u-sm-3-4{width:75%}.pure-u-sm-19-24{width:79.1667%}.pure-u-sm-4-5{width:80%}.pure-u-sm-20-24,.pure-u-sm-5-6{width:83.3333%}.pure-u-sm-21-24,.pure-u-sm-7-8{width:87.5%}.pure-u-sm-11-12,.pure-u-sm-22-24{width:91.6667%}.pure-u-sm-23-24{width:95.8333%}.pure-u-sm-1,.pure-u-sm-1-1,.pure-u-sm-24-24,.pure-u-sm-5-5{width:100%}}@media screen and (min-width:48em){.pure-u-md-1,.pure-u-md-1-1,.pure-u-md-1-12,.pure-u-md-1-2,.pure-u-md-1-24,.pure-u-md-1-3,.pure-u-md-1-4,.pure-u-md-1-5,.pure-u-md-1-6,.pure-u-md-1-8,.pure-u-md-10-24,.pure-u-md-11-12,.pure-u-md-11-24,.pure-u-md-12-24,.pure-u-md-13-24,.pure-u-md-14-24,.pure-u-md-15-24,.pure-u-md-16-24,.pure-u-md-17-24,.pure-u-md-18-24,.pure-u-md-19-24,.pure-u-md-2-24,.pure-u-md-2-3,.pure-u-md-2-5,.pure-u-md-20-24,.pure-u-md-21-24,.pure-u-md-22-24,.pure-u-md-23-24,.pure-u-md-24-24,.pure-u-md-3-24,.pure-u-md-3-4,.pure-u-md-3-5,.pure-u-md-3-8,.pure-u-md-4-24,.pure-u-md-4-5,.pure-u-md-5-12,.pure-u-md-5-24,.pure-u-md-5-5,.pure-u-md-5-6,.pure-u-md-5-8,.pure-u-md-6-24,.pure-u-md-7-12,.pure-u-md-7-24,.pure-u-md-7-8,.pure-u-md-8-24,.pure-u-md-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-md-1-24{width:4.1667%}.pure-u-md-1-12,.pure-u-md-2-24{width:8.3333%}.pure-u-md-1-8,.pure-u-md-3-24{width:12.5%}.pure-u-md-1-6,.pure-u-md-4-24{width:16.6667%}.pure-u-md-1-5{width:20%}.pure-u-md-5-24{width:20.8333%}.pure-u-md-1-4,.pure-u-md-6-24{width:25%}.pure-u-md-7-24{width:29.1667%}.pure-u-md-1-3,.pure-u-md-8-24{width:33.3333%}.pure-u-md-3-8,.pure-u-md-9-24{width:37.5%}.pure-u-md-2-5{width:40%}.pure-u-md-10-24,.pure-u-md-5-12{width:41.6667%}.pure-u-md-11-24{width:45.8333%}.pure-u-md-1-2,.pure-u-md-12-24{width:50%}.pure-u-md-13-24{width:54.1667%}.pure-u-md-14-24,.pure-u-md-7-12{width:58.3333%}.pure-u-md-3-5{width:60%}.pure-u-md-15-24,.pure-u-md-5-8{width:62.5%}.pure-u-md-16-24,.pure-u-md-2-3{width:66.6667%}.pure-u-md-17-24{width:70.8333%}.pure-u-md-18-24,.pure-u-md-3-4{width:75%}.pure-u-md-19-24{width:79.1667%}.pure-u-md-4-5{width:80%}.pure-u-md-20-24,.pure-u-md-5-6{width:83.3333%}.pure-u-md-21-24,.pure-u-md-7-8{width:87.5%}.pure-u-md-11-12,.pure-u-md-22-24{width:91.6667%}.pure-u-md-23-24{width:95.8333%}.pure-u-md-1,.pure-u-md-1-1,.pure-u-md-24-24,.pure-u-md-5-5{width:100%}}@media screen and (min-width:64em){.pure-u-lg-1,.pure-u-lg-1-1,.pure-u-lg-1-12,.pure-u-lg-1-2,.pure-u-lg-1-24,.pure-u-lg-1-3,.pure-u-lg-1-4,.pure-u-lg-1-5,.pure-u-lg-1-6,.pure-u-lg-1-8,.pure-u-lg-10-24,.pure-u-lg-11-12,.pure-u-lg-11-24,.pure-u-lg-12-24,.pure-u-lg-13-24,.pure-u-lg-14-24,.pure-u-lg-15-24,.pure-u-lg-16-24,.pure-u-lg-17-24,.pure-u-lg-18-24,.pure-u-lg-19-24,.pure-u-lg-2-24,.pure-u-lg-2-3,.pure-u-lg-2-5,.pure-u-lg-20-24,.pure-u-lg-21-24,.pure-u-lg-22-24,.pure-u-lg-23-24,.pure-u-lg-24-24,.pure-u-lg-3-24,.pure-u-lg-3-4,.pure-u-lg-3-5,.pure-u-lg-3-8,.pure-u-lg-4-24,.pure-u-lg-4-5,.pure-u-lg-5-12,.pure-u-lg-5-24,.pure-u-lg-5-5,.pure-u-lg-5-6,.pure-u-lg-5-8,.pure-u-lg-6-24,.pure-u-lg-7-12,.pure-u-lg-7-24,.pure-u-lg-7-8,.pure-u-lg-8-24,.pure-u-lg-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-lg-1-24{width:4.1667%}.pure-u-lg-1-12,.pure-u-lg-2-24{width:8.3333%}.pure-u-lg-1-8,.pure-u-lg-3-24{width:12.5%}.pure-u-lg-1-6,.pure-u-lg-4-24{width:16.6667%}.pure-u-lg-1-5{width:20%}.pure-u-lg-5-24{width:20.8333%}.pure-u-lg-1-4,.pure-u-lg-6-24{width:25%}.pure-u-lg-7-24{width:29.1667%}.pure-u-lg-1-3,.pure-u-lg-8-24{width:33.3333%}.pure-u-lg-3-8,.pure-u-lg-9-24{width:37.5%}.pure-u-lg-2-5{width:40%}.pure-u-lg-10-24,.pure-u-lg-5-12{width:41.6667%}.pure-u-lg-11-24{width:45.8333%}.pure-u-lg-1-2,.pure-u-lg-12-24{width:50%}.pure-u-lg-13-24{width:54.1667%}.pure-u-lg-14-24,.pure-u-lg-7-12{width:58.3333%}.pure-u-lg-3-5{width:60%}.pure-u-lg-15-24,.pure-u-lg-5-8{width:62.5%}.pure-u-lg-16-24,.pure-u-lg-2-3{width:66.6667%}.pure-u-lg-17-24{width:70.8333%}.pure-u-lg-18-24,.pure-u-lg-3-4{width:75%}.pure-u-lg-19-24{width:79.1667%}.pure-u-lg-4-5{width:80%}.pure-u-lg-20-24,.pure-u-lg-5-6{width:83.3333%}.pure-u-lg-21-24,.pure-u-lg-7-8{width:87.5%}.pure-u-lg-11-12,.pure-u-lg-22-24{width:91.6667%}.pure-u-lg-23-24{width:95.8333%}.pure-u-lg-1,.pure-u-lg-1-1,.pure-u-lg-24-24,.pure-u-lg-5-5{width:100%}}@media screen and (min-width:80em){.pure-u-xl-1,.pure-u-xl-1-1,.pure-u-xl-1-12,.pure-u-xl-1-2,.pure-u-xl-1-24,.pure-u-xl-1-3,.pure-u-xl-1-4,.pure-u-xl-1-5,.pure-u-xl-1-6,.pure-u-xl-1-8,.pure-u-xl-10-24,.pure-u-xl-11-12,.pure-u-xl-11-24,.pure-u-xl-12-24,.pure-u-xl-13-24,.pure-u-xl-14-24,.pure-u-xl-15-24,.pure-u-xl-16-24,.pure-u-xl-17-24,.pure-u-xl-18-24,.pure-u-xl-19-24,.pure-u-xl-2-24,.pure-u-xl-2-3,.pure-u-xl-2-5,.pure-u-xl-20-24,.pure-u-xl-21-24,.pure-u-xl-22-24,.pure-u-xl-23-24,.pure-u-xl-24-24,.pure-u-xl-3-24,.pure-u-xl-3-4,.pure-u-xl-3-5,.pure-u-xl-3-8,.pure-u-xl-4-24,.pure-u-xl-4-5,.pure-u-xl-5-12,.pure-u-xl-5-24,.pure-u-xl-5-5,.pure-u-xl-5-6,.pure-u-xl-5-8,.pure-u-xl-6-24,.pure-u-xl-7-12,.pure-u-xl-7-24,.pure-u-xl-7-8,.pure-u-xl-8-24,.pure-u-xl-9-24{display:inline-block;zoom:1;letter-spacing:normal;word-spacing:normal;vertical-align:top;text-rendering:auto}.pure-u-xl-1-24{width:4.1667%}.pure-u-xl-1-12,.pure-u-xl-2-24{width:8.3333%}.pure-u-xl-1-8,.pure-u-xl-3-24{width:12.5%}.pure-u-xl-1-6,.pure-u-xl-4-24{width:16.6667%}.pure-u-xl-1-5{width:20%}.pure-u-xl-5-24{width:20.8333%}.pure-u-xl-1-4,.pure-u-xl-6-24{width:25%}.pure-u-xl-7-24{width:29.1667%}.pure-u-xl-1-3,.pure-u-xl-8-24{width:33.3333%}.pure-u-xl-3-8,.pure-u-xl-9-24{width:37.5%}.pure-u-xl-2-5{width:40%}.pure-u-xl-10-24,.pure-u-xl-5-12{width:41.6667%}.pure-u-xl-11-24{width:45.8333%}.pure-u-xl-1-2,.pure-u-xl-12-24{width:50%}.pure-u-xl-13-24{width:54.1667%}.pure-u-xl-14-24,.pure-u-xl-7-12{width:58.3333%}.pure-u-xl-3-5{width:60%}.pure-u-xl-15-24,.pure-u-xl-5-8{width:62.5%}.pure-u-xl-16-24,.pure-u-xl-2-3{width:66.6667%}.pure-u-xl-17-24{width:70.8333%}.pure-u-xl-18-24,.pure-u-xl-3-4{width:75%}.pure-u-xl-19-24{width:79.1667%}.pure-u-xl-4-5{width:80%}.pure-u-xl-20-24,.pure-u-xl-5-6{width:83.3333%}.pure-u-xl-21-24,.pure-u-xl-7-8{width:87.5%}.pure-u-xl-11-12,.pure-u-xl-22-24{width:91.6667%}.pure-u-xl-23-24{width:95.8333%}.pure-u-xl-1,.pure-u-xl-1-1,.pure-u-xl-24-24,.pure-u-xl-5-5{width:100%}}
+  </style>
+  
+
+  
+  <style type="text/css" media="screen">
+    html {
+	min-height: 100%;
+	width: 100%;
+	position: relative;
+}
+
+body {
+	background-color: rgb(252, 252, 252);
+	color: #484848;
+}
+
+a {
+	text-decoration: none;
+}
+
+code, kbd, pre, samp {
+    background-color: rgb(240, 240, 240);
+}
+
+.nav-menu {
+	margin-top: 5px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+.pure-menu-heading {
+	text-transform: none;
+	font-size: large;
+}
+
+.header {
+	text-align: left;
+	color: #484848;
+	margin-bottom: .5em;
+}
+
+.header ul li {
+	height: auto;
+}
+
+.header ul li a {
+	font-weight: bold;
+	color: #484848;
+	font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.header {
+	font-weight: bold;
+	color: #484848;
+	font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.site-title {
+	color: #484848;
+	text-transform: none;
+	font-weight: normal;
+	font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.pull-right {
+	float: right;
+}
+
+.posts-name {
+	text-transform: capitalize;
+	font-weight: bold;
+	padding-left: 1em;
+	margin-top: 1em;
+	font-family: "Source Sans Pro", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.posts {
+	font-family: verdana, arial, helvetica, sans-serif;
+	list-style-type: none;
+	padding-left: 1em;
+}
+
+.posts li p {
+	margin-top: 0;
+}
+
+.posts li {
+	margin-bottom: 1em;
+}
+
+.posts li > a {
+	color: #369;
+	text-decoration: none;
+}
+.posts li > a:hover {
+	color: #2d5986;
+	text-decoration: underline;
+}
+
+.post-list {
+	font-size: large;
+}
+
+.footnote {
+	font-family: verdana, arial, helvetica, sans-serif;
+	color: #575757;
+	font-size: 0.75em;
+	margin-bottom: 0;
+}
+
+.footnote a {
+	color: #575757;
+}
+
+.footnote a:hover {
+	text-decoration: underline;
+	color: #369;
+}
+
+.footer {
+	position: absolute;
+	z-index: 2;
+	height: auto;
+	width: 100%;
+	bottom: 0;
+}
+
+.footer-content {
+	border-top: 1px solid #e3e3e3;
+	font-size: 80%;
+	color: #bbb;
+}
+
+.footer-content a {
+	color: #575757;
+}
+
+.footer-content ul {
+	height: auto;
+	margin-top: 0;
+	margin-bottom: 0;
+	display: inline-block;
+	padding-left: 0;
+}
+
+/* https://github.com/gohugoio/hugo/issues/1778#issuecomment-451552602 */
+#TableOfContents > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#gototop-btn {
+	display: inline-block;
+}
+
+#foot-name {
+	color: #484848;
+	text-transform: none;
+}
+
+#foot-copyright {
+	padding-left: 1em;
+	padding-bottom: 0.5em;
+	margin: 0;
+}
+
+.post {
+	font-family: proxima-nova, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+	color: #484848;
+	letter-spacing: normal;
+	padding-left: .5em;
+}
+
+.post h1, h2, h3, h4, h5, h6 {
+	font-weight: bold;
+	letter-spacing: normal;
+}
+
+.post-content {
+	z-index: 9;
+	overflow: auto;
+	padding: 0;
+	padding-bottom: 3em;
+	font-size: 16px;
+	line-height: 1.4;
+}
+
+.post-content img {
+	max-width: 100%;
+	height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.post-content pre {
+	padding: 0.5em;
+}
+
+.post a {
+	color: #369;
+	text-decoration: none;
+}
+
+.post a:hover {
+	color: #2d5986;
+	text-decoration: underline;
+}
+
+.post h1 {
+	font-size: 28px;
+}
+
+.post h2 {
+	font-size: 25px;
+}
+
+.post h3 {
+	font-size: 23px;
+}
+
+.post h4 {
+	font-size: 21px;
+}
+
+.post h5 {
+	font-size: 19px;
+}
+
+.post h6 {
+	font-size: 18px;
+}
+
+.post-title {
+	margin-top: 0;
+	margin-bottom: 2em;
+}
+
+.post-title h1 {
+	font-weight: bold;
+	font-size: 39px;
+	line-height: 40px;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+@media screen and (max-width: 767px) {
+	.desktop {
+		display: none;
+	}
+
+	.mobile {
+		display: block;
+	}
+
+	#toggle-btn {
+		float: right;
+		padding: .5em 1em;
+		text-decoration: none;
+		color: #484848;
+		font-weight: bold;
+		line-height: 1.5em;
+	}
+
+	#toggle-content li {
+		clear: both;
+		height: auto;
+		background-color: rgb(249, 249, 249);
+	}
+
+	#toggle-home {
+		display: inline-block;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.mobile {
+		display: none;
+	}
+
+	.desktop {
+		display: block;
+	}
+}
+
+  </style>
+
+  
+  <link rel="shortcut icon" 
+   
+    href="https://rogchap.com/favicon.ico"
+  
+  type="image/x-icon">
+
+  
+  <meta name="generator" content="Hugo 0.62.2" />
+
+  
+  <meta property="og:title" content="Running Go Code on iOS and Android" />
+<meta property="og:description" content="In this tutorial we&#39;ll be building a simple Go package that you can run from an iOS application (Swift) and also an Android application (Kotlin).
+This tutorial does NOT use the Go Mobile framework; instead it uses Cgo to build the raw static (iOS) and shared (Android) C library that can be imported into your mobile project (which is what the Go Mobile framework does under-the-hood).
+Setup For this tutorial we&#39;ll create a simple monorepo with the following structure:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/" />
+<meta property="og:image" content="https://rogchap.com/tile.png"/>
+<meta property="article:published_time" content="2020-09-14T14:51:26+10:00" />
+<meta property="article:modified_time" content="2020-09-14T14:51:26+10:00" />
+
+</head>
+<body>
+
+<div class="header pure-g">
+    <div class="pure-u-1-24 pure-u-md-5-24"></div>
+    <div class="pure-u-11-12 pure-u-md-7-12">
+        <div class="desktop pure-menu pure-menu-horizontal nav-menu">
+            
+            <a href="https://rogchap.com/" class="site-title pure-menu-heading">Roger Chapman</a>
+            <ul class="pure-menu-list pull-right">
+                
+                <li class="pure-menu-item">
+                    <a href="https://rogchap.com/about/" class="pure-menu-link">About</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mobile pure-menu nav-menu">
+            <a href="https://rogchap.com/" class="site-title pure-menu-heading" id="toggle-home">Roger Chapman</a>
+            <a href="#" id="toggle-btn">&#9776;</a>
+            <ul class="pure-menu-list" id="toggle-content" style="display:none;">
+                
+                
+                <li class="pure-menu-item">
+                    <a href="https://rogchap.com/about/" class="pure-menu-link">About</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+<div class="pure-g">
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+  <div class="pure-u-11-12 pure-u-md-7-12">
+    <div class="post">
+
+      <div class="post-title">
+        <p class="footnote">
+          
+          <time datetime="2020-09-14 14:51:26 &#43;1000 AEST">
+            
+            Sep 14, 2020
+            
+          </time>
+          
+          
+          
+          |
+          
+          
+          tags: [ <a
+            href="https://rogchap.com/tags/go">Go</a>, <a
+            href="https://rogchap.com/tags/mobile">Mobile</a>, <a
+            href="https://rogchap.com/tags/ios">iOS</a>, <a
+            href="https://rogchap.com/tags/android">Android</a> ]
+          
+
+          
+
+          
+        </p>
+        <h1>Running Go Code on iOS and Android</h1>
+      </div>
+
+      <div class="post-content">
+        
+        <p>In this tutorial we'll be building a simple Go package that you can run from an iOS application (Swift) and also an
+Android application (Kotlin).</p>
+<p>This tutorial does <strong>NOT</strong> use the <a href="https://github.com/golang/mobile">Go Mobile</a>
+framework; instead it uses Cgo to build the raw static (iOS) and shared (Android) C library that can be imported into your
+mobile project (which is what the Go Mobile framework does under-the-hood).</p>
+<h2 id="setup">Setup</h2>
+<p>For this tutorial we'll create a simple monorepo with the following structure:</p>
+<pre><code>.
+├── android/
+├── go/
+│   ├── cmd/
+│   │   └── libfoo/
+│   │       └── main.go
+│   ├── foo/
+│   │   └── foo.go
+│   ├── go.mod
+│   └── go.sum
+└── ios/
+</code></pre><div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">$ mkdir -p android ios go/cmd/libfoo go/foo
+</code></pre></div><p>We'll start with the Go code and come back to creating the iOS and Android projects later.</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">$ <span style="color:#007020">cd</span> go
+$ go mod init rogchap.com/libfoo
+</code></pre></div><h2 id="foo-package">Foo package</h2>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#60a0b0;font-style:italic">// go/foo/foo.go
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">package</span> foo
+
+<span style="color:#60a0b0;font-style:italic">// Reverse reverses the given string by each utf8 character
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">Reverse</span>(in <span style="color:#902000">string</span>) <span style="color:#902000">string</span> {
+    n <span style="color:#666">:=</span> <span style="color:#40a070">0</span>
+    <span style="color:#902000">rune</span> <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">rune</span>, <span style="color:#007020">len</span>(in))
+    <span style="color:#007020;font-weight:bold">for</span> _, r <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> in { 
+        <span style="color:#902000">rune</span>[n] = r
+        n<span style="color:#666">++</span>
+    } 
+    <span style="color:#902000">rune</span> = <span style="color:#902000">rune</span>[<span style="color:#40a070">0</span>:n]
+    <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; n<span style="color:#666">/</span><span style="color:#40a070">2</span>; i<span style="color:#666">++</span> { 
+        <span style="color:#902000">rune</span>[i], <span style="color:#902000">rune</span>[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i] = <span style="color:#902000">rune</span>[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i], <span style="color:#902000">rune</span>[i] 
+    } 
+    <span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020">string</span>(<span style="color:#902000">rune</span>)
+}
+</code></pre></div><p>Our <code>foo</code> package has a single function <code>Reverse</code> that has a single string argument <code>in</code> and a single string output.</p>
+<h2 id="export-for-c">Export for C</h2>
+<p>In order for our C library to call our <code>foo</code> package we need to export all the functions that we want to expose to C
+with the special <code>export</code> comment.
+This wrapper needs to be in the <code>main</code> package:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#60a0b0;font-style:italic">// go/cmd/libfoo/main.go
+</span><span style="color:#60a0b0;font-style:italic"></span>pacakge main
+
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#4070a0">&#34;C&#34;</span>
+
+<span style="color:#60a0b0;font-style:italic">// other imports should be seperate from the special Cgo import
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">import</span> (
+    <span style="color:#4070a0">&#34;rogchap.com/libfoo/foo&#34;</span>
+)
+
+<span style="color:#60a0b0;font-style:italic">//export reverse
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">reverse</span>(in <span style="color:#666">*</span>C.char) <span style="color:#666">*</span>C.char {
+    <span style="color:#007020;font-weight:bold">return</span> C.<span style="color:#06287e">CString</span>(foo.<span style="color:#06287e">Reverse</span>(C.<span style="color:#06287e">GoString</span>(in)))
+}
+
+<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {}
+</code></pre></div><p>We're using the special <code>C.GoString()</code> and <code>C.CString()</code> functions to convert between Go string and a C string.</p>
+<p><em>Note:</em> The function that we are exporting does not need to be an exported Go function (ie. starts with a Captial
+letter). Also note the empty <code>main</code> function; this is required for the Go code to compile otherwise you'll get a
+<code>function main is undeclared in the main package</code> error.</p>
+<p>Let's test our build by creating a static C library using the Go <code>-buildmode</code> flag:</p>
+<pre><code>go build -buildmode=c-archive -o foo.a ./cmd/libfoo
+</code></pre><p>This should have outputed the C library: <code>foo.a</code> and the header file: <code>foo.h</code>. You should see our exported
+function at the bottom of our header file:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#007020;font-weight:bold">extern</span> <span style="color:#902000">char</span><span style="color:#666">*</span> <span style="color:#06287e">reverse</span>(<span style="color:#902000">char</span><span style="color:#666">*</span> in);
+</code></pre></div><h2 id="building-for-ios">Building for iOS</h2>
+<p>Our goal is to create a <a href="https://en.wikipedia.org/wiki/Fat_binary">fat binary</a> that can be used on iOS devices and the
+iOS simulator.</p>
+<p>The Go standard library includes a script for building for iOS:
+<a href="https://golang.org/misc/ios/clangwrap.sh"><code>$GOROOT/misc/ios/clangwrap.sh</code></a>, however this script only builds for
+<code>arm64</code>, and we need <code>x86_64</code> too for the iOS Simulator. So, we're going to create our own <code>clangwrap.sh</code>:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#007020">#!/bin/sh
+</span><span style="color:#007020"></span>
+<span style="color:#60a0b0;font-style:italic"># go/clangwrap.sh</span>
+
+<span style="color:#bb60d5">SDK_PATH</span><span style="color:#666">=</span><span style="color:#4070a0">`</span>xcrun --sdk <span style="color:#bb60d5">$SDK</span> --show-sdk-path<span style="color:#4070a0">`</span>
+<span style="color:#bb60d5">CLANG</span><span style="color:#666">=</span><span style="color:#4070a0">`</span>xcrun --sdk <span style="color:#bb60d5">$SDK</span> --find clang<span style="color:#4070a0">`</span>
+
+<span style="color:#007020;font-weight:bold">if</span> <span style="color:#666">[</span> <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$GOARCH</span><span style="color:#4070a0">&#34;</span> <span style="color:#666">=</span><span style="color:#666">=</span> <span style="color:#4070a0">&#34;amd64&#34;</span> <span style="color:#666">]</span>; <span style="color:#007020;font-weight:bold">then</span>
+    <span style="color:#bb60d5">CARCH</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;x86_64&#34;</span>
+<span style="color:#007020;font-weight:bold">elif</span> <span style="color:#666">[</span> <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$GOARCH</span><span style="color:#4070a0">&#34;</span> <span style="color:#666">=</span><span style="color:#666">=</span> <span style="color:#4070a0">&#34;arm64&#34;</span> <span style="color:#666">]</span>; <span style="color:#007020;font-weight:bold">then</span>
+    <span style="color:#bb60d5">CARCH</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;arm64&#34;</span>
+<span style="color:#007020;font-weight:bold">fi</span>
+
+<span style="color:#007020">exec</span> <span style="color:#bb60d5">$CLANG</span> -arch <span style="color:#bb60d5">$CARCH</span> -isysroot <span style="color:#bb60d5">$SDK_PATH</span> -mios-version-min<span style="color:#666">=</span>10.0 <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$@</span><span style="color:#4070a0">&#34;</span>
+</code></pre></div><p>Don't forget to make it executable:</p>
+<pre><code>chmod +x clangwrap.sh
+</code></pre><p>Now we can build our library for each architecture and combine into a fat binary using the <code>lipo</code> tool (via a Makefile):</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#60a0b0;font-style:italic"># go/Makefile
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#06287e">ios-arm64</span><span style="color:#666">:</span>
+	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>darwin <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm64 <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">SDK</span><span style="color:#666">=</span>iphoneos <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>PWD<span style="color:#007020;font-weight:bold">)</span>/clangwrap.sh <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CGO_CFLAGS</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;-fembed-bitcode&#34;</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-archive -tags ios -o <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.a ./cmd/libfoo
+
+<span style="color:#06287e">ios-x86_64</span><span style="color:#666">:</span>
+	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>darwin <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>amd64 <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">SDK</span><span style="color:#666">=</span>iphonesimulator <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>PWD<span style="color:#007020;font-weight:bold">)</span>/clangwrap.sh <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-archive -tags ios -o <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64.a ./cmd/libfoo
+
+<span style="color:#06287e">ios</span><span style="color:#666">:</span> ios-arm64 ios-x86_64
+	lipo <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64.a <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.a -create -output <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/foo.a
+	cp <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.h <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/foo.h
+</code></pre></div><h2 id="create-our-ios-application">Create our iOS Application</h2>
+<p>Using XCode we can create a simple single page application. I'm going to use Swift UI, but it is just as easy to do with
+UIKit:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#60a0b0;font-style:italic">//</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">i</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">s</span><span style="color:#60a0b0;font-style:italic">/</span><span style="color:#60a0b0;font-style:italic">f</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">b</span><span style="color:#60a0b0;font-style:italic">a</span><span style="color:#60a0b0;font-style:italic">r</span><span style="color:#60a0b0;font-style:italic">/</span><span style="color:#60a0b0;font-style:italic">C</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">n</span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">n</span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">V</span><span style="color:#60a0b0;font-style:italic">i</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">w</span><span style="color:#60a0b0;font-style:italic">.</span><span style="color:#60a0b0;font-style:italic">s</span><span style="color:#60a0b0;font-style:italic">w</span><span style="color:#60a0b0;font-style:italic">i</span><span style="color:#60a0b0;font-style:italic">f</span><span style="color:#60a0b0;font-style:italic">t</span>
+
+<span style="color:#007020;font-weight:bold">struct</span> <span style="color:#0e84b5;font-weight:bold">ContentView</span>: View {
+
+    @State <span style="color:#007020;font-weight:bold">private</span> <span style="color:#007020;font-weight:bold">var</span> <span style="color:#bb60d5">txt</span>: <span style="color:#007020">String</span> = <span style="color:#4070a0">&#34;</span><span style="color:#4070a0">&#34;</span>
+
+    <span style="color:#007020;font-weight:bold">var</span> <span style="color:#bb60d5">body</span>: some View {
+        VStack{
+            TextField(<span style="color:#4070a0">&#34;</span><span style="color:#4070a0">&#34;</span>, text: <span style="">$</span>txt)
+            .textFieldStyle(RoundedBorderTextFieldStyle())
+            Button(<span style="color:#4070a0">&#34;</span><span style="color:#4070a0">Reverse</span><span style="color:#4070a0">&#34;</span>){
+                <span style="color:#60a0b0;font-style:italic">//</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">R</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">v</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">r</span><span style="color:#60a0b0;font-style:italic">s</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">x</span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">h</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">r</span><span style="color:#60a0b0;font-style:italic">e</span>
+            }
+            Spacer()
+        }
+        .padding(.all, <span style="color:#40a070">15</span>)
+    }
+}
+</code></pre></div><p>In XCode we can drag-and-drop our newly generated <code>foo.a</code> and <code>foo.h</code> into our project. For our Swift code to
+interop with our library we need to create a bridging header:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#60a0b0;font-style:italic">// ios/foobar/foobar-Bridging-Header.h
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#007020">#</span><span style="color:#007020">import &#34;foo.h&#34;</span><span style="color:#007020">
+</span></code></pre></div><p>In Xcode <code>Build Settings</code>, under <code>Swift Compiler - General</code> set the <code>Objective-C Bridging Header</code> to the file we just
+created: <code>foobar/foobar-Bridging-Header.h</code>.</p>
+<p>We also need to set the <code>Library Search Paths</code> to include the directory of our generated header file <code>foo.h</code>.
+(Xcode may have done this for you when you drag-and-drop the files into the project).</p>
+<p>We can now call our function from Swift, then build and run:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#60a0b0;font-style:italic">//</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">i</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">s</span><span style="color:#60a0b0;font-style:italic">/</span><span style="color:#60a0b0;font-style:italic">f</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">b</span><span style="color:#60a0b0;font-style:italic">a</span><span style="color:#60a0b0;font-style:italic">r</span><span style="color:#60a0b0;font-style:italic">/</span><span style="color:#60a0b0;font-style:italic">C</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">n</span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">n</span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">V</span><span style="color:#60a0b0;font-style:italic">i</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">w</span><span style="color:#60a0b0;font-style:italic">.</span><span style="color:#60a0b0;font-style:italic">s</span><span style="color:#60a0b0;font-style:italic">w</span><span style="color:#60a0b0;font-style:italic">i</span><span style="color:#60a0b0;font-style:italic">f</span><span style="color:#60a0b0;font-style:italic">t</span>
+
+Button(<span style="color:#4070a0">&#34;</span><span style="color:#4070a0">Reverse</span><span style="color:#4070a0">&#34;</span>){
+    <span style="color:#007020;font-weight:bold">let</span> <span style="color:#bb60d5">str</span> = reverse(<span style="color:#007020">UnsafeMutablePointer</span>&lt;<span style="color:#007020">Int8</span>&gt;(<span style="color:#007020;font-weight:bold">mutating</span>: (<span style="color:#007020;font-weight:bold">self</span>.txt <span style="color:#007020;font-weight:bold">as</span> NSString).utf8String))
+    <span style="color:#007020;font-weight:bold">self</span>.txt = <span style="color:#007020">String</span>.<span style="color:#007020;font-weight:bold">init</span>(cString: str!, encoding: .utf8)<span style="color:#666">!</span>
+    <span style="color:#60a0b0;font-style:italic">//</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">d</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">n</span><span style="color:#60a0b0;font-style:italic">&#39;</span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">f</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">r</span><span style="color:#60a0b0;font-style:italic">g</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">r</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">l</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">a</span><span style="color:#60a0b0;font-style:italic">s</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">h</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">m</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic">m</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic">r</span><span style="color:#60a0b0;font-style:italic">y</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">o</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">h</span><span style="color:#60a0b0;font-style:italic">e</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">C</span><span style="color:#60a0b0;font-style:italic"> </span><span style="color:#60a0b0;font-style:italic">S</span><span style="color:#60a0b0;font-style:italic">t</span><span style="color:#60a0b0;font-style:italic">r</span><span style="color:#60a0b0;font-style:italic">i</span><span style="color:#60a0b0;font-style:italic">n</span><span style="color:#60a0b0;font-style:italic">g</span>
+    str?.deallocate()
+}
+</code></pre></div><p><img src="/posts/img/libfoo_ios.gif" alt="libfoo ios app"></p>
+<h1 id="creating-the-android-application">Creating the Android application</h1>
+<p>Using Android Studio, we will create a new Android project. From the Project Templates select <code>Native C++</code>, which will
+create a project with an Empty Activity that is configured to use the Java Native Interface (JNI). We will still select
+<code>Kotlin</code> as our language of choice for the project.</p>
+<p>After creating a simple Activity with a <code>EditText</code> and a <code>Button</code> we create the basic functionality for our app:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#60a0b0;font-style:italic">// android/app/src/main/java/com/rogchap/foobar/MainActivity.kt
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">MainActivity</span> : AppCompatActivity() {
+
+    <span style="color:#007020;font-weight:bold">override</span> <span style="color:#007020;font-weight:bold">fun</span> <span style="color:#06287e">onCreate</span>(savedInstanceState: Bundle?) {
+        <span style="color:#007020;font-weight:bold">super</span>.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        btn.setOnClickListener {
+            txt.setText(reverse(txt.text.toString()))
+        }
+    }
+
+    <span style="color:#60a0b0;font-style:italic">/**
+</span><span style="color:#60a0b0;font-style:italic">     * A native method that is implemented by the &#39;native-lib&#39; native library,
+</span><span style="color:#60a0b0;font-style:italic">     * which is packaged with this application.
+</span><span style="color:#60a0b0;font-style:italic">     */</span>
+    <span style="color:#007020;font-weight:bold">private</span> <span style="color:#007020;font-weight:bold">external</span> <span style="color:#007020;font-weight:bold">fun</span> <span style="color:#06287e">reverse</span>(str: String): String
+
+    <span style="color:#007020;font-weight:bold">companion</span> <span style="color:#007020;font-weight:bold">object</span> {
+        <span style="color:#60a0b0;font-style:italic">// Used to load the &#39;native-lib&#39; library on application startup.
+</span><span style="color:#60a0b0;font-style:italic"></span>        init {
+            System.loadLibrary(<span style="color:#4070a0">&#34;native-lib&#34;</span>)
+        }
+    }
+}
+</code></pre></div><p>We created (and called) an external function <code>reverse</code> that we need to implement in the JNI (C++):</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#60a0b0;font-style:italic">// android/app/src/main/cpp/native-lib.cpp
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#007020;font-weight:bold">extern</span> <span style="color:#4070a0"></span><span style="color:#4070a0">&#34;</span><span style="color:#4070a0">C</span><span style="color:#4070a0">&#34;</span> {
+    jstring
+    <span style="color:#06287e">Java_com_rogchap_foobar_MainActivity_reverse</span>(JNIEnv<span style="color:#666">*</span> env, jobject, jstring str) {
+        <span style="color:#60a0b0;font-style:italic">// Reverse text here 
+</span><span style="color:#60a0b0;font-style:italic"></span>        <span style="color:#007020;font-weight:bold">return</span> str;
+    }
+}
+</code></pre></div><p>The JNI code has to follow the conventions to interop correctly between the Native C++ and Kotlin (JVM).</p>
+<h2 id="build-for-android">Build for Android</h2>
+<p>The way the JNI works with external libraries has changed over the many releases of Android and the NDK. The current
+(and easiest) is to place our outputted library into a special <code>jniLibs</code> folder that is copied into our final APK file.</p>
+<p>Rather than creating a Fat binary (as we did for iOS) we are going to place each architecture in the correct folder.
+Again, for the JNI, conventions matter.</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="">/</span><span style="">/</span> <span style="">g</span><span style="">o</span><span style="">/</span><span style="">M</span><span style="">a</span><span style="">k</span><span style="">e</span><span style="">f</span><span style="">i</span><span style="">l</span><span style="">e</span>
+
+<span style="color:#bb60d5">ANDROID_OUT</span><span style="color:#666">=</span>../android/app/src/main/jniLibs
+<span style="color:#bb60d5">ANDROID_SDK</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>HOME<span style="color:#007020;font-weight:bold">)</span>/Library/Android/sdk
+<span style="color:#bb60d5">NDK_BIN</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>ANDROID_SDK<span style="color:#007020;font-weight:bold">)</span>/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/bin
+
+<span style="color:#06287e">android-armv7a</span><span style="color:#666">:</span>
+	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARM</span><span style="color:#666">=</span><span style="color:#40a070">7</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/armv7a-linux-androideabi21-clang <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/armeabi-v7a/libfoo.so ./cmd/libfoo
+
+<span style="color:#06287e">android-arm64</span><span style="color:#666">:</span>
+	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm64 <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/aarch64-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64-v8a/libfoo.so ./cmd/libfoo
+
+<span style="color:#06287e">android-x86</span><span style="color:#666">:</span>
+	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span><span style="color:#40a070">386</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/i686-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/x86/libfoo.so ./cmd/libfoo
+
+<span style="color:#06287e">android-x86_64</span><span style="color:#666">:</span>
+	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>amd64 <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/x86_64-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
+</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64/libfoo.so ./cmd/libfoo
+
+<span style="color:#06287e">android</span><span style="color:#666">:</span> android-armv7a android-arm64 android-x86 android-x86_64
+</code></pre></div><p><strong>Note</strong> Make sure you set the correct location for your Android SDK and the version of the NDK you have downloaded.</p>
+<p>Running <code>make android</code> will now build all the shared libraries we need into the correct folder. We now need to add our
+library to CMake:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmake" data-lang="cmake"><span style="">/</span><span style="">/</span> <span style="">a</span><span style="">n</span><span style="">d</span><span style="">r</span><span style="">o</span><span style="">i</span><span style="">d</span><span style="">/</span><span style="">a</span><span style="">p</span><span style="">p</span><span style="">/</span><span style="">s</span><span style="">r</span><span style="">c</span><span style="">/</span><span style="">m</span><span style="">a</span><span style="">i</span><span style="">n</span><span style="">/</span><span style="">c</span><span style="">p</span><span style="">p</span><span style="">/</span><span style="">C</span><span style="">M</span><span style="">a</span><span style="">k</span><span style="">e</span><span style="">L</span><span style="">i</span><span style="">s</span><span style="">t</span><span style="">s</span><span style="">.</span><span style="">t</span><span style="">x</span><span style="">t</span><span style="">
+</span><span style=""></span><span style="">
+</span><span style=""></span><span style="">/</span><span style="">/</span> <span style="">.</span><span style="">.</span><span style="">.</span><span style="">
+</span><span style=""></span><span style="">
+</span><span style=""></span><span style="color:#007020">add_library</span>(<span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">SHARED</span> <span style="color:#4070a0">IMPORTED</span>)<span style="">
+</span><span style=""></span><span style="color:#007020">set_property</span>(<span style="color:#4070a0">TARGET</span> <span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">PROPERTY</span> <span style="color:#4070a0">IMPORTED_NO_SONAME</span> <span style="color:#4070a0">1</span>)<span style="">
+</span><span style=""></span><span style="color:#007020">set_target_properties</span>(<span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">PROPERTIES</span> <span style="color:#4070a0">IMPORTED_LOCATION</span> <span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_CURRENT_SOURCE_DIR</span><span style="color:#666">}</span><span style="color:#4070a0">/../jniLibs/</span><span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_ANDROID_ARCH_ABI</span><span style="color:#666">}</span><span style="color:#4070a0">/libfoo.so</span>)<span style="">
+</span><span style=""></span><span style="color:#007020">include_directories</span>(<span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_CURRENT_SOURCE_DIR</span><span style="color:#666">}</span><span style="color:#4070a0">/../jniLibs/</span><span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_ANDROID_ARCH_ABI</span><span style="color:#666">}</span><span style="color:#4070a0">/</span>)<span style="">
+</span><span style=""></span><span style="">
+</span><span style=""></span><span style="">/</span><span style="">/</span> <span style="">.</span><span style="">.</span><span style="">.</span><span style="">
+</span><span style=""></span><span style="">
+</span><span style=""></span><span style="color:#007020">target_link_libraries</span>(<span style="color:#4070a0">native-lib</span> <span style="color:#4070a0">lib_foo</span> <span style="color:#666">${</span><span style="color:#bb60d5">log-lib</span><span style="color:#666">}</span>)<span style="">
+</span></code></pre></div><p>It took me a while to figure out these settings, once again, naming matters so was important to name the library with
+<code>lib_xxxx</code> and also set the property <code>IMPORTED_NO_SONAME 1</code> otherwise your apk will be looking for your library in the
+wrong place.</p>
+<p>We can now hookup our JNI code to our Go library, cross our fingers, and run our app:</p>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#60a0b0;font-style:italic">// android/app/src/main/cpp/native-lib.cpp
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#007020">#</span><span style="color:#007020">include</span> <span style="color:#007020">&#34;libfoo.h&#34;</span><span style="color:#007020">
+</span><span style="color:#007020"></span>
+<span style="color:#007020;font-weight:bold">extern</span> <span style="color:#4070a0"></span><span style="color:#4070a0">&#34;</span><span style="color:#4070a0">C</span><span style="color:#4070a0">&#34;</span> {
+    jstring
+    <span style="color:#06287e">Java_com_rogchap_foobar_MainActivity_reverse</span>(JNIEnv<span style="color:#666">*</span> env, jobject, jstring str) {
+        <span style="color:#007020;font-weight:bold">const</span> <span style="color:#902000">char</span><span style="color:#666">*</span> cstr <span style="color:#666">=</span> env<span style="color:#666">-</span><span style="color:#666">&gt;</span>GetStringUTFChars(str, <span style="color:#40a070">0</span>);
+        <span style="color:#902000">char</span><span style="color:#666">*</span> cout <span style="color:#666">=</span> reverse(<span style="color:#007020;font-weight:bold">const_cast</span><span style="color:#666">&lt;</span><span style="color:#902000">char</span><span style="color:#666">*</span><span style="color:#666">&gt;</span>(cstr));
+        jstring out <span style="color:#666">=</span> env<span style="color:#666">-</span><span style="color:#666">&gt;</span>NewStringUTF(cout);
+        env<span style="color:#666">-</span><span style="color:#666">&gt;</span>ReleaseStringUTFChars(str, cstr);
+        free(cout);
+        <span style="color:#007020;font-weight:bold">return</span> out;
+    }
+}
+</code></pre></div><p><img src="/posts/img/libfoo_android.gif" alt="libfoo android app"></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>One of Go's strengths is that it's cross-platform; but that doesn't just mean Window, Mac and Linux, Go can target many
+other architectures including iOS and Android. Now you have another option in your toolbelt to create shared libraries
+that run on server, your mobile apps and maybe even web (via web assembly).</p>
+<p>All the code for this tutorial, is available on GitHub: <a href="https://github.com/rogchap/libfoo">rogchap/libfoo</a></p>
+<p>Looking forward to hearing about the new killer app that you build with Go.</p>
+
+        
+        <div style="margin-top: 4em" v>
+          <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "rogchap" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+<div class="footer pure-g">
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+  <div class="pure-u-11-12 pure-u-md-7-12">
+    <div class="footer-content">
+      <div class="pure-menu pure-menu-horizontal">
+        <ul>
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="mailto:rogchap@gmail.com" class="pure-menu-link">Email</a>
+          </li>
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="https://github.com/rogchap" class="pure-menu-link">GitHub</a>
+          </li>
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="https://twitter.com/rogchap" class="pure-menu-link">Twitter</a>
+          </li>
+          
+
+          
+          <li class="pure-menu-item">
+            <a href="https://medium.com/@rogchap" class="pure-menu-link">Medium</a>
+          </li>
+          
+
+        </ul>
+        <a href="#" class="pure-menu-link pull-right desktop" id="gototop-btn">↑↑</a>
+        
+      </div>
+      
+    </div>
+  </div>
+  <div class="pure-u-1-24 pure-u-md-5-24"></div>
+</div>
+
+<script type="text/javascript">
+  function go() {
+    var d = document.querySelectorAll(".desktop")
+    if (document.documentElement.clientWidth > 768) {
+      d.forEach(function (e) { e.style.display = ""; })
+    } else {
+      d.forEach(function (e) { e.style.display = "none"; })
+    }
+  }
+  go();
+  window.addEventListener('resize', go);
+</script>
+<script type="text/javascript">
+  var a = document.querySelector("#toggle-btn"), b = document.querySelector("#toggle-content"); a.addEventListener("click", function () { "" == b.style.display ? (b.style.display = "none", a.innerHTML = "☰") : (b.style.display = "", a.innerHTML = "✕") });</script>
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-4155555-8', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+</body>
+
+</html>

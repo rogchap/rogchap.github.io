@@ -8,10 +8,46 @@
     <language>en-au</language>
     <managingEditor>rogchap@gmail.com</managingEditor>
     <webMaster>rogchap@gmail.com</webMaster>
-    <lastBuildDate>Thu, 09 Jan 2020 21:46:34 +1100</lastBuildDate>
+    <lastBuildDate>Mon, 14 Sep 2020 14:51:26 +1000</lastBuildDate>
     
 	<atom:link href="https://rogchap.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Android</title>
+      <link>https://rogchap.com/tags/android/</link>
+      <pubDate>Mon, 14 Sep 2020 14:51:26 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/tags/android/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Go</title>
+      <link>https://rogchap.com/tags/go/</link>
+      <pubDate>Mon, 14 Sep 2020 14:51:26 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>iOS</title>
+      <link>https://rogchap.com/tags/ios/</link>
+      <pubDate>Mon, 14 Sep 2020 14:51:26 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/tags/ios/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mobile</title>
+      <link>https://rogchap.com/tags/mobile/</link>
+      <pubDate>Mon, 14 Sep 2020 14:51:26 +1000</pubDate>
+      <author>rogchap@gmail.com</author>
+      <guid>https://rogchap.com/tags/mobile/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Vim</title>
@@ -19,15 +55,6 @@
       <pubDate>Thu, 09 Jan 2020 21:46:34 +1100</pubDate>
       <author>rogchap@gmail.com</author>
       <guid>https://rogchap.com/tags/vim/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Go</title>
-      <link>https://rogchap.com/tags/go/</link>
-      <pubDate>Sat, 19 Oct 2019 13:50:32 +1100</pubDate>
-      <author>rogchap@gmail.com</author>
-      <guid>https://rogchap.com/tags/go/</guid>
       <description></description>
     </item>
     
