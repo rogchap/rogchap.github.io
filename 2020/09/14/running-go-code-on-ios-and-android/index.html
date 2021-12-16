@@ -507,7 +507,7 @@ This wrapper needs to be in the <code>main</code> package:</p>
 <p><em>Note:</em> The function that we are exporting does not need to be an exported Go function (ie. starts with a Captial
 letter). Also note the empty <code>main</code> function; this is required for the Go code to compile otherwise you&rsquo;ll get a
 <code>function main is undeclared in the main package</code> error.</p>
-<p>Lets test our build by creating a static C library using the Go <code>-buildmode</code> flag:</p>
+<p>Let&rsquo;s test our build by creating a static C library using the Go <code>-buildmode</code> flag:</p>
 <pre><code>go build -buildmode=c-archive -o foo.a ./cmd/libfoo
 </code></pre><p>This should have outputed the C library: <code>foo.a</code> and the header file: <code>foo.h</code>. You should see our exported
 function at the bottom of our header file:</p>
@@ -601,7 +601,7 @@ Button(<span style="color:#4070a0">&#34;Reverse&#34;</span>){
 <p>Using Android Studio, we will create a new Android project. From the Project Templates select <code>Native C++</code>, which will
 create a project with an Empty Activity that is configured to use the Java Native Interface (JNI). We will still select
 <code>Kotlin</code> as our language of choice for the project.</p>
-<p>After creating a simple Activity with a <code>EditText</code> and <code>Button</code> we create the basic functionality for our app:</p>
+<p>After creating a simple Activity with a <code>EditText</code> and a <code>Button</code> we create the basic functionality for our app:</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#60a0b0;font-style:italic">// android/app/src/main/java/com/rogchap/foobar/MainActivity.kt
 </span><span style="color:#60a0b0;font-style:italic"></span>
 <span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">MainActivity</span> : AppCompatActivity() {
@@ -628,7 +628,7 @@ create a project with an Empty Activity that is configured to use the Java Nativ
         }
     }
 }
-</code></pre></div><p>We created (and called) and external function <code>reverse</code> that we need to implement in the JNI (C++):</p>
+</code></pre></div><p>We created (and called) an external function <code>reverse</code> that we need to implement in the JNI (C++):</p>
 <div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#60a0b0;font-style:italic">// android/app/src/main/cpp/native-lib.cpp
 </span><span style="color:#60a0b0;font-style:italic"></span>
 <span style="color:#007020;font-weight:bold">extern</span> <span style="color:#4070a0">&#34;C&#34;</span> {
