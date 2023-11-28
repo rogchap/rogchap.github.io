@@ -363,7 +363,7 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.74.3" />
+  <meta name="generator" content="Hugo 0.110.0">
 
   
   <meta property="og:title" content="Running Go Code on iOS and Android" />
@@ -371,8 +371,7 @@ code, kbd, pre, samp {
 This tutorial does NOT use the Go Mobile framework; instead it uses Cgo to build the raw static (iOS) and shared (Android) C library that can be imported into your mobile project (which is what the Go Mobile framework does under-the-hood).
 Setup For this tutorial we&rsquo;ll create a simple monorepo with the following structure:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/" />
-<meta property="og:image" content="https://rogchap.com/tile.png"/>
+<meta property="og:url" content="https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/" /><meta property="og:image" content="https://rogchap.com/tile.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-09-14T14:51:26+10:00" />
 <meta property="article:modified_time" content="2020-09-14T14:51:26+10:00" />
 
@@ -449,7 +448,7 @@ framework; instead it uses Cgo to build the raw static (iOS) and shared (Android
 mobile project (which is what the Go Mobile framework does under-the-hood).</p>
 <h2 id="setup">Setup</h2>
 <p>For this tutorial we&rsquo;ll create a simple monorepo with the following structure:</p>
-<pre><code>.
+<pre tabindex="0"><code>.
 ├── android/
 ├── go/
 │   ├── cmd/
@@ -460,261 +459,261 @@ mobile project (which is what the Go Mobile framework does under-the-hood).</p>
 │   ├── go.mod
 │   └── go.sum
 └── ios/
-</code></pre><div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">$ mkdir -p android ios go/cmd/libfoo go/foo
-</code></pre></div><p>We&rsquo;ll start with the Go code and come back to creating the iOS and Android projects later.</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">$ <span style="color:#007020">cd</span> go
-$ go mod init rogchap.com/libfoo
-</code></pre></div><h2 id="foo-package">Foo package</h2>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#60a0b0;font-style:italic">// go/foo/foo.go
-</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">package</span> foo
-
-<span style="color:#60a0b0;font-style:italic">// Reverse reverses the given string by each utf8 character
-</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">Reverse</span>(in <span style="color:#902000">string</span>) <span style="color:#902000">string</span> {
-    n <span style="color:#666">:=</span> <span style="color:#40a070">0</span>
-    <span style="color:#902000">rune</span> <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">rune</span>, <span style="color:#007020">len</span>(in))
-    <span style="color:#007020;font-weight:bold">for</span> _, r <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> in { 
-        <span style="color:#902000">rune</span>[n] = r
-        n<span style="color:#666">++</span>
-    } 
-    <span style="color:#902000">rune</span> = <span style="color:#902000">rune</span>[<span style="color:#40a070">0</span>:n]
-    <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; n<span style="color:#666">/</span><span style="color:#40a070">2</span>; i<span style="color:#666">++</span> { 
-        <span style="color:#902000">rune</span>[i], <span style="color:#902000">rune</span>[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i] = <span style="color:#902000">rune</span>[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i], <span style="color:#902000">rune</span>[i] 
-    } 
-    <span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020">string</span>(<span style="color:#902000">rune</span>)
-}
-</code></pre></div><p>Our <code>foo</code> package has a single function <code>Reverse</code> that has a single string argument <code>in</code> and a single string output.</p>
+</code></pre><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>$ mkdir -p android ios go/cmd/libfoo go/foo
+</span></span></code></pre></div><p>We&rsquo;ll start with the Go code and come back to creating the iOS and Android projects later.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>$ <span style="color:#007020">cd</span> go
+</span></span><span style="display:flex;"><span>$ go mod init rogchap.com/libfoo
+</span></span></code></pre></div><h2 id="foo-package">Foo package</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// go/foo/foo.go
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">package</span> foo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// Reverse reverses the given string by each utf8 character
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">Reverse</span>(in <span style="color:#902000">string</span>) <span style="color:#902000">string</span> {
+</span></span><span style="display:flex;"><span>    n <span style="color:#666">:=</span> <span style="color:#40a070">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#902000">rune</span> <span style="color:#666">:=</span> <span style="color:#007020">make</span>([]<span style="color:#902000">rune</span>, <span style="color:#007020">len</span>(in))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">for</span> _, r <span style="color:#666">:=</span> <span style="color:#007020;font-weight:bold">range</span> in { 
+</span></span><span style="display:flex;"><span>        <span style="color:#902000">rune</span>[n] = r
+</span></span><span style="display:flex;"><span>        n<span style="color:#666">++</span>
+</span></span><span style="display:flex;"><span>    } 
+</span></span><span style="display:flex;"><span>    <span style="color:#902000">rune</span> = <span style="color:#902000">rune</span>[<span style="color:#40a070">0</span>:n]
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">for</span> i <span style="color:#666">:=</span> <span style="color:#40a070">0</span>; i &lt; n<span style="color:#666">/</span><span style="color:#40a070">2</span>; i<span style="color:#666">++</span> { 
+</span></span><span style="display:flex;"><span>        <span style="color:#902000">rune</span>[i], <span style="color:#902000">rune</span>[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i] = <span style="color:#902000">rune</span>[n<span style="color:#666">-</span><span style="color:#40a070">1</span><span style="color:#666">-</span>i], <span style="color:#902000">rune</span>[i] 
+</span></span><span style="display:flex;"><span>    } 
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> <span style="color:#007020">string</span>(<span style="color:#902000">rune</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Our <code>foo</code> package has a single function <code>Reverse</code> that has a single string argument <code>in</code> and a single string output.</p>
 <h2 id="export-for-c">Export for C</h2>
 <p>In order for our C library to call our <code>foo</code> package we need to export all the functions that we want to expose to C
 with the special <code>export</code> comment.
 This wrapper needs to be in the <code>main</code> package:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#60a0b0;font-style:italic">// go/cmd/libfoo/main.go
-</span><span style="color:#60a0b0;font-style:italic"></span>pacakge main
-
-<span style="color:#007020;font-weight:bold">import</span> <span style="color:#4070a0">&#34;C&#34;</span>
-
-<span style="color:#60a0b0;font-style:italic">// other imports should be seperate from the special Cgo import
-</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">import</span> (
-    <span style="color:#4070a0">&#34;rogchap.com/libfoo/foo&#34;</span>
-)
-
-<span style="color:#60a0b0;font-style:italic">//export reverse
-</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">reverse</span>(in <span style="color:#666">*</span>C.char) <span style="color:#666">*</span>C.char {
-    <span style="color:#007020;font-weight:bold">return</span> C.<span style="color:#06287e">CString</span>(foo.<span style="color:#06287e">Reverse</span>(C.<span style="color:#06287e">GoString</span>(in)))
-}
-
-<span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {}
-</code></pre></div><p>We&rsquo;re using the special <code>C.GoString()</code> and <code>C.CString()</code> functions to convert between Go string and a C string.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// go/cmd/libfoo/main.go
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>pacakge main
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">import</span> <span style="color:#4070a0">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// other imports should be seperate from the special Cgo import
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#4070a0">&#34;rogchap.com/libfoo/foo&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">//export reverse
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">reverse</span>(in <span style="color:#666">*</span>C.char) <span style="color:#666">*</span>C.char {
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">return</span> C.<span style="color:#06287e">CString</span>(foo.<span style="color:#06287e">Reverse</span>(C.<span style="color:#06287e">GoString</span>(in)))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">func</span> <span style="color:#06287e">main</span>() {}
+</span></span></code></pre></div><p>We&rsquo;re using the special <code>C.GoString()</code> and <code>C.CString()</code> functions to convert between Go string and a C string.</p>
 <p><em>Note:</em> The function that we are exporting does not need to be an exported Go function (ie. starts with a Captial
 letter). Also note the empty <code>main</code> function; this is required for the Go code to compile otherwise you&rsquo;ll get a
 <code>function main is undeclared in the main package</code> error.</p>
 <p>Let&rsquo;s test our build by creating a static C library using the Go <code>-buildmode</code> flag:</p>
-<pre><code>go build -buildmode=c-archive -o foo.a ./cmd/libfoo
+<pre tabindex="0"><code>go build -buildmode=c-archive -o foo.a ./cmd/libfoo
 </code></pre><p>This should have outputed the C library: <code>foo.a</code> and the header file: <code>foo.h</code>. You should see our exported
 function at the bottom of our header file:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#007020;font-weight:bold">extern</span> <span style="color:#902000">char</span><span style="color:#666">*</span> <span style="color:#06287e">reverse</span>(<span style="color:#902000">char</span><span style="color:#666">*</span> in);
-</code></pre></div><h2 id="building-for-ios">Building for iOS</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C" data-lang="C"><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">extern</span> <span style="color:#902000">char</span><span style="color:#666">*</span> <span style="color:#06287e">reverse</span>(<span style="color:#902000">char</span><span style="color:#666">*</span> in);
+</span></span></code></pre></div><h2 id="building-for-ios">Building for iOS</h2>
 <p>Our goal is to create a <a href="https://en.wikipedia.org/wiki/Fat_binary">fat binary</a> that can be used on iOS devices and the
 iOS simulator.</p>
 <p>The Go standard library includes a script for building for iOS:
 <a href="https://golang.org/misc/ios/clangwrap.sh"><code>$GOROOT/misc/ios/clangwrap.sh</code></a>, however this script only builds for
 <code>arm64</code>, and we need <code>x86_64</code> too for the iOS Simulator. So, we&rsquo;re going to create our own <code>clangwrap.sh</code>:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#007020">#!/bin/sh
-</span><span style="color:#007020"></span>
-<span style="color:#60a0b0;font-style:italic"># go/clangwrap.sh</span>
-
-<span style="color:#bb60d5">SDK_PATH</span><span style="color:#666">=</span><span style="color:#4070a0">`</span>xcrun --sdk <span style="color:#bb60d5">$SDK</span> --show-sdk-path<span style="color:#4070a0">`</span>
-<span style="color:#bb60d5">CLANG</span><span style="color:#666">=</span><span style="color:#4070a0">`</span>xcrun --sdk <span style="color:#bb60d5">$SDK</span> --find clang<span style="color:#4070a0">`</span>
-
-<span style="color:#007020;font-weight:bold">if</span> <span style="color:#666">[</span> <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$GOARCH</span><span style="color:#4070a0">&#34;</span> <span style="color:#666">==</span> <span style="color:#4070a0">&#34;amd64&#34;</span> <span style="color:#666">]</span>; <span style="color:#007020;font-weight:bold">then</span>
-    <span style="color:#bb60d5">CARCH</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;x86_64&#34;</span>
-<span style="color:#007020;font-weight:bold">elif</span> <span style="color:#666">[</span> <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$GOARCH</span><span style="color:#4070a0">&#34;</span> <span style="color:#666">==</span> <span style="color:#4070a0">&#34;arm64&#34;</span> <span style="color:#666">]</span>; <span style="color:#007020;font-weight:bold">then</span>
-    <span style="color:#bb60d5">CARCH</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;arm64&#34;</span>
-<span style="color:#007020;font-weight:bold">fi</span>
-
-<span style="color:#007020">exec</span> <span style="color:#bb60d5">$CLANG</span> -arch <span style="color:#bb60d5">$CARCH</span> -isysroot <span style="color:#bb60d5">$SDK_PATH</span> -mios-version-min<span style="color:#666">=</span>10.0 <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$@</span><span style="color:#4070a0">&#34;</span>
-</code></pre></div><p>Don&rsquo;t forget to make it executable:</p>
-<pre><code>chmod +x clangwrap.sh
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#007020">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#007020"></span>
+</span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"># go/clangwrap.sh</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#bb60d5">SDK_PATH</span><span style="color:#666">=</span><span style="color:#4070a0">`</span>xcrun --sdk <span style="color:#bb60d5">$SDK</span> --show-sdk-path<span style="color:#4070a0">`</span>
+</span></span><span style="display:flex;"><span><span style="color:#bb60d5">CLANG</span><span style="color:#666">=</span><span style="color:#4070a0">`</span>xcrun --sdk <span style="color:#bb60d5">$SDK</span> --find clang<span style="color:#4070a0">`</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">if</span> <span style="color:#666">[</span> <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$GOARCH</span><span style="color:#4070a0">&#34;</span> <span style="color:#666">==</span> <span style="color:#4070a0">&#34;amd64&#34;</span> <span style="color:#666">]</span>; <span style="color:#007020;font-weight:bold">then</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#bb60d5">CARCH</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;x86_64&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">elif</span> <span style="color:#666">[</span> <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$GOARCH</span><span style="color:#4070a0">&#34;</span> <span style="color:#666">==</span> <span style="color:#4070a0">&#34;arm64&#34;</span> <span style="color:#666">]</span>; <span style="color:#007020;font-weight:bold">then</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#bb60d5">CARCH</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;arm64&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020">exec</span> <span style="color:#bb60d5">$CLANG</span> -arch <span style="color:#bb60d5">$CARCH</span> -isysroot <span style="color:#bb60d5">$SDK_PATH</span> -mios-version-min<span style="color:#666">=</span>10.0 <span style="color:#4070a0">&#34;</span><span style="color:#bb60d5">$@</span><span style="color:#4070a0">&#34;</span>
+</span></span></code></pre></div><p>Don&rsquo;t forget to make it executable:</p>
+<pre tabindex="0"><code>chmod +x clangwrap.sh
 </code></pre><p>Now we can build our library for each architecture and combine into a fat binary using the <code>lipo</code> tool (via a Makefile):</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="color:#60a0b0;font-style:italic"># go/Makefile
-</span><span style="color:#60a0b0;font-style:italic"></span>
-<span style="color:#06287e">ios-arm64</span><span style="color:#666">:</span>
-	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>darwin <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm64 <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">SDK</span><span style="color:#666">=</span>iphoneos <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>PWD<span style="color:#007020;font-weight:bold">)</span>/clangwrap.sh <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CGO_CFLAGS</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;-fembed-bitcode&#34;</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-archive -tags ios -o <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.a ./cmd/libfoo
-
-<span style="color:#06287e">ios-x86_64</span><span style="color:#666">:</span>
-	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>darwin <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>amd64 <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">SDK</span><span style="color:#666">=</span>iphonesimulator <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>PWD<span style="color:#007020;font-weight:bold">)</span>/clangwrap.sh <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-archive -tags ios -o <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64.a ./cmd/libfoo
-
-<span style="color:#06287e">ios</span><span style="color:#666">:</span> ios-arm64 ios-x86_64
-	lipo <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64.a <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.a -create -output <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/foo.a
-	cp <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.h <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/foo.h
-</code></pre></div><h2 id="create-our-ios-application">Create our iOS Application</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-make" data-lang="make"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"># go/Makefile
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#06287e">ios-arm64</span><span style="color:#666">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>darwin <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm64 <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">SDK</span><span style="color:#666">=</span>iphoneos <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>PWD<span style="color:#007020;font-weight:bold">)</span>/clangwrap.sh <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CGO_CFLAGS</span><span style="color:#666">=</span><span style="color:#4070a0">&#34;-fembed-bitcode&#34;</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-archive -tags ios -o <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.a ./cmd/libfoo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#06287e">ios-x86_64</span><span style="color:#666">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>darwin <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>amd64 <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">SDK</span><span style="color:#666">=</span>iphonesimulator <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>PWD<span style="color:#007020;font-weight:bold">)</span>/clangwrap.sh <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-archive -tags ios -o <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64.a ./cmd/libfoo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#06287e">ios</span><span style="color:#666">:</span> ios-arm64 ios-x86_64
+</span></span><span style="display:flex;"><span>	lipo <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64.a <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.a -create -output <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/foo.a
+</span></span><span style="display:flex;"><span>	cp <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64.h <span style="color:#007020;font-weight:bold">$(</span>IOS_OUT<span style="color:#007020;font-weight:bold">)</span>/foo.h
+</span></span></code></pre></div><h2 id="create-our-ios-application">Create our iOS Application</h2>
 <p>Using XCode we can create a simple single page application. I&rsquo;m going to use Swift UI, but it is just as easy to do with
 UIKit:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#60a0b0;font-style:italic">// ios/foobar/ContentView.swift</span>
-
-<span style="color:#007020;font-weight:bold">struct</span> <span style="color:#0e84b5;font-weight:bold">ContentView</span>: View {
-
-    @State <span style="color:#007020;font-weight:bold">private</span> <span style="color:#007020;font-weight:bold">var</span> <span style="color:#bb60d5">txt</span>: <span style="color:#007020">String</span> = <span style="color:#4070a0">&#34;&#34;</span>
-
-    <span style="color:#007020;font-weight:bold">var</span> <span style="color:#bb60d5">body</span>: some View {
-        VStack{
-            TextField(<span style="color:#4070a0">&#34;&#34;</span>, text: <span style="">$</span>txt)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            Button(<span style="color:#4070a0">&#34;Reverse&#34;</span>){
-                <span style="color:#60a0b0;font-style:italic">// Reverse text here</span>
-            }
-            Spacer()
-        }
-        .padding(.all, <span style="color:#40a070">15</span>)
-    }
-}
-</code></pre></div><p>In XCode we can drag-and-drop our newly generated <code>foo.a</code> and <code>foo.h</code> into our project. For our Swift code to
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// ios/foobar/ContentView.swift</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">struct</span> <span style="color:#0e84b5;font-weight:bold">ContentView</span>: View {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @State <span style="color:#007020;font-weight:bold">private</span> <span style="color:#007020;font-weight:bold">var</span> <span style="color:#bb60d5">txt</span>: <span style="color:#007020">String</span> = <span style="color:#4070a0">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">var</span> <span style="color:#bb60d5">body</span>: some View {
+</span></span><span style="display:flex;"><span>        VStack{
+</span></span><span style="display:flex;"><span>            TextField(<span style="color:#4070a0">&#34;&#34;</span>, text: <span style="">$</span>txt)
+</span></span><span style="display:flex;"><span>            .textFieldStyle(RoundedBorderTextFieldStyle())
+</span></span><span style="display:flex;"><span>            Button(<span style="color:#4070a0">&#34;Reverse&#34;</span>){
+</span></span><span style="display:flex;"><span>                <span style="color:#60a0b0;font-style:italic">// Reverse text here</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            Spacer()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        .padding(.all, <span style="color:#40a070">15</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>In XCode we can drag-and-drop our newly generated <code>foo.a</code> and <code>foo.h</code> into our project. For our Swift code to
 interop with our library we need to create a bridging header:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#60a0b0;font-style:italic">// ios/foobar/foobar-Bridging-Header.h
-</span><span style="color:#60a0b0;font-style:italic"></span>
-<span style="color:#007020">#import &#34;foo.h&#34;
-</span></code></pre></div><p>In Xcode <code>Build Settings</code>, under <code>Swift Compiler - General</code> set the <code>Objective-C Bridging Header</code> to the file we just
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// ios/foobar/foobar-Bridging-Header.h
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#007020">#import &#34;foo.h&#34;
+</span></span></span></code></pre></div><p>In Xcode <code>Build Settings</code>, under <code>Swift Compiler - General</code> set the <code>Objective-C Bridging Header</code> to the file we just
 created: <code>foobar/foobar-Bridging-Header.h</code>.</p>
 <p>We also need to set the <code>Library Search Paths</code> to include the directory of our generated header file <code>foo.h</code>.
 (Xcode may have done this for you when you drag-and-drop the files into the project).</p>
 <p>We can now call our function from Swift, then build and run:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#60a0b0;font-style:italic">// ios/foobar/ContentView.swift</span>
-
-Button(<span style="color:#4070a0">&#34;Reverse&#34;</span>){
-    <span style="color:#007020;font-weight:bold">let</span> <span style="color:#bb60d5">str</span> = reverse(<span style="color:#007020">UnsafeMutablePointer</span>&lt;<span style="color:#007020">Int8</span>&gt;(<span style="color:#007020;font-weight:bold">mutating</span>: (<span style="color:#007020;font-weight:bold">self</span>.txt <span style="color:#007020;font-weight:bold">as</span> NSString).utf8String))
-    <span style="color:#007020;font-weight:bold">self</span>.txt = <span style="color:#007020">String</span>.<span style="color:#007020;font-weight:bold">init</span>(cString: str!, encoding: .utf8)<span style="color:#666">!</span>
-    <span style="color:#60a0b0;font-style:italic">// don&#39;t forget to release the memory to the C String</span>
-    str?.deallocate()
-}
-</code></pre></div><p><img src="/posts/img/libfoo_ios.gif" alt="libfoo ios app"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-swift" data-lang="swift"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// ios/foobar/ContentView.swift</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Button(<span style="color:#4070a0">&#34;Reverse&#34;</span>){
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">let</span> <span style="color:#bb60d5">str</span> = reverse(<span style="color:#007020">UnsafeMutablePointer</span>&lt;<span style="color:#007020">Int8</span>&gt;(<span style="color:#007020;font-weight:bold">mutating</span>: (<span style="color:#007020;font-weight:bold">self</span>.txt <span style="color:#007020;font-weight:bold">as</span> NSString).utf8String))
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">self</span>.txt = <span style="color:#007020">String</span>.<span style="color:#007020;font-weight:bold">init</span>(cString: str!, encoding: .utf8)<span style="color:#666">!</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#60a0b0;font-style:italic">// don&#39;t forget to release the memory to the C String</span>
+</span></span><span style="display:flex;"><span>    str?.deallocate()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="/posts/img/libfoo_ios.gif" alt="libfoo ios app"></p>
 <h1 id="creating-the-android-application">Creating the Android application</h1>
 <p>Using Android Studio, we will create a new Android project. From the Project Templates select <code>Native C++</code>, which will
 create a project with an Empty Activity that is configured to use the Java Native Interface (JNI). We will still select
 <code>Kotlin</code> as our language of choice for the project.</p>
 <p>After creating a simple Activity with a <code>EditText</code> and a <code>Button</code> we create the basic functionality for our app:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#60a0b0;font-style:italic">// android/app/src/main/java/com/rogchap/foobar/MainActivity.kt
-</span><span style="color:#60a0b0;font-style:italic"></span>
-<span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">MainActivity</span> : AppCompatActivity() {
-
-    <span style="color:#007020;font-weight:bold">override</span> <span style="color:#007020;font-weight:bold">fun</span> <span style="color:#06287e">onCreate</span>(savedInstanceState: Bundle?) {
-        <span style="color:#007020;font-weight:bold">super</span>.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        btn.setOnClickListener {
-            txt.setText(reverse(txt.text.toString()))
-        }
-    }
-
-    <span style="color:#60a0b0;font-style:italic">/**
-</span><span style="color:#60a0b0;font-style:italic">     * A native method that is implemented by the &#39;native-lib&#39; native library,
-</span><span style="color:#60a0b0;font-style:italic">     * which is packaged with this application.
-</span><span style="color:#60a0b0;font-style:italic">     */</span>
-    <span style="color:#007020;font-weight:bold">private</span> <span style="color:#007020;font-weight:bold">external</span> <span style="color:#007020;font-weight:bold">fun</span> <span style="color:#06287e">reverse</span>(str: String): String
-
-    <span style="color:#007020;font-weight:bold">companion</span> <span style="color:#007020;font-weight:bold">object</span> {
-        <span style="color:#60a0b0;font-style:italic">// Used to load the &#39;native-lib&#39; library on application startup.
-</span><span style="color:#60a0b0;font-style:italic"></span>        init {
-            System.loadLibrary(<span style="color:#4070a0">&#34;native-lib&#34;</span>)
-        }
-    }
-}
-</code></pre></div><p>We created (and called) an external function <code>reverse</code> that we need to implement in the JNI (C++):</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#60a0b0;font-style:italic">// android/app/src/main/cpp/native-lib.cpp
-</span><span style="color:#60a0b0;font-style:italic"></span>
-<span style="color:#007020;font-weight:bold">extern</span> <span style="color:#4070a0">&#34;C&#34;</span> {
-    jstring
-    <span style="color:#06287e">Java_com_rogchap_foobar_MainActivity_reverse</span>(JNIEnv<span style="color:#666">*</span> env, jobject, jstring str) {
-        <span style="color:#60a0b0;font-style:italic">// Reverse text here 
-</span><span style="color:#60a0b0;font-style:italic"></span>        <span style="color:#007020;font-weight:bold">return</span> str;
-    }
-}
-</code></pre></div><p>The JNI code has to follow the conventions to interop correctly between the Native C++ and Kotlin (JVM).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// android/app/src/main/java/com/rogchap/foobar/MainActivity.kt
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">class</span> <span style="color:#0e84b5;font-weight:bold">MainActivity</span> : AppCompatActivity() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">override</span> <span style="color:#007020;font-weight:bold">fun</span> <span style="color:#06287e">onCreate</span>(savedInstanceState: Bundle?) {
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">super</span>.onCreate(savedInstanceState)
+</span></span><span style="display:flex;"><span>        setContentView(<span style="color:#0e84b5;font-weight:bold">R</span>.layout.activity_main)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        btn.setOnClickListener {
+</span></span><span style="display:flex;"><span>            txt.setText(reverse(txt.text.toString()))
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#60a0b0;font-style:italic">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">     * A native method that is implemented by the &#39;native-lib&#39; native library,
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">     * which is packaged with this application.
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">     */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">private</span> <span style="color:#007020;font-weight:bold">external</span> <span style="color:#007020;font-weight:bold">fun</span> <span style="color:#06287e">reverse</span>(str: String): String
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#007020;font-weight:bold">companion</span> <span style="color:#007020;font-weight:bold">object</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#60a0b0;font-style:italic">// Used to load the &#39;native-lib&#39; library on application startup.
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>        <span style="color:#007020;font-weight:bold">init</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#0e84b5;font-weight:bold">System</span>.loadLibrary(<span style="color:#4070a0">&#34;native-lib&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>We created (and called) an external function <code>reverse</code> that we need to implement in the JNI (C++):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// android/app/src/main/cpp/native-lib.cpp
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">extern</span> <span style="color:#4070a0">&#34;C&#34;</span> {
+</span></span><span style="display:flex;"><span>    jstring
+</span></span><span style="display:flex;"><span>    <span style="color:#06287e">Java_com_rogchap_foobar_MainActivity_reverse</span>(JNIEnv<span style="color:#666">*</span> env, jobject, jstring str) {
+</span></span><span style="display:flex;"><span>        <span style="color:#60a0b0;font-style:italic">// Reverse text here 
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>        <span style="color:#007020;font-weight:bold">return</span> str;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The JNI code has to follow the conventions to interop correctly between the Native C++ and Kotlin (JVM).</p>
 <h2 id="build-for-android">Build for Android</h2>
 <p>The way the JNI works with external libraries has changed over the many releases of Android and the NDK. The current
 (and easiest) is to place our outputted library into a special <code>jniLibs</code> folder that is copied into our final APK file.</p>
 <p>Rather than creating a Fat binary (as we did for iOS) we are going to place each architecture in the correct folder.
 Again, for the JNI, conventions matter.</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-make" data-lang="make"><span style="">//</span> <span style="">go/Makefile</span>
-
-<span style="color:#bb60d5">ANDROID_OUT</span><span style="color:#666">=</span>../android/app/src/main/jniLibs
-<span style="color:#bb60d5">ANDROID_SDK</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>HOME<span style="color:#007020;font-weight:bold">)</span>/Library/Android/sdk
-<span style="color:#bb60d5">NDK_BIN</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>ANDROID_SDK<span style="color:#007020;font-weight:bold">)</span>/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/bin
-
-<span style="color:#06287e">android-armv7a</span><span style="color:#666">:</span>
-	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARM</span><span style="color:#666">=</span><span style="color:#40a070">7</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/armv7a-linux-androideabi21-clang <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/armeabi-v7a/libfoo.so ./cmd/libfoo
-
-<span style="color:#06287e">android-arm64</span><span style="color:#666">:</span>
-	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm64 <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/aarch64-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64-v8a/libfoo.so ./cmd/libfoo
-
-<span style="color:#06287e">android-x86</span><span style="color:#666">:</span>
-	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span><span style="color:#40a070">386</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/i686-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/x86/libfoo.so ./cmd/libfoo
-
-<span style="color:#06287e">android-x86_64</span><span style="color:#666">:</span>
-	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>amd64 <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/x86_64-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
-</span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64/libfoo.so ./cmd/libfoo
-
-<span style="color:#06287e">android</span><span style="color:#666">:</span> android-armv7a android-arm64 android-x86 android-x86_64
-</code></pre></div><p><strong>Note</strong> Make sure you set the correct location for your Android SDK and the version of the NDK you have downloaded.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-make" data-lang="make"><span style="display:flex;"><span><span style="">//</span> <span style="">go/Makefile</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#bb60d5">ANDROID_OUT</span><span style="color:#666">=</span>../android/app/src/main/jniLibs
+</span></span><span style="display:flex;"><span><span style="color:#bb60d5">ANDROID_SDK</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>HOME<span style="color:#007020;font-weight:bold">)</span>/Library/Android/sdk
+</span></span><span style="display:flex;"><span><span style="color:#bb60d5">NDK_BIN</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>ANDROID_SDK<span style="color:#007020;font-weight:bold">)</span>/ndk/21.0.6113669/toolchains/llvm/prebuilt/darwin-x86_64/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#06287e">android-armv7a</span><span style="color:#666">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARM</span><span style="color:#666">=</span><span style="color:#40a070">7</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/armv7a-linux-androideabi21-clang <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/armeabi-v7a/libfoo.so ./cmd/libfoo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#06287e">android-arm64</span><span style="color:#666">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>arm64 <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/aarch64-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/arm64-v8a/libfoo.so ./cmd/libfoo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#06287e">android-x86</span><span style="color:#666">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span><span style="color:#40a070">386</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/i686-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/x86/libfoo.so ./cmd/libfoo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#06287e">android-x86_64</span><span style="color:#666">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#bb60d5">CGO_ENABLED</span><span style="color:#666">=</span><span style="color:#40a070">1</span> <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOOS</span><span style="color:#666">=</span>android <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">GOARCH</span><span style="color:#666">=</span>amd64 <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	<span style="color:#bb60d5">CC</span><span style="color:#666">=</span><span style="color:#007020;font-weight:bold">$(</span>NDK_BIN<span style="color:#007020;font-weight:bold">)</span>/x86_64-linux-android21-clang <span style="color:#4070a0;font-weight:bold">\
+</span></span></span><span style="display:flex;"><span><span style="color:#4070a0;font-weight:bold"></span>	go build -buildmode<span style="color:#666">=</span>c-shared -o <span style="color:#007020;font-weight:bold">$(</span>ANDROID_OUT<span style="color:#007020;font-weight:bold">)</span>/x86_64/libfoo.so ./cmd/libfoo
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#06287e">android</span><span style="color:#666">:</span> android-armv7a android-arm64 android-x86 android-x86_64
+</span></span></code></pre></div><p><strong>Note</strong> Make sure you set the correct location for your Android SDK and the version of the NDK you have downloaded.</p>
 <p>Running <code>make android</code> will now build all the shared libraries we need into the correct folder. We now need to add our
 library to CMake:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmake" data-lang="cmake"><span style="">//</span> <span style="">android/app/src/main/cpp/CMakeLists.txt
-</span><span style="">
-</span><span style="">//</span> <span style="">...
-</span><span style="">
-</span><span style=""></span><span style="color:#007020">add_library</span>(<span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">SHARED</span> <span style="color:#4070a0">IMPORTED</span>)<span style="">
-</span><span style=""></span><span style="color:#007020">set_property</span>(<span style="color:#4070a0">TARGET</span> <span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">PROPERTY</span> <span style="color:#4070a0">IMPORTED_NO_SONAME</span> <span style="color:#4070a0">1</span>)<span style="">
-</span><span style=""></span><span style="color:#007020">set_target_properties</span>(<span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">PROPERTIES</span> <span style="color:#4070a0">IMPORTED_LOCATION</span> <span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_CURRENT_SOURCE_DIR</span><span style="color:#666">}</span><span style="color:#4070a0">/../jniLibs/</span><span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_ANDROID_ARCH_ABI</span><span style="color:#666">}</span><span style="color:#4070a0">/libfoo.so</span>)<span style="">
-</span><span style=""></span><span style="color:#007020">include_directories</span>(<span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_CURRENT_SOURCE_DIR</span><span style="color:#666">}</span><span style="color:#4070a0">/../jniLibs/</span><span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_ANDROID_ARCH_ABI</span><span style="color:#666">}</span><span style="color:#4070a0">/</span>)<span style="">
-</span><span style="">
-</span><span style="">//</span> <span style="">...
-</span><span style="">
-</span><span style=""></span><span style="color:#007020">target_link_libraries</span>(<span style="color:#4070a0">native-lib</span> <span style="color:#4070a0">lib_foo</span> <span style="color:#666">${</span><span style="color:#bb60d5">log-lib</span><span style="color:#666">}</span>)<span style="">
-</span></code></pre></div><p>It took me a while to figure out these settings, once again, naming matters so was important to name the library with
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmake" data-lang="cmake"><span style="display:flex;"><span><span style="">//</span> <span style="">android/app/src/main/cpp/CMakeLists.txt
+</span></span></span><span style="display:flex;"><span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">//</span> <span style="">...
+</span></span></span><span style="display:flex;"><span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="color:#007020">add_library</span>(<span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">SHARED</span> <span style="color:#4070a0">IMPORTED</span>)<span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="color:#007020">set_property</span>(<span style="color:#4070a0">TARGET</span> <span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">PROPERTY</span> <span style="color:#4070a0">IMPORTED_NO_SONAME</span> <span style="color:#4070a0">1</span>)<span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="color:#007020">set_target_properties</span>(<span style="color:#4070a0">lib_foo</span> <span style="color:#4070a0">PROPERTIES</span> <span style="color:#4070a0">IMPORTED_LOCATION</span> <span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_CURRENT_SOURCE_DIR</span><span style="color:#666">}</span><span style="color:#4070a0">/../jniLibs/</span><span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_ANDROID_ARCH_ABI</span><span style="color:#666">}</span><span style="color:#4070a0">/libfoo.so</span>)<span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="color:#007020">include_directories</span>(<span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_CURRENT_SOURCE_DIR</span><span style="color:#666">}</span><span style="color:#4070a0">/../jniLibs/</span><span style="color:#666">${</span><span style="color:#bb60d5">CMAKE_ANDROID_ARCH_ABI</span><span style="color:#666">}</span><span style="color:#4070a0">/</span>)<span style="">
+</span></span></span><span style="display:flex;"><span><span style="">
+</span></span></span><span style="display:flex;"><span><span style="">//</span> <span style="">...
+</span></span></span><span style="display:flex;"><span><span style="">
+</span></span></span><span style="display:flex;"><span><span style=""></span><span style="color:#007020">target_link_libraries</span>(<span style="color:#4070a0">native-lib</span> <span style="color:#4070a0">lib_foo</span> <span style="color:#666">${</span><span style="color:#bb60d5">log-lib</span><span style="color:#666">}</span>)<span style="">
+</span></span></span></code></pre></div><p>It took me a while to figure out these settings, once again, naming matters so was important to name the library with
 <code>lib_xxxx</code> and also set the property <code>IMPORTED_NO_SONAME 1</code> otherwise your apk will be looking for your library in the
 wrong place.</p>
 <p>We can now hookup our JNI code to our Go library, cross our fingers, and run our app:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#60a0b0;font-style:italic">// android/app/src/main/cpp/native-lib.cpp
-</span><span style="color:#60a0b0;font-style:italic"></span>
-<span style="color:#007020">#include</span> <span style="color:#007020">&#34;libfoo.h&#34;</span><span style="color:#007020">
-</span><span style="color:#007020"></span>
-<span style="color:#007020;font-weight:bold">extern</span> <span style="color:#4070a0">&#34;C&#34;</span> {
-    jstring
-    <span style="color:#06287e">Java_com_rogchap_foobar_MainActivity_reverse</span>(JNIEnv<span style="color:#666">*</span> env, jobject, jstring str) {
-        <span style="color:#007020;font-weight:bold">const</span> <span style="color:#902000">char</span><span style="color:#666">*</span> cstr <span style="color:#666">=</span> env<span style="color:#666">-&gt;</span>GetStringUTFChars(str, <span style="color:#40a070">0</span>);
-        <span style="color:#902000">char</span><span style="color:#666">*</span> cout <span style="color:#666">=</span> reverse(<span style="color:#007020;font-weight:bold">const_cast</span><span style="color:#666">&lt;</span><span style="color:#902000">char</span><span style="color:#666">*&gt;</span>(cstr));
-        jstring out <span style="color:#666">=</span> env<span style="color:#666">-&gt;</span>NewStringUTF(cout);
-        env<span style="color:#666">-&gt;</span>ReleaseStringUTFChars(str, cstr);
-        free(cout);
-        <span style="color:#007020;font-weight:bold">return</span> out;
-    }
-}
-</code></pre></div><p><img src="/posts/img/libfoo_android.gif" alt="libfoo android app"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic">// android/app/src/main/cpp/native-lib.cpp
+</span></span></span><span style="display:flex;"><span><span style="color:#60a0b0;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#007020">#include</span> <span style="color:#007020">&#34;libfoo.h&#34;</span><span style="color:#007020">
+</span></span></span><span style="display:flex;"><span><span style="color:#007020"></span>
+</span></span><span style="display:flex;"><span><span style="color:#007020;font-weight:bold">extern</span> <span style="color:#4070a0">&#34;C&#34;</span> {
+</span></span><span style="display:flex;"><span>    jstring
+</span></span><span style="display:flex;"><span>    <span style="color:#06287e">Java_com_rogchap_foobar_MainActivity_reverse</span>(JNIEnv<span style="color:#666">*</span> env, jobject, jstring str) {
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">const</span> <span style="color:#902000">char</span><span style="color:#666">*</span> cstr <span style="color:#666">=</span> env<span style="color:#666">-&gt;</span>GetStringUTFChars(str, <span style="color:#40a070">0</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#902000">char</span><span style="color:#666">*</span> cout <span style="color:#666">=</span> reverse(<span style="color:#007020;font-weight:bold">const_cast</span><span style="color:#666">&lt;</span><span style="color:#902000">char</span><span style="color:#666">*&gt;</span>(cstr));
+</span></span><span style="display:flex;"><span>        jstring out <span style="color:#666">=</span> env<span style="color:#666">-&gt;</span>NewStringUTF(cout);
+</span></span><span style="display:flex;"><span>        env<span style="color:#666">-&gt;</span>ReleaseStringUTFChars(str, cstr);
+</span></span><span style="display:flex;"><span>        free(cout);
+</span></span><span style="display:flex;"><span>        <span style="color:#007020;font-weight:bold">return</span> out;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="/posts/img/libfoo_android.gif" alt="libfoo android app"></p>
 <h2 id="conclusion">Conclusion</h2>
 <p>One of Go&rsquo;s strengths is that it&rsquo;s cross-platform; but that doesn&rsquo;t just mean Window, Mac and Linux, Go can target many
 other architectures including iOS and Android. Now you have another option in your toolbelt to create shared libraries
@@ -726,7 +725,7 @@ that run on server, your mobile apps and maybe even web (via web assembly).</p>
         <div style="margin-top: 4em" v>
           <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     

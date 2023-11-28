@@ -8,11 +8,7 @@
     <language>en-au</language>
     <managingEditor>rogchap@gmail.com</managingEditor>
     <webMaster>rogchap@gmail.com</webMaster>
-    <lastBuildDate>Mon, 14 Sep 2020 14:51:26 +1000</lastBuildDate>
-    
-	<atom:link href="https://rogchap.com/tags/android/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 14 Sep 2020 14:51:26 +1000</lastBuildDate><atom:link href="https://rogchap.com/tags/android/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Running Go Code on iOS and Android</title>
       <link>https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/</link>

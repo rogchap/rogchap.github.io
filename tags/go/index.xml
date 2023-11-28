@@ -8,11 +8,7 @@
     <language>en-au</language>
     <managingEditor>rogchap@gmail.com</managingEditor>
     <webMaster>rogchap@gmail.com</webMaster>
-    <lastBuildDate>Mon, 14 Sep 2020 14:51:26 +1000</lastBuildDate>
-    
-	<atom:link href="https://rogchap.com/tags/go/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Mon, 14 Sep 2020 14:51:26 +1000</lastBuildDate><atom:link href="https://rogchap.com/tags/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Running Go Code on iOS and Android</title>
       <link>https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/</link>
@@ -32,7 +28,7 @@ Setup For this tutorial we&amp;rsquo;ll create a simple monorepo with the follow
       <guid>https://rogchap.com/2019/10/19/webhook-endpoint-for-grpc-gateway/</guid>
       <description>grpc-gatway is a protoc plugin that reads protobuf service definitions and generates a reverse-proxy server which translates a RESTful HTTP API into gRPC.
 Each field in a proto message would normally match to a JSON field:
-message Request { id int32 = 1; first_name string = 2; last_name string = 3;}{ &amp;#34;id&amp;#34;: 123456, &amp;#34;first_name&amp;#34;: &amp;#34;Roger&amp;#34;, &amp;#34;last_name&amp;#34;: &amp;#34;Chapman&amp;#34; } However, for a webhook (or other arbitrary data) being POSTed you may just want to pass the raw JSON body to your gRPC handler.</description>
+message Request { id int32 = 1; first_name string = 2; last_name string = 3; } { &amp;#34;id&amp;#34;: 123456, &amp;#34;first_name&amp;#34;: &amp;#34;Roger&amp;#34;, &amp;#34;last_name&amp;#34;: &amp;#34;Chapman&amp;#34; } However, for a webhook (or other arbitrary data) being POSTed you may just want to pass the raw JSON body to your gRPC handler.</description>
     </item>
     
     <item>
@@ -43,7 +39,7 @@ message Request { id int32 = 1; first_name string = 2; last_name string = 3;}{ &
       <guid>https://rogchap.com/2019/10/06/demystify-gos-empty-interface/</guid>
       <description>One of delights of using the Go programming language is how quickly Engineers can learn and start using the language; but at the same time, Engineers also &amp;ldquo;Copy/Paste&amp;rdquo; without some of the understanding.
 Go&amp;rsquo;s empty interface interface{} is one such mystery when learning the language; Engineers are happy to use interface{} to represent any type, but get confused about the interface keyword and why it&amp;rsquo;s used.
-let i:any = 1; // Typescript std::any i = 1; // C++17 Object i = 1; // Java var i interface{} = 1 // Go  &amp;ldquo;interface{} says nothing&amp;rdquo; &amp;ndash; Rob Pike  Interface type Lets start with a regular interface:</description>
+let i:any = 1; // Typescript std::any i = 1; // C++17 Object i = 1; // Java var i interface{} = 1 // Go &amp;ldquo;interface{} says nothing&amp;rdquo; &amp;ndash; Rob Pike Interface type Lets start with a regular interface:</description>
     </item>
     
     <item>
@@ -63,8 +59,8 @@ The HACK Assembly language is very simple, and an Assembler could be written usi
       <author>rogchap@gmail.com</author>
       <guid>https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/</guid>
       <description>From the official gRPC-Web docs:
- &amp;ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&amp;rdquo;
- For production we can just enable the envoy.grpc_web filter and we are good to go.
+&amp;ldquo;gRPC-Web clients connect to gRPC services via a special gateway proxy: the current version of the library uses Envoy by default, in which gRPC-Web support is built-in.&amp;rdquo;
+For production we can just enable the envoy.grpc_web filter and we are good to go.
 But for development I wanted to create a gRPC server that engineers could install via a single binary and not have to run anything extra (like envoy running in docker).</description>
     </item>
     

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>Simple Vim Markdown Preview</title>
   <meta name="description" content="There are a lot of Vim plugins that allow you to preview markdown files:
- iamcco/markdown-preview.vim JamshedVesuna/vim-markdown-preview MikeCoder/markdown-preview.vim pingao777/markdown-preview-sync suan/vim-instant-markdown PratikBhusal/vim-grip mgor/vim-markdown-grip  But to name a few.
+iamcco/markdown-preview.vim JamshedVesuna/vim-markdown-preview MikeCoder/markdown-preview.vim pingao777/markdown-preview-sync suan/vim-instant-markdown PratikBhusal/vim-grip mgor/vim-markdown-grip But to name a few.
 I was looking for something simple; but most of these plugins had options and setting, commands and auto commands that was just too bloated for my needs.
 Most of these tools use a separate tool to render the markdown to the browser; grip is a cli application that renders markdown via the GitHub API, and is simple to install:">
   <meta name="author" content="">
@@ -364,17 +364,16 @@ code, kbd, pre, samp {
   type="image/x-icon">
 
   
-  <meta name="generator" content="Hugo 0.74.3" />
+  <meta name="generator" content="Hugo 0.110.0">
 
   
   <meta property="og:title" content="Simple Vim Markdown Preview" />
 <meta property="og:description" content="There are a lot of Vim plugins that allow you to preview markdown files:
- iamcco/markdown-preview.vim JamshedVesuna/vim-markdown-preview MikeCoder/markdown-preview.vim pingao777/markdown-preview-sync suan/vim-instant-markdown PratikBhusal/vim-grip mgor/vim-markdown-grip  But to name a few.
+iamcco/markdown-preview.vim JamshedVesuna/vim-markdown-preview MikeCoder/markdown-preview.vim pingao777/markdown-preview-sync suan/vim-instant-markdown PratikBhusal/vim-grip mgor/vim-markdown-grip But to name a few.
 I was looking for something simple; but most of these plugins had options and setting, commands and auto commands that was just too bloated for my needs.
 Most of these tools use a separate tool to render the markdown to the browser; grip is a cli application that renders markdown via the GitHub API, and is simple to install:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://rogchap.com/2020/01/09/simple-vim-markdown-preview/" />
-<meta property="og:image" content="https://rogchap.com/tile.png"/>
+<meta property="og:url" content="https://rogchap.com/2020/01/09/simple-vim-markdown-preview/" /><meta property="og:image" content="https://rogchap.com/tile.png"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-01-09T21:46:34+11:00" />
 <meta property="article:modified_time" content="2020-01-09T21:46:34+11:00" />
 
@@ -456,39 +455,39 @@ Most of these tools use a separate tool to render the markdown to the browser; g
 was just too bloated for my needs.</p>
 <p>Most of these tools use a separate tool to render the markdown to the browser; <a href="https://github.com/joeyespo/grip">grip</a>
 is a cli application that renders markdown via the GitHub API, and is simple to install:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-zsh" data-lang="zsh">$ brew install grip
-</code></pre></div><p>I would prefer to render offline, but grip does what I need for now.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-zsh" data-lang="zsh"><span style="display:flex;"><span>$ brew install grip
+</span></span></code></pre></div><p>I would prefer to render offline, but grip does what I need for now.</p>
 <h2 id="no-plugin-required">No plugin required</h2>
 <p>With <code>grip</code> installed I can simple run it with:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:! grip %<span style="">
-</span></code></pre></div><p>or in a Vim terminal:</p>
-<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim">:term grip %<span style="">
-</span></code></pre></div><h2 id="homemade-plugin">Homemade plugin</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span>:! grip %<span style="">
+</span></span></span></code></pre></div><p>or in a Vim terminal:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span>:term grip %<span style="">
+</span></span></span></code></pre></div><h2 id="homemade-plugin">Homemade plugin</h2>
 <p>The above commands are great, but I wanted something more integrated into Vim. Using this <a href="https://www.reddit.com/r/vim/comments/8asgjj/topnotch_vim_markdown_live_previews_with_no/">Reddit
 post</a> as inspiration, I
 adapted the code to work in Vim8:</p>
-<pre><code class="language-vimscript" data-lang="vimscript">&quot; .vim/plugin/local.vim
+<pre tabindex="0"><code class="language-vimscript" data-lang="vimscript">&#34; .vim/plugin/local.vim
 command! MarkdownPreview call local#mdpreview#start()
 command! MarkdownStopPreview call local#mdpreview#stop()
-</code></pre><pre><code class="language-vimscript" data-lang="vimscript">&quot; .vim/autoload/local/mdpreview.vim
+</code></pre><pre tabindex="0"><code class="language-vimscript" data-lang="vimscript">&#34; .vim/autoload/local/mdpreview.vim
 func! local#mdpreview#start() abort
     call local#mdpreview#stop()
     let s:mdpreview_job_id = job_start(
-        \ &quot;/bin/zsh -c \&quot;grip -b &quot;. shellescape(expand('%:p')) . &quot; 0 2&gt;&amp;1 | awk '/Running/ { print \\$4 }'\&quot;&quot;,
-        \ { 'out_cb': 'OnGripStart', 'pty': 1 })
+        \ &#34;/bin/zsh -c \&#34;grip -b &#34;. shellescape(expand(&#39;%:p&#39;)) . &#34; 0 2&gt;&amp;1 | awk &#39;/Running/ { print \\$4 }&#39;\&#34;&#34;,
+        \ { &#39;out_cb&#39;: &#39;OnGripStart&#39;, &#39;pty&#39;: 1 })
     func! OnGripStart(_, output)
-        echo &quot;grip &quot; . a:output
+        echo &#34;grip &#34; . a:output
     endfunc
 endfunc
 
 func! local#mdpreview#stop() abort
-    if exists('s:mdpreview_job_id')
+    if exists(&#39;s:mdpreview_job_id&#39;)
         call job_stop(s:mdpreview_job_id)
         unlet s:mdpreview_job_id
     endif
 endfunc
 </code></pre><p>I also wanted the <code>grip</code> server to stop when I changed vim buffers so I also added this <code>autocmd</code>:</p>
-<pre><code class="language-vimscript" data-lang="vimscript">&quot; .vim/plugin/local.vim
+<pre tabindex="0"><code class="language-vimscript" data-lang="vimscript">&#34; .vim/plugin/local.vim
 au BufLeave * call local#mdpreview#stop()
 </code></pre><p>Simple homemade plugin for markdown preview; all I do now is call <code>:MarkdownPreview</code> and <code>grip</code> will preview my markdown
 file in my default browser.</p>
@@ -497,7 +496,7 @@ file in my default browser.</p>
         <div style="margin-top: 4em" v>
           <div id="disqus_thread"></div>
 <script type="application/javascript">
-    var disqus_config = function () {
+    window.disqus_config = function () {
     
     
     

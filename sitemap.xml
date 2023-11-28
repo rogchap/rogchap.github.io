@@ -1,97 +1,61 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>https://rogchap.com/tags/android/</loc>
     <lastmod>2020-09-14T14:51:26+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/tags/go/</loc>
     <lastmod>2020-09-14T14:51:26+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/tags/ios/</loc>
     <lastmod>2020-09-14T14:51:26+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/tags/mobile/</loc>
     <lastmod>2020-09-14T14:51:26+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/posts/</loc>
     <lastmod>2020-09-14T14:51:26+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/</loc>
     <lastmod>2020-09-14T14:51:26+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/2020/09/14/running-go-code-on-ios-and-android/</loc>
     <lastmod>2020-09-14T14:51:26+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/tags/</loc>
     <lastmod>2020-09-14T14:51:26+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/2020/01/09/simple-vim-markdown-preview/</loc>
     <lastmod>2020-01-09T21:46:34+11:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/tags/vim/</loc>
     <lastmod>2020-01-09T21:46:34+11:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/tags/grpc/</loc>
     <lastmod>2019-10-19T13:50:32+11:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/2019/10/19/webhook-endpoint-for-grpc-gateway/</loc>
     <lastmod>2019-10-19T13:50:32+11:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/2019/10/06/demystify-gos-empty-interface/</loc>
     <lastmod>2019-10-06T14:03:20+11:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/2019/07/28/building-an-assembler/</loc>
     <lastmod>2019-07-28T13:04:23+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/2019/07/26/in-process-grpc-web-proxy/</loc>
     <lastmod>2019-07-26T17:11:06+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/2019/06/25/mocking-grpc-in-go/</loc>
     <lastmod>2019-06-25T22:20:10+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/about/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://rogchap.com/modules/</loc>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://rogchap.com/suid/</loc>
+  </url><url>
     <loc>https://rogchap.com/v8go/</loc>
   </url>
-  
 </urlset>
